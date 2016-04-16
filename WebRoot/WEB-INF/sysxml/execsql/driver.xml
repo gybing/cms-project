@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	
+	<!-- 地点列表 -->
+	<mapper id="qryDriverList">
+	    <sql key="qryDriverList" resultType="paging" operator="select">
+	      	 SELECT 
+	       <isNotEmpty property="query_count">
+				COUNT(1) 
+			</isNotEmpty>
+	      	<isEmpty property="query_count">
+	      	 (@i:=@i+1) seq,t1.* from 
+	      	(select t.*,IFNULL(sc.center_name,'') CENTER_NAME,tt.truck_plate truckPlate,tf.code truckFramePlate 
+	      	</isEmpty>
+	      	from tab_driver t
+	      	left join tab_schedule_center sc on t.schedule_center = sc.center_id 
+	      	left join tab_frame_truck tt on t.default_truck = tt.ft_id 
+	      	left join tab_frame_truck tf on t.default_frame = tf.ft_id 
+	        where t.is_del = 'N' 
+	        <isNotEmpty  property="columns[0][search][value]">
+		        and (
+		        t.name like '%${columns[0][search][value]}%'
+		        or t.code like '%${columns[0][search][value]}%' 
+		        or t.mobile_1 like '%${columns[0][search][value]}%' 
+		       <!--  or t.file_no like '%${searchKey}%' 
+		        or t.company like '%${searchKey}%' 
+		        or t.idcard like '%${searchKey}%' 
+		        or t.license_no like '%${searchKey}%' 
+		        or t.license_type like '%${searchKey}%' 
+		        or t.qualification like '%${searchKey}%' 
+		        or t.default_truck like '%${searchKey}%' 
+		        or t.customs_no like '%${searchKey}%' 
+		        or t.ic_no like '%${searchKey}%' 
+		        or t.mobile_2 like '%${searchKey}%' 
+		        or t.mobile_3 like '%${searchKey}%' 
+		        or t.fax like '%${searchKey}%' 
+		        or t.qq like '%${searchKey}%' 
+		        or t.email like '%${searchKey}%' 
+		        or t.addr like '%${searchKey}%' 
+		        or t.remark like '%${searchKey}%'  -->
+		        )
+	        </isNotEmpty>
+	        <isEmpty property="query_count">
+	        	ORDER BY t.driver_id DESC 
+				LIMIT ${page_start},${page_end}
+				) t1,(SELECT @i:= ${page_start} ) it
+			</isEmpty>
+	    </sql>
+	</mapper>
+	<!-- 新增司机 -->
+	<mapper id="addDriver">
+	    <sql key="addDriver" operator="execute">
+	        insert into tab_driver(driver_id,tag,name,code,file_no,due,birthday,sex,groupno,idcard,graduation,
+	        license_no,license_type,license_date,license_limited,qualification,qualification_limited,default_truck,
+	        default_frame,customs_no,ic_no,mobile_1,mobile_2,mobile_3,fax,qq,email,salary_base,addr,remark,
+	        current_status,tuoche,diaoche,weixiu,waixie,guakao,is_del,schedule_center,app_pwd)  
+	        
+	        values(#{driverId},#{tag},#{driverName},#{driverCode},#{fileNo},#{due},#{birthday},#{sex},
+	        #{groupNo},#{idCard},#{graduation},#{licenseNo},#{licenseType},#{licenseDate},
+	        #{licenseLimited},#{qualification},#{qualificationLimited},#{defaultTruck},#{defaultFrame},
+	        #{customsNo},#{icNo},#{mobile1},#{mobile2},#{mobile3},#{fax},#{qq},#{email},#{salaryBase},
+	        #{addr},#{remark},#{currentStatus},#{tuoche},#{diaoche},#{weixiu},#{waixie},#{guakao},'N',#{scheduleCenter},MD5('123456'))
+	    </sql>
+	    <sql key="saveDriverForFrame" operator="execute">
+	    	update tab_frame_truck set default_driver_id=#{driverId} where ft_id=#{defaultFrame}
+	    </sql>
+	    <sql key="saveDriverForTruck" operator="execute">
+	    	update tab_frame_truck set default_driver_id=#{driverId} where ft_id=#{defaultTruck}
+	    </sql>
+	    <sql key="saveDriverForTruck" operator="execute">
+	    	UPDATE tab_truck_status t1
+			INNER JOIN (
+				SELECT
+					t.ft_id,
+					td.driver_id,
+					td.mobile_1,
+					td.`name`
+				FROM
+					tab_frame_truck t
+				LEFT JOIN tab_driver td ON t.default_driver_id = td.driver_id
+				WHERE
+					t.ft_id = #{defaultTruck}
+			) t2 ON t1.ft_id = t2.ft_id
+			SET t1.driver = t2.`name`,
+			 t1.driver_id = t2.driver_id,
+			 t1.driver_tel = t2.mobile_1;
+	    </sql>
+	    <!-- 回调service -->
+	    <sql key="addDriverService" operator="callback" class="addDriverService" >
+	        
+	    </sql>
+	</mapper>
+	<!-- 修改司机 -->
+	<mapper id="editDriver">
+	    <sql key="editDriver" operator="execute">
+	        update tab_driver set name=#{driverName},code=#{driverCode},file_no=#{fileNo},due=#{due},birthday=#{birthday},
+	        sex=#{sex},groupno=#{groupNo},idcard=#{idCard},graduation=#{graduation},license_no=#{licenseNo},
+	        license_type=#{licenseType},license_date=#{licenseDate},license_limited=#{licenseLimited},qualification=#{qualification},
+	        qualification_limited=#{qualificationLimited},default_truck=#{defaultTruck},default_frame=#{defaultFrame},customs_no=#{customsNo},
+	        ic_no=#{icNo},mobile_1=#{mobile1},mobile_2=#{mobile2},mobile_3=#{mobile3},fax=#{fax},qq=#{qq},email=#{email},salary_base=#{salaryBase},addr=#{addr},
+	        remark=#{remark},current_status=#{currentStatus},tuoche=#{tuoche},diaoche=#{diaoche},weixiu=#{weixiu},waixie=#{waixie},guakao=#{guakao},schedule_center=#{scheduleCenter}
+	        where driver_id = #{driverId}
+	    </sql>
+	    <!-- 删除原本司机图片 -->
+	    <sql key="editDriver" operator="execute">
+	    	update tab_driver_pic set is_del='Y' where driver_id = #{driverId} 
+	    </sql>
+	    <sql key="editDriverForFrame" operator="execute">
+	    	update tab_frame_truck set default_driver_id=#{driverId} where ft_id=#{defaultFrame}
+	    </sql>
+	    <sql key="editDriverForTruck" operator="execute">
+	    	update tab_frame_truck set default_driver_id=#{driverId} where ft_id=#{defaultTruck}
+	    </sql>
+	    <sql key="editDriverForTruck" operator="execute">
+	    	UPDATE tab_truck_status t1
+			INNER JOIN (
+				SELECT
+					t.ft_id,
+					td.driver_id,
+					td.mobile_1,
+					td.`name`
+				FROM
+					tab_frame_truck t
+				LEFT JOIN tab_driver td ON t.default_driver_id = td.driver_id
+				WHERE
+					t.ft_id = #{defaultTruck}
+			) t2 ON t1.ft_id = t2.ft_id
+			SET t1.driver = t2.`name`,
+			 t1.driver_id = t2.driver_id,
+			 t1.driver_tel = t2.mobile_1;
+	    </sql>
+	    <!-- 回调service -->
+	    <sql key="addDriverService" operator="callback" class="addDriverService" >
+	        
+	    </sql>
+	</mapper>
+	<!-- 删除司机 -->
+	<mapper id="delDriver">
+	    <sql key="delDriver" operator="execute">
+	       <!--  delete from tab_driver where driver_id = #{driverId} -->
+	       update tab_driver set is_del='Y'  where driver_id = #{driverId}
+	    </sql>
+	</mapper>
+	<!-- 根据ID获取司机信息 -->
+	<mapper id="getDriverInfo">
+	    <sql key="getDriverInfo" operator="select" resultType="map">
+	        select t.* ,tsc.center_name,tft.truck_plate,tft1.CODE FRAME_CODE
+	        from tab_driver t
+	        left join tab_schedule_center tsc on t.schedule_center = tsc.center_code
+	        left join tab_frame_truck tft on t.default_truck = tft.ft_id 
+	        left join tab_frame_truck tft1 on t.default_frame = tft1.ft_id 
+	        where driver_id = #{driverId}
+	    </sql>
+	</mapper>
+	<!-- 获取车架列表 -->
+	<mapper id="getTruckFrameList">
+	    <sql key="getTruckFrameList" operator="select" resultType="list">
+	        select ft_id,truck_plate,type,code from tab_frame_truck where is_del='N'
+	    </sql>
+	</mapper>
+	<!-- 获取司机图片列表 -->
+	<mapper id="getDriverPic">
+	    <sql key="getDriverPic" operator="select" resultType="list">
+	        select t.pic_type code,t.pic_local_url path,pic_remote_url remotePath, dict.text 
+	        from tab_driver_pic t 
+	        left join dict_common dict on dict.type='DRIVER_CARD' and t.pic_type = dict.code 
+	        where t.is_del='N' and driver_id =#{driverId}
+	    </sql>
+	</mapper>
+	
+	<mapper id="getDriverSelectList">
+	    <sql key="getDriverSelectList" resultType="list" operator="select">
+			SELECT DRIVER_ID ID,CONCAT('姓名：',NAME,'  ','电话：',MOBILE_1) TEXT FROM tab_driver WHERE IS_DEL='N'
+		</sql>
+	</mapper>
+</mappers>

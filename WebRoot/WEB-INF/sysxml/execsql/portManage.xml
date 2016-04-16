@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	<!-- 港口信息列表-->
+	<mapper id="qryPortList">
+	    <sql key="qryPortList" resultType="paging" operator="select">
+	       SELECT
+	       <isNotEmpty property="query_count">
+				COUNT(port_id) 
+			</isNotEmpty>
+	      	<isEmpty property="query_count">
+	      	(@i:=@i+1) num,A.* from (
+      	 	select
+			port_id,
+			tag,
+			port_code,
+			short_cut,
+			port_en,
+			port_cn,
+			port_line,
+			port_air_code,
+			un_code,
+			oocl_code,
+			port_encoding,
+			country_code,
+			country_name,
+			city_code,
+			isf_ams_code,
+			custom_code,
+			penavico_code,
+			port_lng,
+			port_lat,
+			port_prefix,
+			business_company,
+			guojihuodai,
+			guojichuandai,
+			guoneihangyun,
+			jibengang,
+			zhuangyungang,
+			mudigang,
+			hangkonggang,
+			remark,
+			is_del
+			</isEmpty>
+		FROM
+			tab_port t 
+		where 1=1
+		<isNotEmpty property="columns[0][search][value]">
+			<!-- and ( t.port_code     like '%${columns[0][search][value]}%'  
+			or t.port_en          like '%${columns[0][search][value]}%'
+			or t.port_cn          like '%${columns[0][search][value]}%'
+			or t.port_line        like '%${columns[0][search][value]}%'  
+			or t.port_air_code    like '%${columns[0][search][value]}%'      
+			or t.un_code          like '%${columns[0][search][value]}%'
+			or t.oocl_code        like '%${columns[0][search][value]}%'  
+			or t.country_code     like '%${columns[0][search][value]}%'     
+			
+			) -->
+			and t.search_field like '%${columns[0][search][value]}%' 
+		</isNotEmpty>
+		<isNotEmpty property="port_id">
+			and port_id = #{port_id}
+		</isNotEmpty>
+			and t.is_del = 'N'
+		 <isEmpty property="query_count">
+				LIMIT ${page_start},${page_end}
+				) A,(SELECT @i:= ${page_start} ) it
+		</isEmpty>
+	    </sql>
+	</mapper>
+	<!-- 查询单个港口信息-->
+	<mapper id="qryPortInfo">
+	    <sql key="qryPortInfo" resultType="map" operator="select">
+	       SELECT
+			port_id,
+			tag,
+			port_code,
+			short_cut,
+			port_en,
+			port_cn,
+			port_line,
+			port_air_code,
+			un_code,
+			oocl_code,
+			port_encoding,
+			country_code,
+			country_name,
+			city_code,
+			isf_ams_code,
+			custom_code,
+			penavico_code,
+			port_lng,
+			port_lat,
+			port_prefix,
+			business_company,
+			guojihuodai,
+			guojichuandai,
+			guoneihangyun,
+			jibengang,
+			zhuangyungang,
+			mudigang,
+			hangkonggang,
+			remark,
+			is_del
+		FROM
+			tab_port t
+		where 1=1
+			and t.is_del = 'N'
+		<isNotEmpty property="port_id">
+			and port_id = #{port_id}
+		</isNotEmpty>
+	    </sql>
+	</mapper>
+	<!-- 新增港口信息 -->
+	<mapper id="addPort">
+		<sql key="addPort" operator="execute">
+			INSERT INTO tab_port (
+				port_id, tag, port_code,short_cut, port_en, port_cn, port_line,
+				port_air_code, un_code, oocl_code, port_encoding,country_code, country_name,
+				city_code, isf_ams_code, custom_code, penavico_code, port_lng,
+				port_lat, port_prefix, business_company,
+				<isNotEmpty property="guojihuodai">
+					guojihuodai,
+				</isNotEmpty>
+				<isNotEmpty property="guojichuandai">
+					guojichuandai,
+				</isNotEmpty>
+				<isNotEmpty property="guoneihangyun">
+					guoneihangyun,
+				</isNotEmpty>
+				<isNotEmpty property="jibengang">
+					jibengang,
+				</isNotEmpty>
+				<isNotEmpty property="zhuangyungang">
+					zhuangyungang,
+				</isNotEmpty>
+				<isNotEmpty property="mudigang">
+					mudigang,
+				</isNotEmpty>
+				<isNotEmpty property="hangkonggang">
+					hangkonggang,
+				</isNotEmpty>
+				remark,search_field)
+			VALUES (
+				UUID(), #{tag}, #{port_code},#{short_cut}, #{port_en}, #{port_cn}, #{port_line}, 
+				#{port_air_code}, #{un_code}, #{oocl_code},#{port_encoding}, #{country_code}, #{country_name},
+				#{city_code}, #{isf_ams_code}, #{custom_code}, #{penavico_code}, #{port_lng}, 
+				#{port_lat}, #{port_prefix}, #{business_company},
+				<isNotEmpty property="guojihuodai">
+					#{guojihuodai},
+				</isNotEmpty>
+				<isNotEmpty property="guojichuandai">
+					#{guojichuandai},
+				</isNotEmpty>
+				<isNotEmpty property="guoneihangyun">
+					  #{guoneihangyun},
+				</isNotEmpty>
+				<isNotEmpty property="jibengang">
+					#{jibengang},
+				</isNotEmpty>
+				<isNotEmpty property="zhuangyungang">
+					#{zhuangyungang},
+				</isNotEmpty>
+				<isNotEmpty property="mudigang">
+					 #{mudigang},
+				</isNotEmpty>
+				<isNotEmpty property="hangkonggang">
+					 #{hangkonggang},
+				</isNotEmpty>
+				  #{remark},
+				  #{port_code}#{port_en}#{port_cn}#{port_air_code}#{country_code}
+				)
+		</sql>
+	</mapper>
+	<!-- 更新港口信息 -->
+	<mapper id="editPort">
+		<sql key="editPort" operator="execute">
+			UPDATE tab_port
+			SET 
+			 port_code = #{port_code},
+			 short_cut = #{short_cut},
+			 port_en = #{port_en},
+			 port_cn = #{port_cn},
+			 port_line = #{port_line},
+			 port_air_code = #{port_air_code},
+			 un_code = #{un_code},
+			 oocl_code = #{oocl_code},
+			 port_encoding = #{port_encoding},
+			 country_code = #{country_code},
+			 country_name = #{country_name},
+			 city_code = #{city_code},
+			 isf_ams_code = #{isf_ams_code},
+			 custom_code = #{custom_code},
+			 penavico_code = #{penavico_code},
+			 port_lng = #{port_lng},
+			 port_lat = #{port_lat},
+			 port_prefix = #{port_prefix},
+			 business_company = #{business_company},
+			 <isNotEmpty property="guojihuodai">
+				 guojihuodai = #{guojihuodai},
+			 </isNotEmpty>
+			 <isEmpty property="guojihuodai">
+			 	 guojihuodai = 0,
+			 </isEmpty>
+			 <isNotEmpty property="guojichuandai">
+			 	guojichuandai = #{guojichuandai},
+			 </isNotEmpty>
+			 <isEmpty property="guojichuandai">
+			 	guojichuandai = 0,
+			 </isEmpty>
+			 <isNotEmpty property="guoneihangyun">
+			 	guoneihangyun = #{guoneihangyun},
+			 </isNotEmpty>
+			 <isEmpty property="guoneihangyun">
+			 	guoneihangyun = 0,
+			 </isEmpty>
+			 <isNotEmpty property="jibengang">
+				 jibengang = #{jibengang},
+			 </isNotEmpty>
+			 <isEmpty property="jibengang">
+			 	jibengang = 0,
+			 </isEmpty>
+			 <isNotEmpty property="zhuangyungang">
+				 zhuangyungang = #{zhuangyungang},
+			 </isNotEmpty>
+			 <isEmpty property="zhuangyungang">
+			 	zhuangyungang = 0,
+			 </isEmpty>
+			 <isNotEmpty property="mudigang">
+				 mudigang = #{mudigang},
+			 </isNotEmpty>
+			 <isEmpty property="mudigang">
+			 	mudigang = 0,
+			 </isEmpty>
+			 <isNotEmpty property="hangkonggang">
+				 hangkonggang = #{hangkonggang},
+			 </isNotEmpty>
+			 <isEmpty property="hangkonggang">
+			 	hangkonggang = 0,
+			 </isEmpty>
+			 remark = #{remark},
+			 search_field=#{port_code}#{port_en}#{port_cn}#{port_air_code}#{country_code}
+			WHERE
+				port_id = #{port_id}
+		</sql>
+	</mapper>
+	
+	<!-- 删除港口信息 -->
+	<mapper id="delPortInfo">
+		<sql key="delPortInfo" operator="execute">
+			update tab_port set is_del = 'Y' where port_id = #{port_id}
+		</sql>
+	</mapper>
+</mappers>

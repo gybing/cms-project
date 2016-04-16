@@ -1,0 +1,329 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.weimingfj.com/xsd/mappers" xmlns="http://www.weimingfj.com/xsd/mappers"
+	elementFormDefault="qualified">
+	<xsd:element name="isNotEmpty">
+		<xsd:annotation>
+			<xsd:documentation>
+					<![CDATA[
+					判断节点，property不为空的时候该节点的代码有效，null、""、属性不存在时候都为false
+					可选，0个或者多个
+					]]>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType mixed="true">
+			<xsd:choice>
+				<xsd:element ref="isNotEmpty" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isEmpty" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isEqual" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isNotEqual" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+			</xsd:choice>
+			<xsd:attribute name="property" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation>
+							<![CDATA[
+							必填，判断的属性名称
+							]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="isEmpty">
+		<xsd:annotation>
+			<xsd:documentation>
+					<![CDATA[
+					判断节点，property为空的时候该节点的代码有效，null、""、属性不存在时候都为true
+					可选，0个或者多个
+					]]>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType mixed="true">
+			<xsd:choice>
+				<xsd:element ref="isNotEmpty" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isEmpty" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isEqual" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isNotEqual" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+			</xsd:choice>
+			<xsd:attribute name="property" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation>
+						<![CDATA[
+						必填，判断的属性名称
+						]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="isEqual">
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[
+				判断节点，比较property值为比较值或者比较属性值的时候有效;
+				可以是属性和指定值比较，也可以属性和属性比较
+				可选，0个或多个
+				]]>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType mixed="true">
+			<xsd:choice>
+				<xsd:element ref="isNotEmpty" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isEmpty" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isEqual" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isNotEqual" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+			</xsd:choice>
+			<xsd:attribute name="property" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation>
+						<![CDATA[
+						必填，用户比较的属性
+						]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="compareValue" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						<![CDATA[
+						和compareProperty进行二选一，比较的值为固定值
+						]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="compareProperty" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						<![CDATA[
+						和compareValue进行二选一，不为空时候为属性和属性进行比较
+						]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="isNotEqual" >
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[
+				判断节点，比较property值不为比较值或者比较属性值的时候有效;
+				可以是属性和指定值比较，也可以属性和属性比较
+				可选，0个或多个
+				]]>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType mixed="true">
+			<xsd:choice>
+				<xsd:element ref="isNotEmpty" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isEmpty" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isEqual" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				<xsd:element ref="isNotEqual" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+			</xsd:choice>
+			<xsd:attribute name="property" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation>
+						<![CDATA[
+						必填，用户比较的属性
+						]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="compareValue" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						<![CDATA[
+						和compareProperty进行二选一，比较的值为固定值
+						]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="compareProperty" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>
+						<![CDATA[
+						和compareValue进行二选一，不为空时候为属性和属性进行比较
+						]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="mappers">
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[
+				单个逻辑执行语句，和url表一一映射，其中id和sys_url_tab，url_id字段一致
+				]]>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="mapper" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>
+							<![CDATA[
+							单个逻辑执行语句，和url表一一映射，其中id和sys_url_tab，url_id字段一致
+							]]>
+						</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="sql" minOccurs="1" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>
+										<![CDATA[
+										执行的单条逻辑语句
+										至少有一个
+										]]>
+									</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType mixed="true">
+									<xsd:choice minOccurs="0" maxOccurs="unbounded">
+										<xsd:element ref="isNotEmpty"></xsd:element>
+										<xsd:element ref="isEmpty"></xsd:element>
+										<xsd:element ref="isNotEqual"></xsd:element>
+										<xsd:element ref="isEqual"></xsd:element>
+									</xsd:choice>
+									<xsd:attribute name="key" type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation>
+												<![CDATA[
+												可选，sql在当前mapper中唯一
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="dynamic" default="false"
+										type="xsd:boolean">
+										<xsd:annotation>
+											<xsd:documentation>
+												<![CDATA[
+												动态分页查询查询语句，queryService有效，默认为false，为true代表获取的数据分页量由用户自主控制
+												否则系统会跟踪数据库类型进行分页语句的拼装
+												可选
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="resultType" default="list">
+										<xsd:annotation>
+											<xsd:documentation>    
+												<![CDATA[
+												查询返回类型，ajaxService有效， list/map/string/page；四个操作,默认为list
+												list 代表返回list
+												map 代表返回map
+												string 代表返回String
+												page 返回分页对象 paginForm
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:NMTOKEN">
+												<xsd:enumeration value="list" />
+												<xsd:enumeration value="map" />
+												<xsd:enumeration value="string" />
+												<xsd:enumeration value="page" />
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:attribute>
+									<xsd:attribute name="operator" default="execute">
+										<xsd:annotation>
+											<xsd:documentation>    
+												<![CDATA[
+												sql操作类型，值为select/insert_file/del_file/execute/callback；五个操作,默认为execute
+												execute 代表执行sql语句
+												select 代表执行查询语句
+												insert_file 代表插入文件
+												del_file 代表删除文件
+												callback 代表回调方法
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:NMTOKEN">
+												<xsd:enumeration value="execute" />
+												<xsd:enumeration value="select" />
+												<xsd:enumeration value="insert_file" />
+												<xsd:enumeration value="del_file" />
+												<xsd:enumeration value="callback" />
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:attribute>
+									<xsd:attribute name="class" type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation>
+												<![CDATA[
+												可选，用于opertor为callbak回调适用的类
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="iterfields" default=""
+										type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation>
+												<![CDATA[
+													可选，需要迭代执行的字段，用了这个属性，根据实际情况会产生多条执行语句；
+													比如页面是主订单和字订单时，子订单有多条，实际情况是保存了主订单，还需要保存子订单（多条）
+													可以用到该字段，比如子订单的字段分别有sub_order_id、sub_order_no、sub_order_name等
+													这里的字段就填写成sub_order_id,sub_order_no,sub_order_name
+													注：和iterfieldsplit有关系，当iterfieldsplit不为空试试，按照页面提交的值进行分割生成迭代语句
+													当iterfieldsplit为空，则按照网页上提交的参数个数生成迭代语句
+													operator=execute时候有效
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="iterfieldsplit" default=""
+										type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation>
+												<![CDATA[
+													可选，和iterfields配合使用
+													当这个字段不为空时，需要迭代属性值（迭代的属性参考字段iterfields）就按照这个字符串进行分割
+													如iterfields=rights,name，iterFieldSplit=“---”
+													页面提交的参数rights=101---102name=101name---102name，迭代的次数为2
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="filewname" default="_FILE_"
+										type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation>
+												<![CDATA[
+													可选，有附件上传的时候使用，不存在该属性时，值为_FILE_；
+													为网页上的附件控件（如  <input type="file" name="_FILE_">;）
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="fileindex" default=""
+										type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation>
+												<![CDATA[
+												可选，配合filewname使用，默认为空，为多类附件上传的时候使用，如头像上传、身份证上传
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="id" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									<![CDATA[
+									唯一值，和url表一一映射，其中id和sys_url_tab，url_id字段一致
+									]]>
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

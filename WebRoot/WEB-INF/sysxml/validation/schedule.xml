@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validations xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://itest.56913.com:20080/xsd/validations.xsd">
+	
+	<!-- ============================ 调度管理设置 =================================== -->
+	<!-- 保存时判断铅封号，箱号唯一性 -->
+    <validation id="editBoxSchedule">
+		<property field="SEAL_NO" method="database" msg="该铅封号已存在, 请重新输入!" sql="SELECT COUNT(1) FROM tab_order_box D WHERE D.SEAL_NO=#{SEAL_NO} AND D.BOX_ID!=#{BOX_ID}" ></property>
+		
+		<property field="NO" method="database" msg="该船名号已存在, 请重新输入!" sql="SELECT COUNT(1) FROM tab_order_box D WHERE D.NO=#{NO} AND D.ORDER_ID=#{ORDER_ID} AND D.BOX_ID!=#{BOX_ID}" ></property>
+	</validation>
+	
+</validations>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	<mapper id="printOrderInfo">
+		<sql key="printOrderInfo" operator="select" resultType="map"> 
+			SELECT
+				o.order_no,
+				o.ship_name,
+				o.ship_voyage ,
+				tco.company cargo_ownner,
+				CONCAT(o.to_port,' ',tp.port_cn) to_port,
+				o.ownner_name,
+				o.ownner_tel,
+				o.addr,
+				o.cargo_remark,
+				ob.size,
+				ob.spec,
+				ob.`no`,
+				ob.seal_no,
+				obs.to
+			FROM
+				tab_order_box ob
+			LEFT JOIN tab_order o ON ob.order_id = o.order_id
+			LEFT JOIN tab_cargo_ownner tco on tco.ownner_id = o.cargo_owner_id
+			LEFT JOIN tab_port tp on tp.port_code = o.to_port
+			LEFT JOIN tab_order_box_schedule obs ON obs.box_id = ob.box_id AND obs.schedule_status = 1
+			WHERE 1=1
+			<isNotEmpty property="box_id">
+				AND ob.`box_id` = #{box_id}
+			</isNotEmpty>
+		</sql>
+	</mapper>
+	<!-- 打印订单信息 -->
+	<mapper id="printOrder">
+		<sql key="printOrder" operator="select" resultType="map"> 
+			SELECT
+				o.order_no,
+				o.ship_name,
+				o.ship_voyage ,
+				o.cargo_ownner,
+				o.to_port,
+				o.ownner_name,
+				o.ownner_tel,
+				o.addr,
+				o.box_take,
+				o.cargo_remark
+			FROM
+				tab_order o
+			WHERE 1=1
+			<isNotEmpty property="ORDER_ID">
+				AND o.ORDER_ID = #{ORDER_ID}
+			</isNotEmpty>
+		</sql>
+	</mapper>
+</mappers>

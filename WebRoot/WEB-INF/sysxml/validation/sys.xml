@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validations xmlns="http://www.weimingfj.com"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/validations.xsd">
+	<!-- ************************* 新 ************************* -->
+	<!-- 人员管理-新增人员 -->
+	<validation id="addManagerMsg">
+		<property field="USER_CODE" method="database" msg="该用户名已被使用，请从新输入！" sql="select count(1) from user_tab where USER_CODE=#{USER_CODE} and IS_DEL='N'" ></property>
+		<property field="TEL" method="database" msg="该电话号码已存在！" sql="select count(1) from user_tab where TEL=#{TEL} and IS_DEL='N'" ></property>
+	</validation>
+	<!-- 删除权限时判断是否还有子节点 -->
+    <validation id="delPriv">
+		<property field="id" method="database" msg="该权限下还有子权限,无法进行删除" sql="select count(1) from priv_bsm_tab where pid=${id} and IS_DEL='N'" ></property>
+	</validation>
+	<!-- 新增字典表类型时，判断是否已经存在 -->
+	<validation id="checkDictType">
+		<property filed="type" method="database" msg="该数据类型已经存在，请修改！" sql="select count(1) from dict_common where type = #{type} and is_del = 'N'"></property>
+	</validation>
+	<!-- 新增字典表具体数据时，判断 code 字段是否已经存在 -->
+	<validation id="checkDict">
+		<property filed="code" method="database" msg="该数据编码已经存在，请修改！" sql="select count(1) from dict_common where code = #{code} and type = #{type} and is_del = 'N'"></property>
+		<property filed="seq" method="database" msg="排序编码已经存在，请修改！" sql="select count(1) from dict_common where seq = #{seq} and type = #{type} and is_del = 'N'"></property>
+	</validation>
+	<!-- ************************* 新 ************************* -->
+	<!-- 人员管理-修改人员 -->
+	<validation id="editManagerMsg">
+		<property field="USER_CODE" method="database" msg="该用户名已被使用，请重新输入！" sql="select count(1) from user_tab where USER_CODE=#{USER_CODE} and IS_DISABLED=1 and USER_ID!=#{USER_ID}" ></property>
+		<property field="TEL" method="database" msg="该电话号码已存在！" sql="select count(1) from user_tab where TEL=#{TEL} and IS_DISABLED=1 and USER_ID!=#{USER_ID}" ></property>
+	</validation>
+	
+	<validation id="editPwd">
+		<property field="OLD_PWD" method="database" msg="原始密码不正确，请重新输入！！" 
+			sql="SELECT IF(COUNT(1)=1, 0, 1) FROM user_tab WHERE USER_PWD=MD5(#{OLD_PWD}) AND USER_ID='$_CRU_USER_ID_$'" >
+		</property>
+	</validation>
+	
+	<validation id="rechargeMax">
+		<property field="POINT" method="database" msg="该用户充值总金额已超上限！" 
+			sql="select if(a.points +#{POINT} >= 2147483647,0,1) from sys_user_tab a where a.user_id=#{RECHARGE_USER}"></property>
+	</validation>
+<!-- 保存角色时判断角色名是否存在 -->
+    <validation id="saveRole">
+		<property field="ROLE_NAME" method="database" msg="角色名称必须唯一" sql="select count(1) from role_bsm_tab where is_del='N' and ROLE_NAME=#{ROLE_NAME}" ></property>
+	</validation>
+    <!-- 编辑角色时判断角色名是否存在 -->
+    <validation id="editRole">
+		<property field="ROLE_NAME" method="database" msg="角色名称已存在" sql="select count(1) from role_bsm_tab where ROLE_NAME=#{ROLE_NAME} and IS_DEL='N' and role_id!=${ROLE_ID}" ></property>
+	</validation>
+    <!-- 删除角色时判断是否是固化角色 -->
+    <validation id="delRole">
+		<property field="ROLE_ID" method="database" msg="系统角色不允许删除" sql="select count(1) from role_bsm_tab where ROLE_ID=${ROLE_ID} and IS_DEL='N' and role_type=1" ></property>
+	</validation>
+	
+	<!-- ============================ 菜单管理 =================================== -->
+	<!-- 保存时判断菜单名是否存在 -->
+    <validation id="saveMenu">
+		<property field="MENU_NAME" method="database" msg="该名称已被使用, 请重新输入!" sql="SELECT COUNT(1) FROM sys_menu_tab M WHERE M.MENU_NAME=#{MENU_NAME}" ></property>
+	</validation>
+	<!-- 修改时判断菜单名是否存在 -->
+    <validation id="editMenu">
+		<property field="MENU_NAME" method="database" msg="该名称已被使用, 请重新输入!" sql="SELECT COUNT(1) FROM sys_menu_tab M WHERE M.MENU_ID!=${MENU_ID} AND M.MENU_NAME=#{MENU_NAME}" ></property>
+	</validation>
+	<!-- 删除菜单时查找是否还有下级菜单 -->
+    <validation id="delMenu" >
+		<property field="MENU_ID" method="database" msg="该菜单底下包含子菜单,无法进行删除!" sql="SELECT COUNT(1) FROM sys_menu_tab M WHERE M.PARENT_MENU_ID=${MENU_ID}" ></property>
+	</validation>
+	
+	<!-- ========================= 操作 sys_url_tab表 ============================== -->
+	<validation id="addUrl">
+		<property field="URL_ID" method="database" msg="URL_ID标识或者路径已经存在，请修改" sql="SELECT COUNT(1) FROM sys_url_tab P WHERE P.URL_ID=#{URL_ID} OR P.FULL_URL=#{FULL_URL}" ></property>
+	</validation>
+	<validation id="editUrl">
+		<property field="URLID" method="database" msg="URL_ID标识或者路径已经存在，请修改" sql="SELECT COUNT(1) FROM sys_url_tab P WHERE P.URL_ID!=#{URLID} AND (P.URL_ID=#{URL_ID} OR P.FULL_URL=#{FULL_URL})" ></property>
+	</validation>
+	<!-- <validation id="delUrl">
+		<property field="URL_ID" method="database" msg="该URL配置已被使用，请先接解除权限绑定再删除" sql="SELECT COUNT(1) FROM sys_url_tab P WHERE (P.PRIV_ID IS NOT NULL OR P.PRIV_ID != '') AND P.URL_ID=#{URL_ID}" ></property>
+	</validation> -->
+</validations>

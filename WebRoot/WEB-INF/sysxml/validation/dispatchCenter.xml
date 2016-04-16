@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validations xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://itest.56913.com:20080/xsd/validations.xsd">
+	
+	<!-- ============================ 调度中心设置 =================================== -->
+	<!-- 保存时判断字段唯一性 -->
+    <validation id="addDispatchCenter">
+		<property field="CENTER_CODE" method="database" msg="该调度中心代码已存在, 请重新输入!" sql="SELECT COUNT(1) FROM tab_schedule_center D WHERE D.CENTER_CODE=#{CENTER_CODE}" ></property>
+	</validation>
+	<!-- 修改时判断车型是否存在 -->
+    <validation id="editDispatchCenter">
+		<property field="CENTER_CODE" method="database" msg="该调度中心代码已存在, 请重新输入!" sql="SELECT COUNT(1) FROM tab_schedule_center D WHERE D.CENTER_ID!=#{UNID} AND D.CENTER_CODE=#{CENTER_CODE}" ></property>
+	</validation>
+</validations>

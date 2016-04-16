@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.weimingfj.com/xsd/validations" xmlns="http://www.weimingfj.com/xsd/validations"
+	elementFormDefault="qualified">
+	<xsd:element name="validations">   
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[
+				后台表单业务验证
+				]]>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="validation" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>
+							<![CDATA[
+							验证的属性，可以是正则表达式，也可以是执行sql
+							]]>
+						</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="property" minOccurs="1" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation>
+										<![CDATA[
+										待验证的表单属性节点
+										]]>
+									</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType >
+									<xsd:attribute name="field" type="xsd:string"
+										use="required">
+										<xsd:annotation>
+											<xsd:documentation>
+												<![CDATA[
+												必填，待验证的属性名称
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="method" default="reg" use="optional">
+										<xsd:annotation>
+											<xsd:documentation>    
+												<![CDATA[
+												验证方法，待选项有reg和database和class
+												reg，使用正则表达式，reg属性不能为空
+												database，使用数据库验证方式，sql属性不能为空
+												class,适用类验证
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:NMTOKEN">
+												<xsd:enumeration value="reg" />
+												<xsd:enumeration value="database" />
+												<xsd:enumeration value="class" />
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:attribute>
+									<xsd:attribute name="required" type="xsd:boolean"
+										default="true">
+										<xsd:annotation>
+											<xsd:documentation>
+												<![CDATA[
+												该字段是否不能为空，默认为true
+												可选
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="reg" default="">
+										<xsd:annotation>
+											<xsd:documentation>    
+												<![CDATA[
+												和method=reg配合使用，正则表示式
+												 *			required : 非空，表单值至少要有一个非空格，制表符，换行符
+												 *			email : 邮件
+												 *			phone : 电话号码
+												 *			mobile : 手机号码
+												 *			url : url地址
+												 *			idcard :身份证
+												 *			currency : 日期  
+												 *			posiint : 正整数
+												 *			number : 数字
+												 *			zip : 邮政信箱   
+												 *			qq : qq号码
+												 *			integer : 整数 
+												 *			double : 浮点数
+												 *			posi_float : 正浮点数
+												 *			no_negative_float : 不小于浮点数
+												 *			posi_number : 正数(可以带小数点)
+												 *			english : 英文字母
+												 *			barcode : 英文字母+汉字
+												 *			chinese : 汉字
+												 *			unsafe : 
+												 *			allphone:所有电话
+												 *			ipaddr:ip地址
+												"required" : /^[\s\S]*\S[\s\S]*$/,
+												"email" : /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/,
+												"phone" : /^((\(\d{3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-)?[1-9]\d{6,7}$/,
+												"mobile" : /^((\(\d{3}\))|(\d{3}\-))?13\d{9}$/,
+												"url" : /^http:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/,
+												"idcard" : /^\d{15}(\d{2}[A-Za-z0-9])?$/,
+												"currency":/^(\d{4})\-(\d{2})\-(\d{2})$/, 
+												"posiint":/^[0-9]*[1-9][0-9]*$/,
+												"number" : /^\d+$/,
+												"zip" : /^[1-9]\d{5}$/,
+												"qq" : /^[1-9]\d{4,8}$/,
+												"integer" : /^[-\+]?\d+$/,
+												"double" : /^(-|((-?\d+)(\.\d+)?)|(-?\d+)\.)$/,
+												"posi_float":/^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/,
+												"no_negative_float":/^(([0-9]+\.[0-9]*[0-9][0-9]*)|([0-9]*[0-9][0-9]*\.[0-9]+)|([0-9]*[0-9][0-9]*))$/,
+												"posi_number":/^[0-9]+[.][0-9]{0,3}$/,
+												"english" : /^[A-Za-z]+$/,
+												"barcode":/^[A-Za-z0-9]+$/,
+												"chinese" : /^[\u0391-\uFFE5]+$/,
+												"unsafe" : /^(([A-Z]*|[a-z]*|\d*|[-_\~!@#\$%\^&\*\.\(\)\[\]\{\}<>\?\\\/\'\"]*)|.{0,5})$|\s/,
+												"allphone" : /^(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}/,
+												"ipaddr" : /^([1-9]|[1-9]\d|1\d{2}|2[0-1]\d|22[0-3])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}$/
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="sql" default="">
+										<xsd:annotation>
+											<xsd:documentation>    
+												<![CDATA[
+												和method=database配合使用，待验证的sql
+												sql必须只返回一个值，0和1，如果不为0代表验证不通过，为0代表验证通过
+												例如：select count(1) from sys_user_tab where code=#{code,string} and user_id!=#{userid,int}
+												可选
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="class" type="xsd:string">
+										<xsd:annotation>
+											<xsd:documentation>
+												<![CDATA[
+												可选，用于method为class时类名标识
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="msg" default="">
+										<xsd:annotation>
+											<xsd:documentation>    
+												<![CDATA[
+												验证不通过的时候，提示给用户的信息
+												如：姓名不能为空
+												可选
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="maxlength" type="xsd:int">
+										<xsd:annotation>
+											<xsd:documentation>    
+												<![CDATA[
+												字段的最大长度
+												method=reg,该字段有效
+												可选
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+									<xsd:attribute name="minlength" type="xsd:int">
+										<xsd:annotation>
+											<xsd:documentation>    
+												<![CDATA[
+												字段的最小长度
+												method=reg,该字段有效
+												可选
+												]]>
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:attribute>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="id" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									<![CDATA[
+									唯一值，和url表一一映射，其中id和sys_url_tab，url_id字段一致
+									]]>
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

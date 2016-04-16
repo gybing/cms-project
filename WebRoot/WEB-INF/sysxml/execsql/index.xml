@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	<!-- 获取车辆监控信息 tab_truck_status 车辆最新状态表  -->
+	<mapper id="queryIndexTruckStatus">
+		<sql key="queryIndexTruckStatus" resultType="list" operator="select">
+			SELECT DISTINCT S.STATUS_ID,
+			       S.TAG,
+			       S.FT_ID,
+			       IFNULL(S.TRUCK_PLATE,'') TRUCK_PLATE,
+			       S.DRIVER_ID,
+			       IFNULL(S.DRIVER,'') DRIVER,
+			       IFNULL(S.DRIVER_TEL,'') DRIVER_TEL,
+			       S.FRAME_ID,
+			       IFNULL(S.TRUCK_FRAME,'') TRUCK_FRAME,
+			       IFNULL(S.LNG,'') LNG,
+			       IFNULL(S.LAT,'') LAT,
+			       IFNULL(S.LOC_ADDRESS,'') LOC_ADDRESS,			       
+			       S.LAST_LOC_TIME,
+			       S.SCHEDULE_ID,
+			       IFNULL(S.SCHEDULE_STATUS,'') SCHEDULE_STATUS,
+			       IFNULL(S.ORDER_NO,'') ORDER_NO,
+			       S.ORDER_ID,
+			       S.BOX_ID,
+			       S.BOX_NO,
+			       IFNULL(DATE_FORMAT(C.SEND_TIME, '%Y-%m-%d %T'),'') SEND_TIME,
+			 	   IFNULL(TIME_FORMAT(TIMEDIFF(NOW(),DATE_FORMAT(C.SEND_TIME, '%Y-%m-%d %T')),'%H.%i'),'0') FEE_TIME,
+			       IFNULL(DATE_FORMAT(C.ARRIVE_TIME, '%Y-%m-%d %T'),'') ARRIVE_TIME,
+			       IFNULL(DATE_FORMAT(C.ARRIVE_TIME, '%m-%d %H:%i'),'') ARRIVE_TIME1,
+			       IFNULL(C.FROM,'') FROM1,
+			       IFNULL(C.TO,'') TO1,
+			       IFNULL(S.SPEED,'0') SPEED,
+			       (SELECT IFNULL(D.CODE,'0') FROM dict_common D WHERE D.TYPE='MILEAGE' LIMIT 1) IS_SPEED,
+			       S.TOTAL_MILEAGE,
+			       S.NOW_MILEAGE,
+			       IFNULL(LEFT((S.NOW_MILEAGE/S.TOTAL_MILEAGE)*100,5),0) FER
+			  FROM tab_truck_status S
+			  LEFT JOIN tab_order_box_schedule C ON C.SCHEDULE_ID = S.SCHEDULE_ID
+			  	WHERE TRIM(S.SCHEDULE_STATUS)!='空闲'
+			<isNotEmpty property="STATUS_ID">
+				AND S.STATUS_ID = #{STATUS_ID}
+			</isNotEmpty>
+		</sql>
+	</mapper>
+	
+	
+</mappers>

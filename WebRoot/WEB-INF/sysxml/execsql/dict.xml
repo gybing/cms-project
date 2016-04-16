@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	
+	<!-- 新增字典表数据 -->
+	<mapper id="addDictType">
+		<sql key="addDict" operator="execute">
+			insert into dict_common (id,type,name,code,text,seq,parent_code) values (UUID(),#{type},#{name},#{code},#{text},#{seq},#{parent_code})
+		</sql>
+	</mapper>
+	
+	<!-- 编辑字典表数据 -->
+	<mapper id="editDict">
+		<sql key="editDict" operator="execute">
+			update dict_common set code = #{code} , text = #{text} ,  parent_code = #{parent_code} 
+			<isNotEmpty property="seq">
+				, seq = #{seq} 
+			</isNotEmpty>
+			<isEmpty property="seq">
+				, seq = 0
+			</isEmpty>
+			where id = #{id}
+		</sql>
+	</mapper>
+	
+	<!-- 批量更新数据类型 -->
+	<mapper id="updateDictType">
+		<sql key="updateDictType" operator="execute">
+			update dict_common set type = #{type},name = #{name} where type = #{old_type}
+		</sql>
+	</mapper>
+	<!-- 批量删除数据类型 -->
+	<mapper id="deleteDictType">
+		<sql key="deleteDictType" operator="execute">
+			update dict_common set is_del = 'Y' where type = #{d_type}
+		</sql>
+	</mapper>	
+	<!-- 删除字典表数据 -->
+	<mapper id="deleteDict">
+		<sql key="deleteDict" operator="execute">
+			update dict_common set is_del = 'Y' where id = #{id}
+		</sql>
+	</mapper>
+	
+	<!-- 根据 id 获取指定数据类型信息 -->
+	<mapper id="getDictTypeById">
+		<sql key="getDictTypeById" operator="select" resultType="map">
+			select `tag`, `type`, `name`, `code`, `parent_code`, `text`, `seq`, `is_del`
+				from `dict_common`
+			where id = #{id}
+		</sql>
+	</mapper>
+	<!-- 获取特定字典数据类型 -->
+	<mapper id="getDictInfoByType">
+		<sql key="getDictInfoByType" operator="select" resutlType="map">
+			select  (@i:=@i+1) num,`id`, `tag`, `type`, `name`, `code`, `parent_code`, `text`, `seq`, `is_del` from `dict_common`,(select @i:= 0 ) it 
+			where type = #{DICT_TYPE} and is_del = 'N'
+			order by seq  
+		</sql>
+	</mapper>
+	<!-- 获取字典表数据类型 -->
+	<mapper id="getAllDictType">
+		<sql key="getAllDictType" operator="select" resultType="paging">
+			<isNotEmpty property="query_count">
+				select count(distinct a.type)
+			</isNotEmpty>
+			<isEmpty property="query_count">
+				select (@i:=@i+1) num,a.type,a.name
+			</isEmpty>
+				from 
+				( SELECT dt.type,dt.`name` FROM dict_common dt 
+					where is_del = 'N'
+				<isNotEmpty property="columns[0][search][value]">
+					AND dt.type LIKE '%${columns[0][search][value]}%'
+				</isNotEmpty>
+				<isNotEmpty property="columns[1][search][value]">
+					AND dt.`name` LIKE '%${columns[1][search][value]}%'
+				</isNotEmpty>
+				<isNotEmpty property="columns[2][search][value]">
+					AND dt.text LIKE '%${columns[2][search][value]}%'
+				</isNotEmpty>
+				GROUP BY dt.type) a
+			<isEmpty property="query_count">
+				,(select @i:= ${page_start} ) it limit ${page_start},${page_end}
+			</isEmpty>
+		</sql>
+	</mapper>
+</mappers>

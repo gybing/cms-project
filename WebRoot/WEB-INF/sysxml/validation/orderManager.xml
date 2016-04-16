@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validations xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://itest.56913.com:20080/xsd/validations.xsd">
+	<!-- 删除需求单时判断该需求单流程节点是否为暂存状态，只有暂存状态可删除 （1暂存、2新建、3已确认、4已完成、5已关闭） -->
+    <validation id="delRequi" >
+		<property field="REQUI_ID" method="database" msg="该需求单只有在暂存状态才可删除!" sql="SELECT COUNT(1) FROM requi_tab WHERE FLOW_NODE != 1 AND REQUI_ID = #{REQUI_ID}" ></property>
+	</validation>
+	
+	<!-- 只有需求单为暂存状态才能做 修改操作 -->
+	<validation id="editRequi" >
+		<property field="REQUI_ID" method="database" msg="该需求单只有在暂存状态才可修改!" sql="SELECT COUNT(1) FROM requi_tab WHERE FLOW_NODE != 1 AND REQUI_ID = #{REQUI_ID}" ></property>
+	</validation>
+	
+	<!-- 新增费用类型 -->
+	<validation id="addFee" >
+		<property field="FEE_TYPE" method="database" msg="该费用类型已存在，请重新输入!" sql="SELECT COUNT(1) FROM dict_fee WHERE FEE_TYPE = #{FEE_TYPE}" ></property>
+		<property field="FEE_CODE" method="database" msg="该费用编码已存在，请重新输入!" sql="SELECT COUNT(1) FROM dict_fee WHERE FEE_CODE = #{FEE_CODE}" ></property>
+	</validation>
+</validations>

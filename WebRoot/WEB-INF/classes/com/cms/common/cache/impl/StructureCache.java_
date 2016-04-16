@@ -1,0 +1,25 @@
+package com.cms.common.cache.impl;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.stereotype.Service;
+
+import com.cms.common.cache.ICacheService;
+
+@Service("structureCache")
+public class StructureCache implements ICacheService {
+
+	@Override
+	public Map<String, TableObject> getCacheContext() {
+		return new ConcurrentHashMap<String, TableObject>();
+	}
+
+	@Override
+	public long getCacheLiveTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+}

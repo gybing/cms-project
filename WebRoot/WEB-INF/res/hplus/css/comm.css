@@ -1,0 +1,91 @@
+.col-custom{
+	padding-left: 5px;
+	padding-right: 5px;
+}
+/* 菜单按钮设置  */
+.btn-menu{
+	background-color: white;
+	border-top: 1px solid #e7eaec; 
+	padding: 8px 0 2px;
+	text-align: center;
+}
+.btn-menu a{
+	margin-left: 3px;
+}
+
+/* 按钮设置  	*/
+.dept-button{
+	background-color: #fff;
+	border-top: 1px solid #e7eaec;
+	padding: 10px;text-align: center;
+}
+.dept-button a:nth-child(2){
+	margin-left: 20px;
+}
+
+/* dataTables 选中背景色设置  */
+tr.onClick td{
+	background-color: #BEEBFF;
+}
+/* 列表操作按钮间的距离 */
+.a-left{
+	margin-left: 5px;
+}
+/* div 不换行 */
+.div-inline{
+	display: inline;
+}
+
+/* dataTables 横向滚动条设置 */
+th, td { white-space: nowrap; }
+div.dataTables_wrapper {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/*01提箱：#18b4ed
+02送箱：#ff0000
+03回箱：#009688
+04进场：#259b24
+05空跑：#c21928
+06暂存：#ad2a56
+07脱空：#68247d
+08退装：#527da4
+09空闲：#1293b0*/
+.label-01 {
+	background-color: #18b4ed;
+	color: #FFF
+}
+.label-02 {
+	background-color: #ff0000;
+	color: #FFF
+}
+.label-03 {
+	background-color: #009688;
+	color: #FFF
+}
+.label-04{
+	background-color: #259b24;
+	color: #FFF
+}
+.label-05 {
+	background-color: #c21928;
+	color: #FFF
+}
+.label-06 {
+	background-color: #ad2a56;
+	color: #FFF
+}
+.label-07{
+	background-color: #68247d;
+	color: #FFF
+}
+.label-08 {
+	background-color: #527da4;
+	color: #FFF
+}
+.label-09 {
+	background-color: #1293b0;
+	color: #FFF
+}
+

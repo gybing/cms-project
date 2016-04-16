@@ -1,0 +1,52 @@
+/** ������ʽ  **/
+select,.col-sm-2 select,select.form-control{
+	background-color: #eee;
+	height: 24px;
+	/* border: solid 1px #666;
+  
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+
+    padding-right: 14px;
+
+    background: url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll right center transparent; */
+}
+.col-sm-2 input[type=text],.col-sm-2 input.layer-date,input[type=text],input.form_date{
+	width:150px;
+}
+
+.col-sm-2 select{
+	width:150px;
+}
+
+.btn-sm{
+	height:26px;
+	padding-left: 10px;
+	padding-right: 10px;
+	/* line-height: 25px; */
+}
+label,input,.control-label,input.form-control{
+	height:24px;
+	line-height: 24px;
+}
+input[type="checkbox"], input[type="radio"]{
+	height:auto;
+}
+td {
+	padding: 0px 5px 5px 0px
+}
+
+.datatables_text_center{
+	text-align:center;
+	min-width: 60px;
+}
+
+/* 自动补全下拉框字体样式 */
+td[data-name='TEXT']{
+	font-size: 12px;
+	-webkit-font-size:12px;/* google */
+	-ms-font-size:12px;/* IE 9 */
+	-o-font-size:12px;/* Opera  */
+	-moz-font-size:12px;/* Firefox  */
+}

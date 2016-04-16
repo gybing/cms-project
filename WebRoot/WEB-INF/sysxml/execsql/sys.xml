@@ -1,0 +1,847 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	<!-- ************************************ 新 开始 ************************************ -->
+	<!-- 新增人员 -->
+	<mapper id="addManager">
+	    <sql key="addUser" operator="execute" >
+	        insert into user_tab(USER_CODE, USER_NAME, USER_PWD, TEL, SEX,CREATE_DATE,COMPANY,DEPARTMENT) 
+	        values (#{USER_CODE}, #{USER_NAME}, md5('123456'), #{TEL},${SEX}, now(),#{COMPANY},#{DEPARTMENT})   
+	    </sql>
+	</mapper>
+	<!-- 编辑人员信息 -->
+	<mapper id="editManager">
+	    <sql key="editUser" operator="execute">
+	        update user_tab set 
+				USER_CODE=#{USER_CODE}, 
+				USER_NAME=#{USER_NAME}, 
+				TEL=#{TEL},
+			    SEX=#{SEX}, 
+			    COMPANY=#{COMPANY},
+			    DEPARTMENT=#{DEPARTMENT},
+			    SCHEDULE_CENTER=#{SCHEDULE_CENTER}
+			where USER_ID=#{USER_ID}
+	    </sql>
+	 </mapper>
+	 <!-- 更新用户头像 -->
+	 <mapper id="updateUserHeader">
+	 	<sql key="updateUserHeader" operator="execute">
+	 		update user_tab set pic = #{pic} where user_id = '$_CRU_USER_ID_$'
+	 	</sql>
+	 </mapper>
+	 <!-- 获取用户当前头像 -->
+	 <mapper id="qryUserCurrentPic">
+	 	<sql key="qryUserCurrentPic" operator="select" resultType="map">
+	 		select pic from user_tab where user_id ='$_CRU_USER_ID_$' and is_del = 'N'
+	 	</sql>
+	 </mapper>
+	<!-- 查看管理员列表 -->
+	<mapper id="queryUserListpage">
+		<sql key="queryUserListpage" operator="select" resultType="autoPaging">
+			select ut.USER_ID,ut.USER_CODE,ut.USER_NAME,ut.SEX,ut.TEL,ut.CREATE_DATE,ut.COMPANY,ut.DEPARTMENT,CASE ut.IS_DISABLED WHEN '0' THEN '否' WHEN '1' THEN '是' ELSE '' END as IS_DISABLED,ut.IS_DEL, GROUP_CONCAT(f.role_name) role_name from user_tab ut
+			left join user_role_bsm_tab curbt on ut.USER_ID=curbt.user_id
+			left join(select * from role_bsm_tab where is_del='N') f on curbt.role_id=f.role_id
+			where 1=1
+			<isNotEmpty property="columns[0][search][value]">
+				and ut.IS_DISABLED = #{columns[0][search][value]} 
+			</isNotEmpty>
+			<isNotEmpty property="columns[1][search][value]">
+				and ut.USER_NAME like '%${columns[1][search][value]}%' 
+			</isNotEmpty>
+			<isNotEmpty property="columns[2][search][value]">
+				and ut.TEL like '%${columns[2][search][value]}%'
+			</isNotEmpty>
+			AND ut.IS_DEL = 'N'
+			GROUP BY ut.USER_ID
+			order by DATE_FORMAT(ut.create_date,'%Y-%m-%d %T') DESC
+	    </sql>
+	</mapper>
+	<!-- 查看人员信息 -->
+	<mapper id="queryUser">
+	    <sql key="queryUser" resultType="map" operator="select">
+	        select * from user_tab where USER_ID=#{USER_ID} 
+	    </sql>
+	</mapper>
+	<!-- 查询用户分配角色列表 -->
+	<mapper id="queryUserRoleList">
+		<sql key="queryRoleList" operator="select" resultType="autoPaging">
+			select c.ROLE_ID,c.ROLE_NAME,c.REMARK,d.NAME as PNAME,IF(e.USER_ID != '' ,'Y','N') BE_ASSIGN 
+			from role_bsm_tab c 
+			left join (
+				select ROLE_ID, GROUP_CONCAT(NAME) as NAME from ((select ROLE_ID,PRIV_ID as PRIV_ID1 from role_priv_bsm_tab ) a 
+				left JOIN (select PRIV_ID as PRIV_ID2,NAME from priv_bsm_tab) b  on a.PRIV_ID1 = b.PRIV_ID2) 
+				GROUP BY ROLE_ID
+			) d on c.ROLE_ID = d.ROLE_ID 
+			left join user_role_bsm_tab e on e.ROLE_ID = c.ROLE_ID and e.USER_ID = #{USER_ID}  
+			where c.is_del='N'
+			<isNotEmpty property="Q_ROLE_NAME">
+				and ROLE_NAME like '%${Q_ROLE_NAME}%' 
+			</isNotEmpty>
+	    </sql>
+	    <!-- <sql key="queryUserRoles" operator="select" resultType="string">
+	        SELECT GROUP_CONCAT(role_id) from user_role_bsm_tab where user_id=#{user_id}
+	    </sql> -->
+	</mapper>
+	<!-- 保存用户角色 -->
+	<mapper id="saveUserRole">
+		<sql key="delUserRole" operator="execute" >
+			delete from user_role_bsm_tab where USER_ID=#{userId}
+	    </sql>
+	    <sql key="saveUserRole" operator="execute" iterfields="roleIds" iterfieldsplit=",">
+	        insert into user_role_bsm_tab (ROLE_ID, USER_ID) values (#{roleIds}, #{userId})
+	    </sql>
+	</mapper>
+	<!-- 删除人员信息 -->
+	<mapper id="delUser">
+	    <sql key="delUser" operator="execute">
+	        update user_tab set IS_DEL='Y'
+			where USER_ID=#{USER_ID}
+	    </sql>
+	</mapper>
+	<!-- 重置密码信息 -->
+	<mapper id="resetManagePwd">
+	    <sql key="resetPwd" operator="execute">
+	        update user_tab set USER_PWD=md5('123456')
+			where USER_ID=#{user_id}
+	    </sql>
+	</mapper>
+	<!-- 修改密码 -->
+	<mapper id="editPwd">
+	    <sql key="editPwd" operator="execute">
+	        UPDATE user_tab U SET U.USER_PWD = MD5(#{USER_PWD})
+				WHERE U.USER_ID = #{USER_ID}
+	    </sql>
+	</mapper>
+	<!-- 管理人员生效-->
+	<mapper id="beEffective">
+		<sql key="beEffective" operator="execute"> 
+			update user_tab set IS_DISABLED='1'  where user_id =#{USER_ID}  
+		</sql>
+	</mapper>
+	<!-- 管理人员失效-->
+	<mapper id="beInvalid">
+		<sql key="beInvalid" operator="execute">
+			update user_tab set IS_DISABLED='0'  where user_id =#{USER_ID}  
+		</sql>
+	</mapper>
+	<!-- 查询角色列表 -->
+	<mapper id="queryRoleList">
+		<sql key="queryRoleList" operator="select" resultType="paging">
+			select 
+			<isNotEmpty property="query_count">
+				count(c.role_id)
+			</isNotEmpty>
+			<isEmpty property="query_count">
+				c.ROLE_ID,c.ROLE_NAME,c.REMARK,d.NAME as PNAME 
+			</isEmpty>
+			from role_bsm_tab c 
+			left join (
+				select ROLE_ID, GROUP_CONCAT(NAME) as NAME from ((select ROLE_ID,PRIV_ID as PRIV_ID1 from role_priv_bsm_tab ) a 
+				left JOIN (select PRIV_ID as PRIV_ID2,NAME from priv_bsm_tab) b  on a.PRIV_ID1 = b.PRIV_ID2) 
+				GROUP BY ROLE_ID
+			) d on c.ROLE_ID = d.ROLE_ID 
+			where c.is_del='N' <!--  and id=#{session_company_id} 
+			<isNotEqual property="session_role_type" compareValue="0">
+			    and role_type=0
+			</isNotEqual>-->
+			<isNotEmpty property="columns[0][search][value]">
+				and ROLE_NAME like '%${columns[0][search][value]}%'
+			</isNotEmpty>
+			order by c.role_id desc
+			 <isEmpty property="query_count">
+				LIMIT ${page_start},${page_end}
+			</isEmpty>
+	    </sql>
+	</mapper>
+	<!-- 新增角色 -->
+	<mapper id="addRole">
+	    <sql key="addRole" operator="execute" >
+	        	insert into role_bsm_tab(ROLE_NAME, REMARK) values (#{ROLE_NAME}, #{REMARK}) 
+	    </sql>
+	</mapper>
+	<!-- 查看角色信息 -->
+	<mapper id="queryRole">
+	    <sql key="queryRole" resultType="map" operator="select">
+	        select * from role_bsm_tab where ROLE_ID=#{ROLE_ID} 
+	    </sql>
+	</mapper>
+	<!-- 编辑角色信息 -->
+	<mapper id="editRole">
+	    <sql key="editRole" operator="execute">
+	        update role_bsm_tab set 
+				ROLE_NAME=#{ROLE_NAME}, 
+				REMARK=#{REMARK} 
+			where ROLE_ID=#{ROLE_ID}
+	    </sql>
+	</mapper>
+	<!-- 删除角色信息 -->
+	<mapper id="delRole">
+	    <sql key="delRole" operator="execute">
+	        update role_bsm_tab set is_del='Y'
+			where ROLE_ID=#{ROLE_ID}
+	    </sql>
+	     <sql key="save_user_and_role_del" operator="execute" >
+			delete from role_priv_bsm_tab where ROLE_ID=#{ROLE_ID}
+	    </sql>
+	    <sql key="del_user_role" operator="execute" >
+			delete from  user_role_bsm_tab where ROLE_ID=#{ROLE_ID}
+	    </sql>
+	</mapper>
+	<!-- 查看权限列表 -->
+	<mapper id="queryRolePrivList">
+	    <sql key="queryRolePrivList" operator="select" resultType="list">
+			<!-- select a.priv_id,a.name,a.pid,a.is_folder,IF(b.priv_id is null,'false','true') is_checked 
+			from priv_bsm_tab a 
+			left join (select * from role_priv_bsm_tab where role_id=${role_id}) b on a.priv_id=b.priv_id
+			WHERE a.IS_DEL='N' -->
+			<!--  <isNotEqual property="session_role_type" compareValue="0">
+			and a.priv_id in (
+				select priv_id from role_priv_tab t 
+				inner join user_role_tab t1 on t.role_id=t1.role_id 
+				where t1.user_id='$_CRU_USER_ID_$'
+			)
+			</isNotEqual>-->
+			SELECT A.PRIV_ID,
+			       A.NAME,
+			       A.PID,
+			       A.IS_FOLDER,
+			       IF(B.PRIV_ID IS NULL, 'FALSE', 'TRUE') IS_CHECKED
+			  FROM priv_bsm_tab A
+			  LEFT JOIN (SELECT T.ROLE_ID, T.PRIV_ID
+			               FROM role_priv_bsm_tab T
+			              WHERE T.ROLE_ID = #{ROLE_ID}) B ON A.PRIV_ID = B.PRIV_ID
+			 WHERE A.IS_DEL = 'N'
+				AND A.PRIV_ID IN (
+					SELECT PRIV_ID
+					  FROM role_priv_bsm_tab T
+					 WHERE T.ROLE_ID = #{ROLE_ID}
+					 )
+		</sql>
+	</mapper>
+	<!-- 保存角色权限 -->
+	<!-- <mapper id="saveRolePriv">
+		<sql key="save_user_and_role_del" operator="execute" >
+			delete from role_priv_bsm_tab where ROLE_ID=#{ROLE_ID}
+	    </sql>
+	    <sql key="save_user_and_role" operator="execute" iterfields="PRIV_IDS" iterfieldsplit=",">
+	        insert into role_priv_bsm_tab (ROLE_ID, PRIV_ID) values (#{ROLE_ID}, #{PRIV_IDS})
+	    </sql>
+	</mapper> -->
+	<mapper id="saveRolePriv">
+		<sql key="save_user_and_role_del" operator="execute" >
+            DELETE FROM role_priv_bsm_tab WHERE ROLE_ID = #{P_ROLE_ID}
+	    </sql>
+	    <sql key="save_user_and_role" operator="execute" iterfields="P_PRIV_ID" iterfieldsplit=",">
+	        INSERT INTO role_priv_bsm_tab
+			  (ROLE_ID, PRIV_ID)
+			VALUES
+			  (#{P_ROLE_ID},#{P_PRIV_ID})
+	    </sql>
+	</mapper>
+	<!-- 查看权限列表 -->
+	<!-- <mapper id="queryPrivList">
+	    <sql key="queryPrivList" operator="select" resultType="list">
+			select a.*,(select count(1) from priv_bsm_tab where IS_DEL='N' and pid=a.priv_id ) childNum  from priv_bsm_tab a WHERE a.IS_DEL='N'
+			<isNotEmpty property="pid">
+			    and pid=${pid}
+			</isNotEmpty>
+			<isEmpty property="pid">
+			    and pid=0
+			</isEmpty>
+		</sql>
+	</mapper> -->
+	<mapper id="queryPrivList">
+	    <sql key="queryPrivList" operator="select" resultType="list">
+			SELECT A.PRIV_ID UNID,
+			       A.NAME TEXT,
+			       (CASE A.PID WHEN '0' THEN '#' ELSE A.PID END)  PARENT_ID,
+			       A.PNAME,
+			       A.SORT,
+			       A.IS_FOLDER,
+			       A.IS_DEL,
+			       A.REMARK,
+			       A.CREATED,
+			       A.LASTMOD,
+			       A.CREATER,
+			       A.MODIFYER,
+			       (SELECT COUNT(1)
+			          FROM priv_bsm_tab
+			         WHERE IS_DEL = 'N'
+			           AND PID = A.PRIV_ID) CHILDNUM
+			  FROM priv_bsm_tab A
+			 WHERE A.IS_DEL = 'N'
+		</sql>
+	</mapper>
+	<!-- 查看权限信息 -->
+	<mapper id="queryPriv">
+	    <sql key="queryPriv" operator="select" resultType="map">
+			select a.* from priv_bsm_tab a WHERE a.IS_DEL='N' 
+			<isNotEmpty property="id">
+		    	and priv_id=${id}
+			</isNotEmpty>
+		</sql>
+	</mapper>
+	<!-- 新增权限 -->
+	<mapper id="addPriv">
+	    <sql key="priv_add" operator="execute" >
+	        insert into priv_bsm_tab(PID, PNAME, NAME, remark, IS_FOLDER, is_del, CREATED, CREATER) 
+			values (#{PID}, #{PNAME}, #{PRIV_NAME}, #{REMARK}, #{IS_FOLDER}, 'N', now(), '$_CRU_USER_ID_$')
+	    </sql>
+	</mapper>
+	<!-- 查询权限对应的url -->
+	<mapper id="queryPrivUrl">
+	    <sql key="queryPrivUrl" resultType="paging" operator="select">
+	        select
+	        <isNotEmpty property="query_count">
+				COUNT(url_id) 
+			</isNotEmpty>
+			<isEmpty property="query_count">
+	         *  
+	         </isEmpty>
+	         from sys_url_tab where (sys_code='cms' or sys_code='base') 
+	         and priv_id=#{Q_PRIV_ID}
+	         <isEmpty property="query_count">
+				LIMIT ${page_start},${page_end}
+			</isEmpty>
+	    </sql>
+	</mapper>
+	<!-- 查询没有权限的url配置 -->
+	<mapper id="queryNoPrivUrl">
+	    <sql key="queryNoPrivUrl" resultType="paging" operator="select">
+	        select 
+	         <isNotEmpty property="query_count">
+				COUNT(url_id) 
+			</isNotEmpty>
+			<isEmpty property="query_count">
+	       	 *
+	       	 </isEmpty>
+	         from sys_url_tab where (sys_code='cms' or sys_code='base')
+	        <isNotEmpty property="columns[0][search][value]">
+	        	and ( URL_ID like '%${columns[0][search][value]}%'
+					or tag like '%${columns[0][search][value]}%'
+					or FULL_URL like '%${columns[0][search][value]}%'
+					or PRIV_ID like '%${columns[0][search][value]}%'
+					or MODULE_ID like '%${columns[0][search][value]}%'
+					or URL_TYPE like '%${columns[0][search][value]}%'
+					or TITLE like '%${columns[0][search][value]}%'
+					or SERVICE_NAME like '%${columns[0][search][value]}%'
+					or PAGE like '%${columns[0][search][value]}%'
+					or VALIDATION like '%${columns[0][search][value]}%'
+					or EXEC_SQL like '%${columns[0][search][value]}%'
+					or LOG_MODIFY like '%${columns[0][search][value]}%'
+					or REMARK like '%${columns[0][search][value]}%'
+					or CREATE_MAN like '%${columns[0][search][value]}%'
+					or SEND_TYPE like '%${columns[0][search][value]}%'
+					or ATT_BATCH_ID like '%${columns[0][search][value]}%'
+					or SYS_CODE like '%${columns[0][search][value]}%'
+					or SQL_ID like '%${columns[0][search][value]}%'
+					or VALIDATION_ID like '%${columns[0][search][value]}%'
+					)
+	        </isNotEmpty>
+	         <isEmpty property="query_count">
+				LIMIT ${page_start},${page_end}
+			</isEmpty>
+	    </sql>
+	</mapper>
+	<!-- 保存URL权限 -->
+	<mapper id="saveUrlPriv">
+	    <sql key="saveUrlPriv" operator="execute" iterfields="urlids" iterfieldsplit=",">
+	        update sys_url_tab set priv_id=#{privId}
+	        where url_id=#{urlids}
+	    </sql>
+	</mapper>
+	<!-- 删除URL权限 -->
+	<mapper id="delUrlPriv">
+	    <sql key="delUrlPriv" operator="execute">
+	        update sys_url_tab set priv_id=null
+	        where url_id=#{urlid}
+	    </sql>
+	</mapper>
+	<!-- 编辑权限 -->
+	<mapper id="editPriv">
+	    <sql key="priv_edit" operator="execute" >
+	        update priv_bsm_tab set NAME=#{PRIV_NAME}, remark=#{REMARK}, IS_FOLDER=#{IS_FOLDER}, lastmod=now(), modifyer='$_CRU_USER_ID_$' 
+			where priv_id=${PRIV_ID}
+	    </sql>
+	</mapper>
+	<!-- 删除权限 -->
+	<mapper id="delPriv">
+	    <sql key="priv_del" operator="execute" >
+	        update priv_bsm_tab set is_del='Y' 
+			where priv_id=${id}
+	    </sql>
+	    <sql key="del_child_priv" operator="execute" >
+	        update priv_bsm_tab set is_del='Y' 
+			where pid=${id}
+	    </sql>
+	</mapper>
+	
+	
+	<!-- 字典表数据操作************************************************************************************************************************************************************************************************************************ -->
+	
+	<!-- 获取具体字典表数据 -->
+	<mapper id="getDictByKey">
+		<sql key="getDictByKey" operator="select" resultType="paging">
+			select 
+			  <isNotEmpty property="query_count">
+				COUNT(id) 
+			</isNotEmpty>
+			<isEmpty property="query_count">
+				(@i:=@i+1) num,id,tag,type,name,code,parent_code,text,seq,is_del 
+			 </isEmpty>
+			from dict_common ,(select   @i:=0)   as   it 
+			where 1=1 
+			and is_del = 'N'
+			<isNotEmpty property="DICT_TYPE">
+				and type = #{DICT_TYPE}
+			</isNotEmpty>
+			<isNotEmpty property="id">
+				and id = #{id}
+			</isNotEmpty>
+			order by seq 
+			<isEmpty property="query_count">
+				LIMIT ${page_start},${page_end}
+			</isEmpty>
+		</sql>
+	</mapper>
+	<!-- 获取航线字典表中的所有航线数据 -->
+	<mapper id="getSailLine">
+		<sql key="getSailLine" operator="select" resultType="list">
+		  	select * from dict_sailline 
+		</sql>
+	</mapper>
+	<!-- 获取国家字典表中的所有国家数据 -->
+	<mapper id="getCountryDict">
+		<sql key="getCountryDict" operator="select" resultType="list">
+		  	select * from dict_country 
+		</sql>
+	</mapper>
+	<!-- 获取字典表中的特定类型数据 -->
+	<mapper id="getSpecialDictType">
+		<sql key="getSpecialDictType" operator="select" resultType="list">
+		  	select * from dict_common where 1=1 and is_del = 'N' 
+		  	<isNotEmpty property="type">
+				and type = '${type}' 
+			</isNotEmpty>
+			order by seq 
+		</sql>
+	</mapper>
+	<!-- 获取字典表中的所有类型 -->
+	<mapper id="getDictType">
+		<sql key="getDictType" operator="select" resultType="list">
+			SELECT DISTINCT A.type UNID,
+			       A.NAME TEXT,
+			       '#'  PARENT_ID,
+			       '' PNAME,
+				       (SELECT COUNT(1)
+			          FROM dict_common
+			         WHERE IS_DEL = 'N'
+			           AND type = A.type) CHILDNUM
+			  FROM dict_common A
+			 WHERE A.IS_DEL = 'N'
+			 order by A.TYPE
+		</sql>
+	</mapper>
+	<!-- 新增字典表数据类型 -->
+	<mapper id="addDictType">
+		<sql key="addDictType" operator="execute">
+			insert into  dict_common (id,tag,type,name,code,text) values (UUID(),#{tag},#{type},#{name},#{code},#{text})
+		</sql>
+	</mapper>
+	<!-- 新增字典表数据 -->
+	<mapper id="addDict">
+		<sql key="addDict" operator="execute">
+			insert into  dict_common (id,tag,type,name,code,text,seq,parent_code) values (UUID(),#{tag},#{type},#{name},#{code},#{text},#{seq},#{parent_code})
+		</sql>
+	</mapper>
+	<!-- 编辑字典表数据 -->
+	<mapper id="editDict">
+		<sql key="editDict" operator="execute">
+			update dict_common set code = #{code} , text = #{text} ,  parent_code = #{parent_code} 
+			<isNotEmpty property="seq">
+				, seq = #{seq} 
+			</isNotEmpty>
+			<isEmpty property="seq">
+				, seq = 0
+			</isEmpty>
+			where id = #{id}
+		</sql>
+	</mapper>
+	
+	<!-- 日志数据操作************************************************************************************************************************************************************************************************************************ -->
+	
+	<!-- 日志列表 -->
+	<mapper id="queryLogList">
+		<sql key="queryLogList" operator="select" resultType="autoPaging">
+			SELECT sl.LOGIN_IP,
+				   sl.USER_CODE,
+				   DATE_FORMAT(sl.ADD_TIME, '%Y-%m-%d %T') ADD_TIME,
+				   sl.USER_ID,
+				   sl.USER_NAME
+			FROM sys_log_tab sl
+			WHERE 1=1 
+			<isNotEmpty property="columns[0][search][value]">
+	        		AND instr(sl.USER_CODE,'${columns[0][search][value]}')>0 
+			</isNotEmpty>
+			<isNotEmpty property="columns[1][search][value]">
+	        		AND instr(sl.USER_NAME,'${columns[1][search][value]}')>0 
+			</isNotEmpty>
+			<isNotEmpty property="columns[2][search][value]">
+				AND sl.ADD_TIME >= '${columns[2][search][value]} 00:00:00'
+			</isNotEmpty>			
+			<isNotEmpty property="columns[3][search][value]">
+				AND '${columns[3][search][value]} 23:59:59' >= sl.ADD_TIME
+			</isNotEmpty>
+		</sql>
+	</mapper>
+	
+	<!-- ============================ 菜单管理 =================================== -->
+	<!-- 查询菜单树 -->
+	<mapper id="menuTree">
+		<sql key="menuTree" resultType="list" operator="select">
+			SELECT aa.* from (SELECT M.MENU_ID UNID,sut.PRIV_ID, (CASE M.PARENT_MENU_ID WHEN '0' THEN '#' ELSE M.PARENT_MENU_ID END) PARENT_ID, M.MENU_NAME TEXT
+			  FROM sys_menu_tab M LEFT JOIN sys_url_tab sut ON M.URL_ID=sut.URL_ID 
+			 ORDER BY M.PARENT_MENU_ID, M.SEQUENCE) aa
+		</sql>
+	</mapper>
+	
+	<!-- 查询菜单名称 -->
+	<mapper id="queryMenuName">
+   	  <sql key="queryMenuName" resultType="string" operator="select">
+   	  	  SELECT M.MENU_NAME FROM sys_menu_tab M WHERE M.MENU_ID = ${MENU_ID}
+	  </sql>
+	</mapper>
+	
+	<!-- 查询菜单 -->
+	<mapper id="queryMenu">
+		<sql key="queryMenu" resultType="map" operator="select">
+			SELECT M.URL_ID,
+			       M.MENU_PATH,
+			       M.PARENT_MENU_ID,
+			       M.MENU_NAME,
+			       M.MENU_TYPE,
+			       M.SEQUENCE MENU_SEQ,
+			       T.MENU_NAME AS PARENT_MENU_NAME,
+			       M.REMARK
+			  FROM sys_menu_tab M
+			  LEFT JOIN sys_menu_tab T ON T.MENU_ID = M.PARENT_MENU_ID
+			 WHERE M.MENU_ID=${MENU_ID}
+		</sql>
+	</mapper>
+	
+	<!-- 新增菜单 -->
+	<mapper id="saveMenu">
+	    <sql key="saveMenu" operator="execute" >
+	    	INSERT INTO sys_menu_tab
+			  (URL_ID,
+			   MENU_PATH,
+			   PARENT_MENU_ID,
+			   MENU_NAME,
+			   MENU_CODE,
+			   MENU_TYPE,
+			   SEQUENCE,
+			   SYS_ABBR,
+			   REMARK)
+			VALUES
+			  (#{URL_ID},
+			   #{MENU_PATH},
+			   ${PARENT_MENU_ID},
+			   #{MENU_NAME},
+			   #{MENU_CODE},
+			   #{MENU_TYPE},
+			   #{MENU_SEQ},
+			   'cms',
+			   #{REMARK})
+	    </sql>
+	</mapper>
+	
+	<!-- 修改菜单 -->
+	<mapper id="editMenu">
+	    <sql key="editMenu" operator="execute" >
+	    	UPDATE sys_menu_tab M
+			   SET M.URL_ID         = #{URL_ID},
+			       M.MENU_PATH      = #{MENU_PATH},			       
+			       M.MENU_NAME      = #{MENU_NAME},
+			       M.MENU_CODE      = #{MENU_CODE},
+			       M.MENU_TYPE      = #{MENU_TYPE},
+			       M.SEQUENCE       = #{MENU_SEQ},
+			       M.REMARK         = #{REMARK}
+			 WHERE M.MENU_ID = ${MENU_ID}
+	    </sql>
+	</mapper>
+	
+	<!-- 删除菜单 -->
+	<mapper id="delMenu">
+	    <sql key="delMenu" operator="execute" >
+	        DELETE FROM sys_menu_tab WHERE MENU_ID = ${MENU_ID}
+	    </sql>
+	</mapper>
+	
+	<!-- =================================== 操作 sys_url_tab表 ======================================== -->
+	
+	<!-- 查询 URL 配置  sys_url_tab -->
+	<mapper id="queryUrlList">
+	    <sql key="queryUrlList" resultType="paging" operator="select">
+			SELECT
+			<isNotEmpty property="query_count">
+				COUNT(P.URL_ID)
+			</isNotEmpty>
+			<isEmpty property="query_count">
+			 	   P.URL_ID,
+	        	   P.FULL_URL,
+			       P.TITLE,
+			       P.SERVICE_NAME,
+			       P.PAGE,
+			       P.SQL_ID,
+			       P.VALIDATION_ID,
+			       P.REMARK
+			</isEmpty>
+			  FROM sys_url_tab P
+			 WHERE P.SYS_CODE = 'cms'
+			   AND (P.PRIV_ID IS NULL OR P.PRIV_ID = '')
+			
+			<isNotEmpty property="columns[0][search][value]">
+				AND P.URL_ID LIKE '%${columns[0][search][value]}%'
+			</isNotEmpty>
+			<isNotEmpty property="columns[1][search][value]">
+				AND P.SERVICE_NAME LIKE '%${columns[1][search][value]}%'
+			</isNotEmpty>
+			<isNotEmpty property="columns[2][search][value]">
+				AND P.SQL_ID LIKE '%${columns[2][search][value]}%'
+			</isNotEmpty>
+			<isEmpty property="query_count">
+				<!-- ORDER BY '',
+				<isEqual property="order[0][column]" compareValue="3">
+					<isNotEmpty property="order[0][dir]">
+						D.DICT_TYPE ${order[0][dir]},
+					</isNotEmpty>
+				</isEqual>
+				<isEqual property="order[0][column]" compareValue="4">
+					<isNotEmpty property="order[0][dir]">
+						D.SORT ${order[0][dir]},
+					</isNotEmpty>
+				</isEqual> -->
+				ORDER BY P.URL_ID DESC
+				LIMIT ${page_start},${page_end}
+			</isEmpty>
+	    </sql>
+	</mapper>
+	
+	<!-- 查询url sys_url_tab -->
+	<mapper id="queryUrl">
+	    <sql key="queryUrl" resultType="map" operator="select">
+	        SELECT P.URL_ID,
+	        	   P.FULL_URL,
+			       P.TITLE,
+			       P.SERVICE_NAME,
+			       P.PAGE,
+			       P.SQL_ID,
+			       P.VALIDATION_ID,
+			       P.REMARK
+			  FROM sys_url_tab P
+			 WHERE P.URL_ID = #{URL_ID}
+	    </sql>
+	</mapper>
+	
+	<!-- 创建url  sys_url_tab -->
+	<mapper id="addUrl">
+	    <sql key="addUrl" operator="execute" >
+	    	INSERT INTO sys_url_tab
+			  (URL_ID,
+			   FULL_URL,
+			   TITLE,
+			   SERVICE_NAME,
+			   PAGE,
+			   REMARK,
+			   SYS_CODE,
+			   SQL_ID,
+			   VALIDATION_ID,
+			   PRIV_ID)
+			VALUES
+			  (#{URL_ID},
+			   #{FULL_URL},
+			   #{TITLE},
+			   #{SERVICE_NAME},
+			   #{PAGE},
+			   #{REMARK},
+			   'cms',
+			   #{SQL_ID},
+			   #{VALIDATION_ID},
+			   #{PRIV_ID})
+	    </sql>
+	</mapper>
+	
+	<!-- 修改url  sys_url_tab -->
+	<mapper id="editUrl">
+	    <sql key="editUrl" operator="execute">
+	    	UPDATE sys_url_tab P
+			   SET P.URL_ID        = #{URL_ID},
+			       P.FULL_URL      = #{FULL_URL},
+			       P.TITLE         = #{TITLE},
+			       P.SERVICE_NAME  = #{SERVICE_NAME},
+			       P.PAGE          = #{PAGE},
+			       P.REMARK        = #{REMARK},
+			       P.SQL_ID        = #{SQL_ID},
+			       P.VALIDATION_ID = #{VALIDATION_ID}
+			 WHERE P.URL_ID = #{URLID}
+	    </sql>
+	</mapper>
+	
+	<!-- 删除url  sys_url_tab -->
+	<mapper id="delUrl">
+	    <sql key="delNoPrivUrl" operator="execute" >
+	        DELETE FROM sys_url_tab WHERE URL_ID = #{URL_ID}
+	    </sql>
+	</mapper>
+	
+	<!-- ************************************ 新 结束 ************************************ -->
+	
+	
+	<!-- 通过表 查字典信息 下拉框 -->
+	<mapper id="getTabSel">
+	    <sql key="getTabSel" resultType="list" operator="select">
+	    	<!-- 楼宇编号 -->
+	    	<isEqual property="TYPE" compareValue="building_no">
+	    		select distinct id,building_no text from sys_building_tab 
+	    	</isEqual>
+	    	<isEqual property="TYPE" compareValue="room_type">
+	    		select distinct id,
+	    	</isEqual>
+	    	<!-- 调度中心 -->
+	    	<isEqual property="TYPE" compareValue="schedule_center">
+				SELECT T.CENTER_CODE ID,TRIM(T.CENTER_NAME) TEXT FROM tab_schedule_center T
+			       	<isNotEmpty property="sSearch_0">
+			       	    WHERE T.CENTER_NAME LIKE '%${sSearch_0}%'
+			       	</isNotEmpty>
+			       	ORDER BY T.CENTER_ID DESC
+	    	</isEqual>
+	    	<!-- 调度中心ID跟TEXT相同 -->
+	    	<isEqual property="TYPE" compareValue="schedule_center_text">
+				SELECT T.CENTER_NAME ID,TRIM(T.CENTER_NAME) TEXT FROM tab_schedule_center T
+			       	<isNotEmpty property="sSearch_0">
+			       	    WHERE T.CENTER_NAME LIKE '%${sSearch_0}%'
+			       	</isNotEmpty>
+			       	ORDER BY T.CENTER_ID DESC
+	    	</isEqual>
+	    	<!-- 船名 -->
+	    	<isEqual property="TYPE" compareValue="ship_name">
+	    		SELECT S.NAME_CN ID, TRIM(S.NAME_CN) TEXT FROM tab_ship S
+				    <isNotEmpty property="sSearch_0">
+			       	    WHERE S.NAME_CN LIKE '%${sSearch_0}%'
+			       	</isNotEmpty>
+			       	ORDER BY S.SHIP_ID DESC
+	    	</isEqual>
+	    	<!-- 港口 -->
+	    	<isEqual property="TYPE" compareValue="port_name">
+	    		SELECT P.PORT_CODE ID,TRIM(CONCAT(P.PORT_CODE,' ',P.PORT_CN)) TEXT FROM tab_port P 
+				    <isNotEmpty property="sSearch_0">
+			       	    WHERE CONCAT(P.PORT_CODE,P.PORT_CN) LIKE '%${sSearch_0}%'
+			       	</isNotEmpty>
+			       	ORDER BY P.PORT_ID DESC
+	    	</isEqual>
+	    	<!-- 货主 -->
+	    	<isEqual property="TYPE" compareValue="cargo_owner">
+	    		SELECT C.OWNNER_ID ID,TRIM(C.COMPANY) TEXT FROM tab_cargo_ownner C WHERE C.COMPANY_TYPE = 'hz'
+				    <isNotEmpty property="sSearch_0">
+			       	    AND C.COMPANY LIKE '%${sSearch_0}%' OR C.COMPANY_CODE LIKE '%${sSearch_0}%'
+			       	</isNotEmpty>
+			       	ORDER BY C.OWNNER_ID DESC
+	    	</isEqual>
+	    	<!-- 货代 -->
+	    	<isEqual property="TYPE" compareValue="cargo_proxy">
+	    		SELECT C.OWNNER_ID ID,TRIM(C.COMPANY) TEXT FROM tab_cargo_ownner C WHERE C.COMPANY_TYPE = 'hd'
+				    <isNotEmpty property="sSearch_0">
+			       	    AND C.COMPANY LIKE '%${sSearch_0}%' OR C.COMPANY_CODE LIKE '%${sSearch_0}%'
+			       	</isNotEmpty>
+			       	ORDER BY C.OWNNER_ID DESC
+	    	</isEqual>
+	    	<!-- 司机 -->
+	    	<isEqual property="TYPE" compareValue="driver">
+	    		SELECT DRIVER_ID ID,TRIM(CONCAT(NAME,'(',MOBILE_1,')')) TEXT FROM tab_driver WHERE IS_DEL='N' AND CURRENT_STATUS !='离职' 
+	    		<isNotEmpty property="sSearch_0">
+			    	AND (NAME LIKE '%${sSearch_0}%' OR MOBILE_1 LIKE '%${sSearch_0}%') ; 
+			    </isNotEmpty>
+	    	</isEqual>
+	    	<!-- 车牌 -->
+	    	<isEqual property="TYPE" compareValue="plate">
+	    		SELECT FT_ID ID,TRIM(TRUCK_PLATE) TEXT FROM tab_frame_truck WHERE IS_DEL='N' 
+	    		<isNotEmpty property="sSearch_0">
+			    	AND TRUCK_PLATE LIKE '%${sSearch_0}%' 
+			    </isNotEmpty>
+	    		AND TYPE='T';
+	    	</isEqual>
+	    	<!-- 车架 -->
+	    	<isEqual property="TYPE" compareValue="frame">
+	    		SELECT FT_ID ID,TRIM(CODE) TEXT FROM tab_frame_truck WHERE IS_DEL='N'
+	    		<isNotEmpty property="sSearch_0">
+			    	AND CODE LIKE '%${sSearch_0}%' 
+			    </isNotEmpty>
+	    		AND TYPE='F';
+	    	</isEqual>
+	    	<!-- 地点 -->
+	    	<isEqual property="TYPE" compareValue="dict_area">
+	    		SELECT A.CODE ID,TRIM(A.NAME) TEXT,A.ID AREA_ID,A.LAT,A.LNG,A.PROVINCE,A.CITY FROM dict_area A 
+				    <isNotEmpty property="sSearch_0">
+			       	    WHERE A.NAME LIKE '%${sSearch_0}%'
+			       	</isNotEmpty>
+			       	ORDER BY A.ID DESC
+	    	</isEqual>
+	    	<!-- 车架号id为中文 -->
+	    	<isEqual property="TYPE" compareValue="TRUCK_FRAME">
+	    		SELECT TRUCK_PLATE ID,TRIM(TRUCK_PLATE) TEXT FROM tab_frame_truck WHERE IS_DEL='N' AND TYPE='F';
+	    	</isEqual>
+	    	<!-- 车架号id为CODE -->
+	    	<isEqual property="TYPE" compareValue="TRUCK_FRAME_CODE">
+	    		SELECT CODE ID,TRIM(CODE) TEXT FROM tab_frame_truck WHERE IS_DEL='N' AND TYPE='F';
+	    	</isEqual>
+	    	<!-- 箱主 -->
+	    	<isEqual property="TYPE" compareValue="box_ownner">
+	    		SELECT O.OWNNER_ID ID,TRIM(O.SHORTCUT) TEXT FROM tab_box_ownner O
+				    <isNotEmpty property="sSearch_0">
+			       	    WHERE TRIM(O.SHORTCUT) LIKE '%${sSearch_0}%'
+			       	</isNotEmpty>
+			       	ORDER BY O.OWNNER_ID DESC
+	    	</isEqual>
+	    	<!-- 箱号 -->
+	    	<isEqual property="TYPE" compareValue="boxNo">
+	    		SELECT tob.box_id ID,TRIM(CONCAT("提单号:",tod.ORDER_NO," 箱号:", tob.NO," 铅封号:",tob.seal_no)) TEXT FROM tab_order_box tob
+		      	LEFT JOIN tab_order tod ON tob.ORDER_ID = tod.ORDER_ID 
+				WHERE tob.order_id IN (SELECT ORDER_ID FROM tab_order WHERE IS_DEL='N' AND IS_FINISH!='Y') 
+				AND SIZE='20' 
+				<!-- AND NOT EXISTS (SELECT a.BOX_ID FROM tab_order_box_schedule a WHERE a.COMMAND = '4' AND a.BOX_ID = tob.BOX_ID) -->
+	    		<isNotEmpty property="sSearch_0">
+			       AND CONCAT(tod.ORDER_NO,tob.NO,tob.SIZE)=#{sSearch_0}
+			    </isNotEmpty>
+	    		<isNotEmpty property="boxId">
+			       AND tob.box_id!=#{boxId}
+			    </isNotEmpty>
+	    	</isEqual>
+	    	<!-- 费用类型 -->
+	    	<isEqual property="TYPE" compareValue="fee_type">
+	    		SELECT F.FEE_CODE ID,TRIM(F.FEE_TYPE) TEXT FROM dict_fee F WHERE F.IS_DEL='N'
+				    <isNotEmpty property="sSearch_0">
+			       	    AND F.FEE_TYPE LIKE '%${sSearch_0}%'
+			       	</isNotEmpty>
+			       	 ORDER BY F.ID
+	    	</isEqual>
+	    	<!-- 航线 -->
+	    	<isEqual property="TYPE" compareValue="sailline">
+	    		SELECT S.SAILLINE ID,TRIM(S.SAILLINE) TEXT FROM dict_sailline S
+	    		<isNotEmpty property="sSearch_0">
+		       	    WHERE S.SAILLINE LIKE '%${sSearch_0}%'
+		       	</isNotEmpty>
+		       	 ORDER BY S.SAILCODE
+	    	</isEqual>
+	    	<!-- 停靠码头 -->
+	    	<isEqual property="TYPE" compareValue="tkmatou">
+	    		SELECT NAME ID,TRIM(NAME) TEXT FROM dict_area WHERE MATOU = 1
+	    	</isEqual>
+	    	<!-- 所属国 -->
+	    	<isEqual property="TYPE" compareValue="country">
+	    		SELECT CHINESENAME ID,TRIM(CHINESENAME) TEXT FROM dict_country 
+	    	</isEqual>
+	    	
+	    </sql>
+	</mapper>
+</mappers>
+

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	<!-- 小区物业管理系统 -->
+	<mapper id="qryUserList">
+		<sql key="qryUserList" operator="select" resultType="paging">
+			<isNotEmpty property="query_count">
+				select count(distinct sut.user_id)
+			</isNotEmpty>
+			<isEmpty property="query_count">
+				select (@i:=@i+1) num,a.* from (
+				select sut.`user_id`,
+				sut.`user_name`,
+				sut.`user_tel`,
+				sut.`phone`,
+				sut.`id_no`,
+				sut.`sex`,
+				sut.`addr`,
+				sut.`email`,
+				sut.`remark`,
+				sut.`housing_area`,
+				sut.`inside_area`,
+				sut.`house_type`,
+				sut.`create_date`,
+				sut.`work`,
+				sut.`work_tel`,
+				sut.`is_move_in`,
+				date_format(sut.`move_in_time`, '%Y-%m-%d') `move_in_time`,
+				sut.`formalities`,
+				sut.`decoration`,
+				sut.`is_move_out`,
+				date_format(sut.`move_out_time`, '%Y-%m-%d') `move_out_time`,
+				sut.`move_out_reason`,
+				sut.`is_del`
+			</isEmpty>
+			from sys_user_tab sut where 1=1
+			<isNotEmpty property="columns[0][search][value]">
+				and sut.user_name LIKE '%${columns[0][search][value]}%'
+			</isNotEmpty>
+			<isNotEmpty property="columns[1][search][value]">
+				and sut.id_no LIKE '%${columns[1][search][value]}%'
+			</isNotEmpty>
+			<isNotEmpty property="columns[2][search][value]">
+				and sut.phone LIKE '%${columns[2][search][value]}%'
+			</isNotEmpty>
+			<isNotEmpty property="columns[3][search][value]">
+				and sut.is_move_out = '${columns[3][search][value]}'
+			</isNotEmpty>
+			<isNotEmpty property="columns[4][search][value]">
+				and sut.move_out_time_start = '${columns[4][search][value]}'
+			</isNotEmpty>
+			<isNotEmpty property="columns[5][search][value]">
+				and sut.move_out_time_end = '${columns[5][search][value]}'
+			</isNotEmpty>
+			<isEmpty property="query_count">
+				order by sut.create_date desc
+				limit ${page_start},${page_end}
+				) a,(select @i:= ${page_start} ) it
+			</isEmpty>
+		</sql>
+	</mapper>
+	<!-- end 小区物业管理系统 -->
+
+</mappers>

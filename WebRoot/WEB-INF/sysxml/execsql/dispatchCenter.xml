@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	
+	<!-- 调度中心列表 -->
+	<mapper id="queryDispatchCenterList">
+	    <sql key="queryDispatchCenterList" resultType="paging" operator="select">
+	       SELECT
+			<isEmpty property="query_count">
+				(@i:=@i+1) seq,A.* from 
+	      	( SELECT sc.CENTER_ID,
+	        	   sc.CENTER_CODE,
+	        	   sc.REMARK,
+	        	   LEFT(sc.REMARK,80) REMARK_CUT,
+	        	   sc.CENTER_NAME
+       	   </isEmpty>
+			<isNotEmpty property="query_count">
+				count(1)
+			</isNotEmpty>
+	        	  <!--  sc.CENTER_COMPANY  -->
+	        FROM tab_schedule_center sc
+	        WHERE sc.TAG = (select TAG from user_tab where USER_ID = '$_CRU_USER_ID_$')
+	        <isNotEmpty property="columns[1][search][value]">
+	        	<isEqual property="columns[0][search][value]" compareValue="0">
+	        		AND (
+	        			instr(sc.CENTER_CODE,'${columns[1][search][value]}')>0 
+	        			OR instr(sc.CENTER_NAME,'${columns[1][search][value]}')>0 
+	        			)
+	        	</isEqual>
+	        	<isEqual property="columns[0][search][value]" compareValue="1">
+	        		AND instr(sc.CENTER_CODE,'${columns[1][search][value]}')>0 
+	        	</isEqual>
+	        	<isEqual property="columns[0][search][value]" compareValue="2">
+	        		AND instr(sc.CENTER_NAME,'${columns[1][search][value]}')>0
+	        	</isEqual>
+	        </isNotEmpty>
+	        <isEmpty property="query_count">
+					limit ${page_start}, ${page_end}
+					) A,(SELECT @i:= ${page_start} ) it
+				</isEmpty>
+	    </sql>
+	</mapper>
+	<!-- 调度中心详细信息 -->
+	<mapper id="queryDispatchCenter">
+	    <sql key="queryDispatchCenter" resultType="map" operator="select">
+	        SELECT sc.CENTER_ID,
+	        	   sc.CENTER_NAME,
+	        	   sc.REMARK,
+	        	   sc.CENTER_CODE
+	        FROM tab_schedule_center sc
+	        WHERE sc.TAG = (select TAG from user_tab where USER_ID = '$_CRU_USER_ID_$')
+	        	  AND sc.CENTER_ID = #{UNID}
+	    </sql>
+	</mapper>
+	<!-- 新增调度中心 -->
+	<mapper id="addDispatchCenter">
+	    <sql key="addDispatchCenter" operator="execute">
+	        INSERT INTO tab_schedule_center 
+	        	(CENTER_ID,
+	        	 TAG,
+	        	 CENTER_NAME,
+	        	 REMARK,
+	        	 CENTER_CODE)
+	        VALUES
+	        	(UUID(),
+	        	 (select TAG from user_tab where USER_ID = '$_CRU_USER_ID_$'),
+	        	 #{CENTER_NAME},
+	        	 #{REMARK},
+	        	 #{CENTER_CODE})
+	    </sql>
+	</mapper>
+	<!-- 修改调度中心 -->
+	<mapper id="editDispatchCenter">
+	    <sql key="editDispatchCenter" operator="execute">
+	        UPDATE tab_schedule_center 
+	        	SET CENTER_NAME = #{CENTER_NAME},
+	        		CENTER_CODE = #{CENTER_CODE},
+	        		REMARK = #{REMARK}
+	        WHERE CENTER_ID = #{UNID}
+	    </sql>
+	</mapper>
+	
+	<!-- 查询调度中心是否被占用 -->
+	<mapper id="dispatchCenterIsUsed">
+		<sql key="dispatchCenterIsUsed" operator="select" resultType="map">
+	    	SELECT
+				COUNT(1) AS NUM
+			FROM
+				tab_schedule_center tsc
+			WHERE
+				(
+					tsc.center_code IN (
+						SELECT
+							t.schedule_center
+						FROM
+							tab_order t
+						WHERE
+							t.is_del = 'N'
+					)
+					OR tsc.center_code IN (
+						SELECT
+							tobs.schedule_center
+						FROM
+							tab_order_box_schedule tobs
+						WHERE
+							tobs.is_del = 'N'
+					)
+				)
+			AND tsc.center_id = #{UNID}
+	    </sql>
+	</mapper>
+	
+	<!-- 删除调度中心 -->
+	<mapper id="delDispatchCenter">
+	    <sql key="delDispatchCenter" operator="execute">
+	        delete from tab_schedule_center where CENTER_ID = #{UNID}
+	    </sql>
+	</mapper>
+	
+	<!-- 获取调度中心信息（用于下拉框设置） -->
+	<mapper id="getDispatchList">
+		<sql id="getDispatchList" operator="select" resultType="list">
+			SELECT sc.* 
+	        FROM tab_schedule_center sc
+	        WHERE sc.TAG = (select TAG from user_tab where USER_ID = '$_CRU_USER_ID_$')
+		</sql>
+	</mapper>
+</mappers>

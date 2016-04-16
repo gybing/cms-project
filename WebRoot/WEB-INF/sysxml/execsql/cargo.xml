@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	
+	<!-- 货主货代列表 -->
+	<mapper id="cargoOwnerList">
+	    <sql key="cargoOwnerList" resultType="paging" operator="select">
+	      	SELECT
+			<isNotEmpty property="query_count">
+				COUNT(t.ownner_id) 
+			</isNotEmpty>
+	      	<isEmpty property="query_count">
+	      	 (@i:=@i+1) seq,A.* from (
+	      	 select
+	      	 t.ownner_id, 
+	      	 t.company, 
+	      	 t.company_code, 
+	      	 t.company_type, 
+	      	 t.company_addr, 
+	      	 t.linkman,
+	      	 t.linktel
+      	 	</isEmpty>
+	      	 from tab_cargo_ownner t where 1=1 
+	        <isNotEmpty  property="columns[0][search][value]">
+		        and search_field like '%${columns[0][search][value]}%'
+	        </isNotEmpty>
+	        <isNotEmpty  property="columns[1][search][value]">
+		        and company_type = #{columns[1][search][value]} 
+	        </isNotEmpty>
+	        <isEmpty property="query_count">
+				ORDER BY t.ownner_id DESC
+				LIMIT ${page_start},${page_end}
+				) A,(SELECT @i:= ${page_start} ) it
+			</isEmpty>
+	    </sql>
+	</mapper>
+	<!-- 新增货主货代 -->
+	<mapper id="addCargoOwner">
+	    <sql key="addCargoOwner" operator="execute">
+	        insert into tab_cargo_ownner(ownner_id,tag,company,company_code,company_type,company_addr,linkman,linktel,province,city,city_code,search_field) 
+	        values(UUID(),#{tag},#{company},#{company_code},#{company_type},#{company_addr},#{linkman},#{linktel},#{province},#{city},#{cargo_add_addr},#{company}#{company_code}#{company_addr}#{linkman}#{linktel})
+	    </sql>
+	</mapper>
+	<!-- 修改货主货代 -->
+	<mapper id="editCargoOwner">
+	    <sql key="editCargoOwner" operator="execute">
+	        update tab_cargo_ownner set company=#{company},company_code=#{company_code},company_type=#{company_type},company_addr=#{company_addr},linkman=#{linkman},linktel=#{linktel},province=#{province},city=#{city},city_code=#{cargo_edit_addr},search_field=#{company}#{company_code}#{company_addr}#{linkman}#{linktel} where ownner_id = #{cargoOwnerId}
+	    </sql>
+	</mapper>
+	<!-- 删除货主货代-->
+	<mapper id="delCargoOwner">
+	    <sql key="delCargoOwner" operator="execute">
+	        delete from tab_cargo_ownner where ownner_id = #{cargoOwnerId}
+	    </sql>
+	</mapper>
+	<!-- 根据id获取货主货代信息 -->
+	<mapper id="getCargoOwner">
+	    <sql key="getCargoOwner" resultType="map" operator="select">
+	        select * from tab_cargo_ownner t
+	        where t.ownner_id = #{cargoOwnerId}
+	    </sql>
+	</mapper>
+</mappers>

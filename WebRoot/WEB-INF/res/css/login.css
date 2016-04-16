@@ -1,0 +1,171 @@
+@charset "utf-8";
+
+html body {
+	margin: 0;
+	font-family: "微软雅黑";
+	height: 100%;
+}
+
+.top {
+	padding: 5px 0px 5px 10px;
+	background: url("../img/u112.png") repeat;
+}
+
+.top span {
+	font-size: 18px;
+	color: #FFFFFF;
+	font-weight: bold;
+	margin-left: 20px;
+}
+
+.main {
+	position: relative;
+	width: 881px;
+	margin: 0 auto;
+	margin-top: 70px;
+}
+
+#navTab {
+	color: #333333;
+}
+
+.navItem {
+	position: relative;
+	width: 163px;
+	height: 80px;
+	font-weight: 400;
+	font-size: 18px;
+	text-align: center;
+	color: #333333;
+	cursor: pointer;
+}
+
+.navItem div span {
+	position: absolute;
+	left: 2px;
+	top: 29px;
+	width: 159px;
+	word-wrap: break-word;
+}
+
+.activity {
+	color: #FFFFFF;
+}
+
+.navItem img {
+	width: 163px;
+	height: 80px;
+}
+
+.arrow {
+	position: absolute;
+	left: 138px;
+	top: 16px;
+	width: 25px;
+	height: 50px;
+}
+
+.arrow img {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 25px;
+	height: 50px;
+}
+
+.loginDiv {
+	position: absolute;
+	left: 162px;
+	top: 0px;
+	width: 718px;
+	height: 460px;
+}
+
+.panelImg {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 718px;
+	height: 460px;
+}
+
+.loginContent {
+	position: absolute;
+	width: 718px;
+	height: 460px;
+	padding-top: 20px;
+}
+
+.yblogoDiv {
+	position: relative;
+	left: 214px;
+	top: 20px;
+	width: 210px;
+	height: 50px;
+}
+
+.dline {
+	width: 100%;
+	text-align: center;
+	position: relative;
+	margin: 0 auto;
+	top: 50px;
+	position: relative;
+}
+
+.loginTable {
+	position: relative;
+	top: 80px;
+}
+
+.loginTable table {
+	margin: 0 auto;
+}
+
+.loginTable table tr {
+	padding: 5px;
+}
+
+.reg_input {
+	width: 197px;
+	height: 19px;
+	line-height: 18px;
+	outline: none;
+	border: 0;
+	padding: 10px 5px;
+	margin: 3px;
+	background: url(../img/reg_input.png) no-repeat left center
+}
+
+.btn_login {
+	display: block;
+	margin: 15px auto 0;
+	text-align: center;
+	text-decoration: none;
+	line-height: 46px;
+	width: 309px;
+	height: 46px;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 16px;
+	color: #FFFFFF;
+	cursor: pointer;
+	background: url(../img/u20.png)
+}
+
+.btn_img {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 142px;
+	height: 40px;
+}
+
+.btn {
+	position: absolute;
+	left: 2px;
+	top: 10px;
+	width: 138px;
+	word-wrap: break-word;
+	text-align: center;
+}

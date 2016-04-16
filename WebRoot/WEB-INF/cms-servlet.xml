@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd  
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-3.2.xsd  
+            http://www.springframework.org/schema/jdbc
+            http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+            http://www.springframework.org/schema/mvc   
+    		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+            http://www.springframework.org/schema/task  
+            http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+
+	<!-- 启动job -->
+	<task:annotation-driven />
+
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+
+	<!--配置ajax -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<bean id="mappingJacksonHttpMessageConverter"
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- component-scan自动搜索@Component , @Controller , @Service , @Repository等标注的类 -->
+	<!-- 自动搜索@Controller标注的类 -->
+	<context:component-scan base-package="com.cms.*.controller">
+	</context:component-scan>
+	<!-- 配置dao默认包 -->
+	<context:component-scan base-package="com.cms.*.dao"></context:component-scan>
+	<!-- 配置service默认包 -->
+	<context:component-scan base-package="com.cms"></context:component-scan>
+	<!-- 配置缓存的包 -->
+	<context:component-scan base-package="com.cms.*.cache"></context:component-scan>
+	<!-- 配置sqlparse默认包 -->
+	<context:component-scan base-package="com.cms.common.sqlparse"></context:component-scan>
+
+	<!-- 初始化 -->
+	<bean id="initPathExposer" class="com.cms.common.exposer.InitPathExposer"
+		init-method="init" />
+
+	<!-- Default ViewResolver -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource"
+		p:basename="i18n/messages" />
+
+ 	<bean class="com.cms.common.exposer.CacheBeanPostProcessor" /> 
+	<bean class="com.cms.common.listener.SpringContextUtil" /> 
+
+	<mvc:resources mapping="#{initPathExposer.resRoot}/**"
+		location="/WEB-INF/res/" cache-period="31536000" />
+	<mvc:resources location="image/" mapping="image/**" />
+</beans>
