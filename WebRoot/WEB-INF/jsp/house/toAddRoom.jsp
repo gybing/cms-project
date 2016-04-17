@@ -5,6 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <jsp:include page="/WEB-INF/jsp/top.jsp"></jsp:include>
+<style type="text/css">
+.has-success .control-label{
+	color:inherit;
+}
+</style>
 <%-- <jsp:include page="/WEB-INF/jsp/formSubmit.jsp"></jsp:include> --%>
 <title>新增住户</title>
 </head>
@@ -21,23 +26,24 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">房间编号:</label>
 								<div class="col-sm-2">
-									<input id="building_addr" name="building_addr" maxlength="14" type="text"/>
+									<input id="room_no" name="room_no" maxlength="14" class="required form-control" type="text"/>
+									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 								<label class="col-sm-2 control-label">楼宇编号:</label>
 								<div class="col-sm-2">
-		                    		<select class="combox" id="building_no" name="building_no">
+		                    		<select class="combox" id="building_no" name="building_no" class="required form-control" >
 										<option value="">请选择</option>
 									</select>
 								</div>
 								<label class="col-sm-2 control-label">楼宇名称:</label>
 								<div class="col-sm-2">
-		                    		<input id="building_name" name="building_name" readonly maxlength="14" type="text" aria-required="true" />
+		                    		<input id="building_name" name="building_name" readonly maxlength="14" type="text" class="form-control" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1 control-label">房间类型:</label>
 								<div class="col-sm-2">
-									<select class="combox" id="room_type" name="room_type">
+									<select class="combox form-control" id="room_type" name="room_type">
 										<option value="">请选择</option>
 									</select>
 								</div>
@@ -49,7 +55,7 @@
 								</div>
 								<label class="col-sm-2 control-label">所在楼层:</label>
 								<div class="col-sm-2">
-									<select class="combox" id="sex" name="sex">
+									<select class="combox" id="room_floor" name="room_floor">
 										<option value="">请选择</option>
 									</select>
 								</div>
@@ -57,25 +63,25 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">建筑面积:</label>
 								<div class="col-sm-3">
-									<input id="building_type" name="building_type" maxlength="14" type="text" aria-required="true" />
+									<input id="construction_area" name="construction_area" maxlength="14" type="text" class="form-control" />
 								</div>
 								<label class="col-sm-1 control-label">套内面积:</label>
 								<div class="col-sm-3">
-									<input id="building_structure" name="building_structure" maxlength="14" type="text" aria-required="true" />
+									<input id="room_area" name="room_area" maxlength="14" type="text" class="form-control" />
 								</div>
 								<label class="col-sm-1 control-label">公摊面积:</label>
 								<div class="col-sm-3">
-									<input id="building_toward" name="building_toward" maxlength="14" type="text" aria-required="true" />
+									<input id="public_area" name="public_area" maxlength="14" type="text" class="form-control" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1 control-label">装修情况:</label>
 								<div class="col-sm-3">
-									<input id="building_type" name="building_type" maxlength="14" type="text" aria-required="true" />
+									<input id="decration_state" name="decration_state" maxlength="14" type="text" class="form-control" />
 								</div>
 								<label class="col-sm-1 control-label">朝向:</label>
 								<div class="col-sm-3">
-									<input id="building_structure" name="building_structure" maxlength="14" type="text" aria-required="true" />
+									<input id="room_toward" name="room_toward" maxlength="14" type="text" class="form-control" />
 								</div>
 							</div>
 						</div>
@@ -120,7 +126,11 @@ $(function() {
 	$s2.init($C("#room_state"), {//运单状态
 		sysdict : $sysdict.ROOM_STATE
 	});
-	// 根据选择的楼宇编号，获取楼宇名称
+	// 设置楼层下拉框为 select2
+	$("#room_floor").select2({
+		minimumResultsForSearch:-1
+	});
+	// 根据选择的楼宇编号，获取楼宇名称,设置楼宇的楼层信息
 	$("#building_no").change(function(){
 		var _b_id = $(this).val();
 		$.ajax({
@@ -131,14 +141,29 @@ $(function() {
 			success:function(json){
 				json = json.resultObj;
 				$("#building_name").val(json.BUILDING_NAME);
+				$("#room_floor").html(""); // 清空上一次选择的楼宇的楼层信息
+				var html = "<option value=\"\">请选择</option>";
+				for (var int = 1; int <= json.BUILDING_FLOORS; int++) {
+					html += "<option value=\""+int+"\">"+int+"</option>";
+				}
+				$("#room_floor").append(html); // 重新载入选中楼宇的楼称信息
+				$("#room_floor").val("").trigger("change"); // 清空上一次选择楼层信息
 			}
 		});
 	});
+	
 	// 表单提交验证
 	$("#building_add_form").validate({
 		submitHandler : function(form) {
+			// 验证楼宇编号是否选择
+			if($("#building_no").val() == ''){
+				layer.tips('请选择楼宇编号!', '#building_no', {
+					  tips: [2,'#f21111'] //还可配置颜色
+				});
+				return ;
+			}
 			$.ajax({
-				url : "${ctxPath }/topic/ajax/saveBuildingInfo",
+				url : "${ctxPath }/topic/ajax/saveRoomInfo",
 				dataType : "json",
 				data : $(form).serialize(),
 				type : "post",

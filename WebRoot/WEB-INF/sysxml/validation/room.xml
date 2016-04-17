@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validations xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://itest.56913.com:20080/xsd/validations.xsd">
+	<!-- 判断楼宇编号唯一性 -->
+    <validation id="saveRoom">
+		<property field="room_no" method="database" msg="房间编号, 请重新输入!" sql="SELECT COUNT(1) FROM sys_room_tab s WHERE s.room_no = #{room_no}" ></property>
+	</validation>
+    <validation id="updateRoom">
+		<property field="room_no" method="database" msg="楼宇编号已经存在, 请重新输入!" sql="SELECT COUNT(1) FROM sys_room_tab s WHERE s.room_no = #{room_no} and s.id != #{r_id}" ></property>
+	</validation>
+</validations>

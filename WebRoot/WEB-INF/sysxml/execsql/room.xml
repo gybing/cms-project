@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	<!-- 新增楼宇信息 -->
+	<mapper id="saveRoomInfo">
+		<sql key="saveRoomInfo" operator="execute">
+			INSERT INTO `sys_room_tab` 
+				(
+					`id`, `room_no`, `building_no`, `building_name`, `room_type`, `room_state`,
+					`room_floor`,
+					<isNotEmpty property="CONSTRUCTION_AREA">
+						`construction_area`,
+					</isNotEmpty>
+					<isNotEmpty property="ROOM_AREA">
+						`room_area`,
+					</isNotEmpty>
+					 <isNotEmpty property="PUBLIC_AREA">
+						 `public_area`,
+					</isNotEmpty>  
+					`decration_state`, `room_toward`, `remark`, `create_date`
+				) 
+				VALUES
+				(
+					UUID(), #{room_no}, #{building_no}, #{building_name}, #{room_type}, #{room_state}, 
+					#{room_floor},
+					<isNotEmpty property="CONSTRUCTION_AREA">
+						${construction_area},
+					</isNotEmpty>
+					<isNotEmpty property="ROOM_AREA">
+						 ${room_area},
+					</isNotEmpty>
+					<isNotEmpty property="PUBLIC_AREA">
+						 ${public_area},
+					</isNotEmpty>  
+					#{decration_state},#{room_toward}, #{remark}, now()
+				);
+		</sql>
+	</mapper>
+	<!-- 更新楼宇信息 -->
+	<mapper id="updateBuildingInfo">
+		<sql key="" operator="execute">
+			UPDATE `sys_building_tab`
+				SET 
+				 `building_no` = #{BUILDING_NO},
+				 `building_name` = #{BUILDING_NAME},
+				 `building_floors` = ${BUILDING_FLOORS},
+				 `building_addr` = #{BUILDING_ADDR},
+				 `building_type` = #{BUILDING_TYPE},
+				 `building_structure` = #{BUILDING_STRUCTURE},
+				 `building_toward` = #{BUILDING_TOWARD},
+				 `remark` = #{REMARK}
+				WHERE
+					(
+						`id` = #{b_id}
+					);
+		</sql>
+	</mapper>
+	<!-- 删除楼宇信息 -->
+	<mapper id="deleteBuildingInfo">
+		<sql key="deleteBuildingInfo" operator="execute">
+			update sys_building_tab set is_del = 'Y' where id = #{b_id}
+		</sql>
+	</mapper>
+	<!-- 获取楼宇信息 -->
+	<mapper id="getBuildingInfo">
+		<sql key="getBuildingInfo" operator="select" resultType="map">
+			select `building_no`,`building_name`,`building_floors`,`building_addr`,`building_type`,`building_structure`,`building_toward`,`create_date`,`remark`
+				from sys_building_tab where 1=1
+			<isNotEmpty property="b_id">
+				and id = #{b_id}
+			</isNotEmpty>
+		</sql>
+	</mapper>
+	<!-- 楼宇信息列表 -->
+	<mapper id="qryBuildingList">
+		<sql key="qryBuildingList" operator="select" resultType="paging">
+			<isNotEmpty property="query_count">
+				select count(distinct sbt.id)
+			</isNotEmpty>
+			<isEmpty property="query_count">
+				select (@i:=@i+1) num,a.* from (
+				select sbt.`id`,
+					sbt.`building_no`,
+					sbt.`building_name`,
+					sbt.`building_floors`,
+					sbt.`building_addr`,
+					sbt.`building_type`,
+					sbt.`building_structure`,
+					sbt.`building_toward`,
+					DATE_FORMAT (sbt.`create_date`,'%Y-%m-%d %T') `create_date`,
+					sbt.`remark`
+			</isEmpty>
+			from sys_building_tab sbt where 1=1 and sbt.is_del = 'N'
+			<isNotEmpty property="columns[0][search][value]">
+				and sut.user_name LIKE '%${columns[0][search][value]}%'
+			</isNotEmpty>
+			<isEmpty property="query_count">
+				order by sbt.create_date desc
+				limit ${page_start},${page_end}
+				) a,(select @i:= ${page_start} ) it
+			</isEmpty>
+		</sql>
+	</mapper>
+</mappers>
