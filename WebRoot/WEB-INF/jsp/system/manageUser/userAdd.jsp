@@ -182,7 +182,7 @@ body {
                                    <input type="text" id="A_DEPARTMENT" name="DEPARTMENT" maxlength="40" class="form-control input-sm"/>
                                </div>
 	                       </div>
-	                       <div class="form-group form-group-sm">
+	                      <%--  <div class="form-group form-group-sm">
 	                       		<label class="col-sm-2 control-label">头像：</label>
 	                       		<div class="col-sm-1">
 		                       		<div id="crop-avatar">
@@ -192,13 +192,7 @@ body {
 		                       			</div>
 		                       		</div>
 	                       		</div>
-	                       		<label class="col-sm-2 control-label col-sm-offset-2" >调度中心：</label>
-                                <div class="col-sm-3">
-                               		<select id="A_SCHEDULE_CENTER"  name="SCHEDULE_CENTER" class="form-control">
-											<option value="">请选择</option>
-									</select>
-                                </div>
-	                       </div>
+	                       </div> --%>
                            <div class="form-group form-group-sm">
                                <label class="col-sm-2 control-label" >提示：</label>
                                <div class="col-sm-4">
@@ -259,6 +253,7 @@ body {
 	<!-- Cropping modal end-->
     <script type="text/javascript">
     	 $(function(){
+    		 console.info('${responseDataForm.resultObj}')
     		$("#userAddForm").validate({
 				submitHandler : function(form) {
 					$.ajax({
@@ -288,11 +283,6 @@ body {
 				}
 			});
     		
-    		//调度中心下拉框
-    		$s2.init($("#A_SCHEDULE_CENTER"), {
-    			tabdict : "schedule_center"
-    			//defVal:"2558855", // 默认为马尾调度中心
-    		});
     	}); 
     </script>
 </body>
