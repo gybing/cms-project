@@ -59,7 +59,7 @@
 									<button type="button" class="btn btn-outline btn-default" onclick="toAddRoom();">
 										<i class="glyphicon glyphicon-plus"></i> 新增
 									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="toEditUser();">
+									<button type="button" class="btn btn-outline btn-default" onclick="toEditRoom();">
 										<i class="glyphicon glyphicon-edit"></i> 修改
 									</button>
 									<button type="button" class="btn btn-outline btn-default" onclick="delOrder();">
@@ -159,20 +159,8 @@ var aoColumnParam = [0],aaSortParam = [];
 $(function(){
 	// 加载列表信息 initTableAutoHeight(id,url,param,colsParam,aoColumnParam,aaSortParam,other); 
 	// param Ajax请求时发送额外的数据(条件),colsParam 设置列属性条件,aoColumnParam 设置哪些列不排序  aaSortParam设置哪些列排序
-	table = initTableAutoHeight("room_list_table", "${ctxPath}/topic/page/qryRoomList", null,cols,aoColumnParam,aaSortParam,"USER_ID",getScreen());
+	table = initTableAutoHeight("room_list_table", "${ctxPath}/topic/page/qryRoomList", null,cols,aoColumnParam,aaSortParam,"ID");
 });
-
-/* 新增房间信息 */
-function toAddUser(){
-	/* 跳转页面  iUrl请求url  iTitletab标签名 */
-	indexToPage("${ctxPath }/topic/toAddUser", "新增房间信息");
-}
-
-/* 编辑住户信息  */
-function toEditUser(){
-	/* 跳转页面  iUrl请求url  iTitletab标签名 */
-	indexToPage("${ctxPath }/topic/toEditUser", "编辑住户信息");
-}
 
 /* 搜索 查询 */
 function searchForm() {
@@ -185,7 +173,7 @@ function searchForm() {
 	table.draw();
 }
 
-/* 迁入弹窗 */
+/* 新增房间信息弹窗 */
 function toAddRoom(){
 	index = layer.open({
 	    type: 2, 
@@ -197,26 +185,23 @@ function toAddRoom(){
 	});
 }
 
-/* 迁出弹窗 */
-function toMoveOut(){
-	index = layer.open({
-	    type: 2, 
-	    title : "住户迁出",
-	    area: ['65%', '71%'],
-	    fix: false, //不固定
-	   // maxmin: true,
-	    content: _contextPath+"/topic/toUserMoveOut"
-	});
-}
-/**
- * 获取屏幕高度
- * */
-function getScreen()
-{
-	var height = document.body.clientHeight;
-	var ibox_title = $(".ibox-title").height();
-	var toolbar = $("#toolbar").height();
-	return height-94-ibox_title-40-toolbar;
+/* 编辑房间信息弹窗 */
+function toEditRoom(){
+	var r_id = $("#clickId").val()?$("#clickId").val():"";
+	if(r_id){
+		index = layer.open({
+		    type: 2, 
+		    title : "编辑房间信息",
+		    area: ['65%', '61%'],
+		    fix: false, //不固定
+		   // maxmin: true,
+		    content: _contextPath+"/topic/toEditRoom?r_id="+r_id
+		});
+	}else{
+		layer.alert("请选择一条记录！", {icon: 2}, function(index){
+			layer.close(index);
+		});  
+	}
 }
 </script>
 </html>

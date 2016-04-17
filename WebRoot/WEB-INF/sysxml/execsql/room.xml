@@ -36,22 +36,40 @@
 				);
 		</sql>
 	</mapper>
-	<!-- 更新楼宇信息 -->
-	<mapper id="updateBuildingInfo">
-		<sql key="" operator="execute">
-			UPDATE `sys_building_tab`
+	<!-- 更新房间信息 -->
+	<mapper id="updateRoomInfo">
+		<sql key="updateRoomInfo" operator="execute">
+			UPDATE `sys_room_tab`
 				SET 
+				 `room_no` = #{ROOM_NO},
 				 `building_no` = #{BUILDING_NO},
-				 `building_name` = #{BUILDING_NAME},
-				 `building_floors` = ${BUILDING_FLOORS},
-				 `building_addr` = #{BUILDING_ADDR},
-				 `building_type` = #{BUILDING_TYPE},
-				 `building_structure` = #{BUILDING_STRUCTURE},
-				 `building_toward` = #{BUILDING_TOWARD},
+				 `room_type` = #{ROOM_TYPE},
+				 `room_state` = #{ROOM_STATE},
+				 `room_floor` = #{ROOM_FLOOR},
+				 <isEmpty property="construction_area">
+				  	`construction_area` = 0,
+				 </isEmpty>
+				 <isNotEmpty property="construction_area">
+					 `construction_area` = #{CONSTRUCTION_AREA},
+				 </isNotEmpty>
+				 <isEmpty property="room_area">
+				  	`room_area` = 0,
+				 </isEmpty>
+				 <isNotEmpty property="room_area">
+					 `room_area` = #{ROOM_AREA},
+				 </isNotEmpty>
+				 <isEmpty property="public_area">
+				  	`public_area` = 0,
+				 </isEmpty>
+				 <isNotEmpty property="public_area">
+					 `public_area` = #{PUBLIC_AREA},
+				 </isNotEmpty>
+				 `decration_state` = #{DECRATION_STATE},
+				 `room_toward` = #{ROOM_TOWARD},
 				 `remark` = #{REMARK}
 				WHERE
 					(
-						`id` = #{b_id}
+						`id` = #{r_id}
 					);
 		</sql>
 	</mapper>
@@ -62,12 +80,15 @@
 		</sql>
 	</mapper>
 	<!-- 获取楼宇信息 -->
-	<mapper id="getBuildingInfo">
-		<sql key="getBuildingInfo" operator="select" resultType="map">
-			select `building_no`,`building_name`,`building_floors`,`building_addr`,`building_type`,`building_structure`,`building_toward`,`create_date`,`remark`
-				from sys_building_tab where 1=1
-			<isNotEmpty property="b_id">
-				and id = #{b_id}
+	<mapper id="getRoomInfo">
+		<sql key="getRoomInfo" operator="select" resultType="map">
+			select 
+				`id`, `room_no`, `building_no`, `room_type`, `room_state`, 
+				`room_floor`, `construction_area`, `room_area`, `public_area`, `decration_state`, 
+				`room_toward`, `remark`, `is_del`, `create_date`
+				from sys_room_tab where 1=1
+			<isNotEmpty property="r_id">
+				and id = #{r_id}
 			</isNotEmpty>
 		</sql>
 	</mapper>
