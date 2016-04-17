@@ -79,49 +79,70 @@
 		$(function(){
 			// 加载列表信息 initTable(id,url,param,colsParam,aoColumnParam,aaSortParam,other); 
 			// param Ajax请求时发送额外的数据(条件),colsParam 设置列属性条件,aoColumnParam 设置哪些列不排序  aaSortParam设置哪些列排序
-        	table = initTableAutoHeight("urlList", "${ctxPath}/topic/page/toUrlList", null,cols,aoColumnParam,aaSortParam,'URL_ID',getScreen());
+        	table = initTableAutoHeight("urlList", "${ctxPath}/topic/page/toUrlList", null,cols,aoColumnParam,aaSortParam,'URL_ID');
 		});
 		
+		// 新增url
 		function addUrl(){
-			/**
-			 * 跳转页面  iUrl请求url  iTitletab标签名
-			 */
-			indexToPage("${ctxPath}/topic/addUrlPage","新增URL");
+			index = layer.open({
+			    type: 2, 
+			    title : "新增 URL 信息",
+			    area: ['64%', '43%'],
+			    fix: false, //不固定
+			   // maxmin: true,
+			    content: _contextPath+"/topic/addUrlPage"
+			});
 		}
-		function editUrl(){			
-			var params = [];			
-			if(!isEmpty($("#clickId").val())) {
-				params = [{URL_ID:$("#clickId").val()}];
-			} else {
-				$("input[data-type='subUrlCheck']:checked").each(function(i) {
-			    	if(this.checked == true){
-			    		params[i] = {URL_ID:$(this).val()};
-			    	}
-			    });
+		
+		// 编辑url
+		function editUrl(){		
+			var r_id = $("#clickId").val()?$("#clickId").val():"";
+			if(r_id){
+				index = layer.open({
+				    type: 2, 
+				    title : "编辑 URL 信息",
+				    area: ['65%', '43%'],
+				    fix: false, //不固定
+				   // maxmin: true,
+				    content: _contextPath+"/topic/editUrlPage?URL_ID="+r_id
+				});
+			}else{
+				layer.alert("请选择一条记录！", {icon: 2}, function(index){
+					layer.close(index);
+				});  
 			}
-			
-			/**
-			 * 修改信息 iUrl请求url param参数 (数组)eg:params = [{unid:"2"}]  iTitletab标签名
-			 */
-			editForm("${ctxPath}/topic/editUrlPage",params,"修改URL");
 		}
+		
+		// 删除url
 		function delUrl(){
-			var params = [];
-			if(!isEmpty($("#clickId").val())) {
-				params = [{URL_ID:$("#clickId").val()}];
-			} else {
-				$("input[data-type='subUrlCheck']:checked").each(function(i) {
-			    	if(this.checked == true){
-			    		params[i] = {URL_ID:$(this).val()};
-			    	}
-			    });
+			var b_id = $("#clickId").val()?$("#clickId").val():"";
+			if(b_id){
+				layer.confirm('您确定要删除这条记录吗?', {icon: 3, title:'提示'}, function(index){
+					 $.ajax({
+							url : "${ctxPath }/topic/ajax/delUrl",
+							dataType : "json",
+							type : "post",
+							data:{"URL_ID":b_id},
+							success : function(json) {
+								if (json.result == '1') {
+									layer.alert(json.resultInfo, function(index){
+										//刷新表格，关闭弹窗
+										searchForm();
+										layer.close(index);
+									});  
+								} else {
+									layer.alert(json.resultInfo,{icon: 2}, function(index){
+										layer.close(index);
+									});  
+									return;
+								}
+						}});
+				});
+			}else{
+				layer.alert("请选择一条记录！", {icon: 2}, function(index){
+					layer.close(index);
+				});  
 			}
-			
-			/**
-			 * 删除记录，支持批量删除（参数格式必须为数组） iUrl请求url iText提示的文本信息（只需关键字）
-			 * params参数 数组eg:params = [{unid:"2"},{unid:"1"}] callBack回调函数
-			 */
-			delForm("${ctxPath}/topic/ajax/delUrl","URL",params,searchForm);
 		}
 		
 		/* 搜索 查询 */
@@ -131,16 +152,6 @@
 			table.column(1).search($('#Q_SERVICE_NAME').val());
 			table.column(2).search($('#Q_SQL_ID').val());
 			table.draw();
-		}
-		/**
-		 * 获取屏幕高度
-		 * */
-		function getScreen()
-		{
-			var height = document.body.clientHeight;
-			var ibox_title = $(".ibox-title").height();
-			var toolbar = $("#toolbar").height();
-			return height-94-ibox_title-40-toolbar;
 		}
     </script>
 </body>
