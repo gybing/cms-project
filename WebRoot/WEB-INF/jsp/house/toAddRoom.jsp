@@ -20,7 +20,7 @@
 				<div class="ibox-content">
 					<div class="panel panel-default" style="margin-top: 5px;">
 						<div class="panel-heading" style="padding: 5px">
-							<span style="font-weight: bold;">楼宇信息</span>
+							<span style="font-weight: bold;">房间信息</span>
 						</div>
 						<div class="panel-body">
 							<div class="form-group">
@@ -119,11 +119,11 @@ $(function() {
 		isSear: 1
 	});
 	// 房间类型下拉框
-	$s2.init($C("#room_type"), {//运单状态
+	$s2.init($C("#room_type"), {
 		sysdict : $sysdict.ROOM_TYPE
 	});
-	// 房间类型下拉框
-	$s2.init($C("#room_state"), {//运单状态
+	// 房间状态下拉框
+	$s2.init($C("#room_state"), {
 		sysdict : $sysdict.ROOM_STATE
 	});
 	// 设置楼层下拉框为 select2

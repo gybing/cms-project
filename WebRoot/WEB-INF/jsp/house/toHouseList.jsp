@@ -18,35 +18,33 @@
 							<input type="hidden" id="clickId" name="clickId">
 								<div class="ibox">
 									<div class="form-group">
-										<label class="col-sm-1 control-label">姓名:</label>
+										<label class="col-sm-1 control-label">房间编号:</label>
 										<div class="col-sm-2">
-											<input id="user_name" name="user_name" maxlength="14" type="text" class="required" aria-required="true" />
+											<input id="room_no" name="room_no" maxlength="14" type="text" class="required form-control" aria-required="true" />
 										</div>
-										<label class="col-sm-1 control-label">身份证号:</label>
+										<label class="col-sm-1 control-label">房间状态:</label>
 										<div class="col-sm-2">
-											<input id="id_no" name="id_no" maxlength="14" type="text" class="required" aria-required="true" />
-										</div>
-										<label class="col-sm-1 control-label">联系电话:</label>
-										<div class="col-sm-2">
-											<input id="phone" name="phone" maxlength="14" type="text" class="required" aria-required="true" />
-										</div>
-										<label class="col-sm-1 control-label">是否迁出:</label>
-										<div class="col-sm-2">
-											<select class="combox" id="is_move_out" name="is_move_out">
+											<select class="combox" id="room_state" name="room_state">
 												<option value="">请选择</option>
-												<option value="0">否</option>
-												<option value="1">是</option>
+											</select>
+										</div>
+										<label class="col-sm-1 control-label">楼宇编号:</label>
+										<div class="col-sm-2">
+											<select class="combox" id="building_no" name="building_no">
+												<option value="">请选择</option>
 											</select>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-sm-1 control-label">迁入时间（起）:</label>
+										<label class="col-sm-1 control-label">房间类型:</label>
 										<div class="col-sm-2">
-											<input type="text" class="form-control layer-date" id="move_in_time_start" name="move_in_time_start" value="${responseDataForm.resultObj[0].MOVE_IN_TIME }" placeholder="YYYY-MM-DD hh:mm"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm'})" />
+											<select class="combox" id="room_type" name="room_type">
+												<option value="">请选择</option>
+											</select>
 										</div>
-										<label class="col-sm-1 control-label">迁入时间（止）:</label>
-										<div class="col-sm-2">
-											<input type="text" class="form-control layer-date" id="move_in_time_end" name="move_in_time_end" value="${responseDataForm.resultObj[0].MOVE_IN_TIME }" placeholder="YYYY-MM-DD hh:mm"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm'})" />
+										<label class="col-sm-1 control-label">楼宇名称:</label>
+										<div class="col-sm-3">
+											<input id="building_name" name="building_name" maxlength="14" type="text" class="required form-control" aria-required="true" />
 										</div>
 										<div class="col-sm-3">
 											<button type="button" class="btn btn-sm btn-primary " onclick="searchForm();">查    询</button>
@@ -81,21 +79,23 @@
 									</button> -->
 								</div>
 							</div>
-							<table id="user_list_table" class="table table-striped table-bordered table-hover data-table with-check">
+							<table id="room_list_table" class="table table-striped table-bordered table-hover data-table with-check">
 								<thead>
 									<tr align="center">
 										<th>序号</th>
-										<th>姓名</th>
-										<th>性别</th>
-										<th>身份证号</th>
-										<th>联系电话</th>
-										<th>邮箱</th>
-										<th>是否迁入</th>
-										<th>入住地址</th>
-										<th>迁入时间</th>
-										<th>是否迁出</th>
-										<th>迁出时间</th>
-										<th>迁出原因</th>
+										<th>房间编号</th>
+										<th>房间状态</th>
+										<th>所在楼层</th>
+										<th>楼宇编号</th>
+										<th>楼宇名称</th>
+										<th>房间类型</th>
+										<th>建筑面积</th>
+										<th>套内面积</th>
+										<th>公摊面积</th>
+										<th>装修情况</th>
+										<th>朝向</th>
+										<th>备注</th>
+										<th>创建时间</th>
 									</tr>
 								</thead>
 								<tbody></tbody>
@@ -107,43 +107,65 @@
 	</div>
 </body>
 <script type="text/javascript">
+//房间状态下拉框
+$s2.init($C("#room_state"), {
+	sysdict : $sysdict.ROOM_STATE,
+	defVal:'${param.room_state}'
+});
+//房间类型下拉框
+$s2.init($C("#room_type"), {
+	sysdict : $sysdict.ROOM_TYPE,
+	defVal:'${param.room_type}'
+});
+//初始化楼宇编号下拉框
+$s2.init($C("#building_no"), {
+	tabdict : "building_no",
+	defVal:'${param.building_no}',
+	isSear: 1
+});
+
 var table;
 var cols = [
 		{"data" : "NUM",// 序号
 			"render" : function(data) {
 				return "<div align='center'>" + data + "</div>";
 		}},
-		{"data" : "USER_NAME"}, // 
-		{"data" : "SEX",
-			"render":function(data){
-				if(data == 'F'){
-					return "女";
-				}else if(data == 'M'){
-					return "男";
+		{"data" : "ROOM_NO"}, // .
+		{"data" : "ROOM_STATE" // 任务状态
+			,"render" : function(data) {
+				if (data == "0") {
+					return "<div class='label label-danger ' >入住</div>";
+				} else if (data == "1") {
+					return "<div class='label label-04' >空房</div>";
+				} else{
+					return data;
 				}
-			}}, // 
-		{"data" : "ID_NO"}, // 
-		{"data" : "PHONE"}, // 
-		{"data" : "EMAIL"}, // 
-		{"data" : "IS_MOVE_IN"}, // 
-		{"data" : "ADDR"}, // 
-		{"data" : "MOVE_IN_TIME"}, // 
-		{"data" : "IS_MOVE_OUT"}, // 
-		{"data" : "MOVE_OUT_TIME"}, // 
-		{"data" : "MOVE_OUT_REASON"} // 
+			}
+		},
+		{"data" : "ROOM_FLOOR"}, // .
+		{"data" : "BUILDING_NO"}, // .
+		{"data" : "BUILDING_NAME"}, // .
+		{"data" : "ROOM_TYPE"}, // .
+		{"data" : "CONSTRUCTION_AREA"}, // .
+		{"data" : "ROOM_AREA"}, // .
+		{"data" : "PUBLIC_AREA"}, // .
+		{"data" : "DECRATION_STATE"}, // .
+		{"data" : "ROOM_TOWARD"}, // .
+		{"data" : "REMARK"}, // .
+		{"data" : "CREATE_DATE"} // .
 		];
 // 设置哪些列不进行排序  哪些列需排序（需要改sql xml条件）
 var aoColumnParam = [0],aaSortParam = [];
 $(function(){
 	// 加载列表信息 initTableAutoHeight(id,url,param,colsParam,aoColumnParam,aaSortParam,other); 
 	// param Ajax请求时发送额外的数据(条件),colsParam 设置列属性条件,aoColumnParam 设置哪些列不排序  aaSortParam设置哪些列排序
-	table = initTableAutoHeight("user_list_table", "${ctxPath}/topic/page/qryUserList", null,cols,aoColumnParam,aaSortParam,"USER_ID",getScreen());
+	table = initTableAutoHeight("room_list_table", "${ctxPath}/topic/page/qryRoomList", null,cols,aoColumnParam,aaSortParam,"USER_ID",getScreen());
 });
 
-/* 新增住户信息 */
+/* 新增房间信息 */
 function toAddUser(){
 	/* 跳转页面  iUrl请求url  iTitletab标签名 */
-	indexToPage("${ctxPath }/topic/toAddUser", "新增住户信息");
+	indexToPage("${ctxPath }/topic/toAddUser", "新增房间信息");
 }
 
 /* 编辑住户信息  */
@@ -154,14 +176,12 @@ function toEditUser(){
 
 /* 搜索 查询 */
 function searchForm() {
-	console.info($('#is_move_out').val());
 	$("#clickId").val(""); //清除之前选中的id
-	table.column(0).search($('#user_name').val());
-	table.column(1).search($('#id_no').val());
-	table.column(2).search($('#phone').val());
-	table.column(3).search($('#is_move_out').val());
-	table.column(4).search($('#move_in_time_start').val());
-	table.column(5).search($('#move_in_time_end').val());
+	table.column(0).search($('#room_no').val());
+	table.column(1).search($('#room_state').val());
+	table.column(2).search($('#building_no').val());
+	table.column(3).search($('#room_type').val());
+	table.column(4).search($('#building_name').val());
 	table.draw();
 }
 
