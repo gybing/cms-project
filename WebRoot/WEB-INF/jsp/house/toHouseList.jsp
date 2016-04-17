@@ -62,7 +62,7 @@
 									<button type="button" class="btn btn-outline btn-default" onclick="toEditRoom();">
 										<i class="glyphicon glyphicon-edit"></i> 修改
 									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="delOrder();">
+									<button type="button" class="btn btn-outline btn-default" onclick="deleteRoomInfo();">
 										<i class="glyphicon glyphicon-remove"></i> 删除
 									</button>
 									<button type="button" class="btn btn-outline btn-default" onclick="toMoveIn();">
@@ -196,6 +196,55 @@ function toEditRoom(){
 		    fix: false, //不固定
 		   // maxmin: true,
 		    content: _contextPath+"/topic/toEditRoom?r_id="+r_id
+		});
+	}else{
+		layer.alert("请选择一条记录！", {icon: 2}, function(index){
+			layer.close(index);
+		});  
+	}
+}
+
+/* 删除房间信息 */
+function deleteRoomInfo(){
+	var r_id = $("#clickId").val()?$("#clickId").val():"";
+	if(r_id){
+		$.ajax({
+			url:"${ctxPath}/topic/ajax/getRoomInfoByKey",
+			type:"post",
+			dataType:"json",
+			data:{"r_id":r_id},
+			success:function(json){
+				if(json.result == 1){
+					json = json.resultObj;
+					if(json.ROOM_STATE == 0){
+						layer.alert("该房间存在住户，无法删除！", {icon: 2}, function(index){
+							layer.close(index);
+						});  
+					}else{
+						layer.confirm('您确定要删除这条房间记录吗?', {icon: 3, title:'提示'}, function(index){
+							 $.ajax({
+									url : "${ctxPath }/topic/ajax/deleteRoomInfo",
+									dataType : "json",
+									type : "post",
+									data:{"r_id":r_id},
+									success : function(json) {
+										if (json.result == '1') {
+											layer.alert(json.resultInfo, function(index){
+												//刷新表格，关闭弹窗
+												searchForm();
+												layer.close(index);
+											});  
+										} else {
+											layer.alert(json.resultInfo,{icon: 2}, function(index){
+												layer.close(index);
+											});  
+											return;
+										}
+								}});
+						});
+					}
+				}
+			}
 		});
 	}else{
 		layer.alert("请选择一条记录！", {icon: 2}, function(index){

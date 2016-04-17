@@ -74,9 +74,9 @@
 		</sql>
 	</mapper>
 	<!-- 删除楼宇信息 -->
-	<mapper id="deleteBuildingInfo">
-		<sql key="deleteBuildingInfo" operator="execute">
-			update sys_building_tab set is_del = 'Y' where id = #{b_id}
+	<mapper id="deleteRoomInfo">
+		<sql key="deleteRoomInfo" operator="execute">
+			update sys_room_tab set is_del = 'Y' where id = #{r_id}
 		</sql>
 	</mapper>
 	<!-- 获取楼宇信息 -->
