@@ -34,30 +34,20 @@ public class MenuUtil {
 			String pid = MapUtils.getString(menu, "PARENT_MENU_ID");  // 父菜单id 
 			String mType = MapUtils.getString(menu, "MENU_TYPE");  // 菜单类型
 			
-			if(StringUtils.isEmpty(priv) && "0".equals(mType)){
-				if(menuMap.containsKey(id)){
+			if ( "0".equals(mType)) {
+				if (menuMap.containsKey(id)) {
 					menu.put(CHILD_NODE_NAME, menuMap.get(id).get(CHILD_NODE_NAME));
 				}
 				menuMap.put(id, menu);
-				buildChildMenu(menuMap,pid,menu);
-			}else{
-//				if(Environment.ADMIN_USER_CODE.equals(usercode)) {
-//					if(menuMap.containsKey(id)){
-//						menu.put(CHILD_NODE_NAME, menuMap.get(id).get(CHILD_NODE_NAME));
-//					}
-//					menuMap.put(id, menu);
-//					buildChildMenu(menuMap,pid,menu);
-//				} else {
-				// 根据用户权限 创建菜单
-//				if(userPrivsList.contains(priv)){
-//					if(menuMap.containsKey(id)){
-//						menu.put(CHILD_NODE_NAME, menuMap.get(id).get(CHILD_NODE_NAME));
-//					}
-//					menuMap.put(id, menu);
-//					buildChildMenu(menuMap,pid,menu);
-//				}
+				buildChildMenu(menuMap, pid, menu);
+			} else {
+				if (userPrivsList.contains(priv) || Environment.LOGIN_NO_PRIV.equals(priv)) {
+					if (menuMap.containsKey(id)) {
+						menu.put(CHILD_NODE_NAME, menuMap.get(id).get(CHILD_NODE_NAME));
+					}
 					menuMap.put(id, menu);
-					buildChildMenu(menuMap,pid,menu);
+					buildChildMenu(menuMap, pid, menu);
+				}
 			}
 		}
 		cleanEmptyMenu(menuMap.get(MAIN_MENU_ID));

@@ -50,11 +50,28 @@
 		$().ready(function() {
 			$("#menuInfoAddForm").validate({
 				submitHandler : function(form) {
-					/**
-					 * From表单提交（主要用于添加、修改）
-					 * @param form表单  fullUrlAjax提交url  pdataId 需要重新加载的页面data_id  callBack回调js
-					 */
-					toSubmit(form, "${ctxPath}/topic/ajax/privAdd",null,refreshMenuTree);
+					$.ajax({
+						url : "${ctxPath }/topic/ajax/privAdd",
+						dataType : "json",
+						data : $(form).serialize(),
+						type : "post",
+						success : function(json) {
+							if (json.result == '1') {
+								layer.alert(json.resultInfo, function(index){
+									//刷新表格，关闭弹窗
+									refreshMenuTree();
+// 									parent.layer.close(parent.layer.getFrameIndex(window.name));
+									layer.close(index);
+								});  
+							} else {
+								layer.alert(json.resultInfo,{icon: 2}, function(index){
+									//刷新表格，关闭弹窗
+									layer.close(index);
+								});  
+								return;
+							}
+					}});
+					
 				}
 			});
 		});

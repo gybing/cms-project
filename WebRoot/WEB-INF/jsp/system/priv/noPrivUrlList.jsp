@@ -11,7 +11,7 @@
 </head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
-		<form class="form-horizontal" id="add_priv_url_form" method="post" action="${ctxPath}/topic/ajax/saveUrlPriv" callback="">
+		<form class="form-horizontal" id="add_priv_url_form" method="post" action="#" callback="">
 		<input type="hidden" id="add_dict_tag" name="tag" value="${sessionScope.SESSION_USER_LOGIN_INFO.userInfo.TAG }" />
 		<input type="hidden" id="clickId" name="urlids"/>
 		<input type="hidden" id="privId" name="privId" value="${param.priv_id }"/>
@@ -92,8 +92,28 @@
 
    		});
 		function savePrivUrl(){
-			$("#add_priv_url_form").submit();
-			parent.layer.close(window.parent.index);
+			$.ajax({
+				url : "${ctxPath}/topic/ajax/saveUrlPriv",
+				dataType : "json",
+				data : $("#add_priv_url_form").serialize(),
+				type : "post",
+				success : function(json) {
+					if (json.result == '1') {
+						layer.alert(json.resultInfo, function(index){
+							//刷新表格，关闭弹窗
+							searchForm();
+							layer.close(index);
+							parent.layer.close(window.parent.index);
+						});  
+					} else {
+						layer.alert(json.resultInfo,{icon: 2}, function(index){
+							//刷新表格，关闭弹窗
+							layer.close(index);
+						});  
+						return;
+					}
+			}});
+			
 		}
 		function closeLayer(){
 			parent.layer.close(window.parent.index); 
