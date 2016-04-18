@@ -4,55 +4,62 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-    <base href="<%=basePath%>">
-    
-    <title>My JSP 'index.jsp' starting page</title>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<jsp:include page="/WEB-INF/jsp/top.jsp"></jsp:include>
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-  </head>
-  <script type="text/javascript">
-  $(function(){
-	 
-         
-  });
-  
-  </script>
-  <body class="gray-bg">
-   	<div class="middle-box text-center loginscreen  animated fadeInDown">
-        <div>
-            <div>
+<!DOCTYPE html>
+<html lang="en">
 
-                <h1 class="logo-name">XH</h1>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
+    <title>小区物业管理系统</title>
+ 	<jsp:include page="/WEB-INF/jsp/top.jsp"></jsp:include>
+ 	<link rel="stylesheet" href="${resRoot}/hplus/css/login.min.css">	
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <script>
+        if(window.top!==window.self){window.top.location=window.location};
+    </script>
+
+</head>
+
+<body class="signin">
+    <div class="signinpanel">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="signin-info">
+                    <div class="logopanel m-b">
+                        <h1>小区物业管理系统</h1>
+                    </div>
+                    <div class="m-b"></div>
+                    <h4><strong>欢迎使用 </strong></h4>
+                    <ul class="m-b">
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势一</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势二</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势三</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势四</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势五</li>
+                    </ul>
+                    <strong>还没有账号？ <a href="#">立即注册&raquo;</a></strong>
+                </div>
             </div>
-            <h3>欢迎使用 </h3>
-
-            <form class="m-t" role="form" action="${ctxPath }/topic/bsm$login" method="post">
-                <div class="form-group">
-                    <input type="text" name="usercode" class="form-control uname" placeholder="用户名" required="">
-                </div>
-                <div class="form-group">
+            <div class="col-sm-5">
+                <form method="post" action="${ctxPath }/topic/bsm$login">
+                    <h4 class="no-margins">登录：</h4>
+                   	<input type="text" name="usercode"  style="width: 257px;" class="form-control uname" placeholder="用户名" required="">
                     <input type="password" name="passwd" class="form-control" placeholder="密码" required="">
-                </div>
-                <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
-		
-
-                <p class="text-muted text-center"> <a href="login.html#"><small>忘记密码了？</small></a> | <a href="register.html">注册一个新账号</a>
-                </p>
-
-            </form>
+                    <p class="m-t-md"></p>
+                    <a href="">忘记密码了？</a>
+                    <button class="btn btn-success btn-block">登录</button>
+                </form>
+            </div>
+        </div>
+        <div class="signup-footer">
+            <div class="pull-left">
+                &copy; 2015 All Rights Reserved.
+            </div>
         </div>
     </div>
-  </body>
+</body>
+
 </html>
