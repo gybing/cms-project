@@ -157,5 +157,29 @@ function searchForm() {
 	table.column(4).search($('#building_name').val());
 	table.draw();
 }
+
+/* 迁入弹窗 */
+function toMoveIn(){
+	index = layer.open({
+	    type: 2, 
+	    title : "住户迁出",
+	    area: ['65%', '51%'],
+	    fix: false, //不固定
+	   // maxmin: true,
+	    content: _contextPath+"/topic/toUserMoveIn"
+	});
+}
+
+/* 迁出弹窗 */
+function toMoveOut(){
+	index = layer.open({
+	    type: 2, 
+	    title : "住户迁出",
+	    area: ['65%', '71%'],
+	    fix: false, //不固定
+	   // maxmin: true,
+	    content: _contextPath+"/topic/toUserMoveOut"
+	});
+}
 </script>
 </html>
