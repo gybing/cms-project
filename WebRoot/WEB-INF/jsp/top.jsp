@@ -42,6 +42,7 @@
 <!-- 选择框   -->
 <script type="text/javascript" src="${resRoot}/hplus/js/plugins/iCheck/icheck.min.js"></script>
 <link rel="stylesheet" href="${resRoot}/hplus/css/plugins/iCheck/custom.css">
+<link href="${resRoot}/hplus/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
 
 <!-- dataTables -->
 <script type="text/javascript" src="${resRoot}/hplus/js/plugins/jeditable/jquery.jeditable.js"></script>
