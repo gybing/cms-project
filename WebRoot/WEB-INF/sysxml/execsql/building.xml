@@ -45,6 +45,30 @@
 			</isNotEmpty>
 		</sql>
 	</mapper>
+	<!-- 楼宇房号信息 -->
+	<mapper id="qryBuildingRoom">
+		<sql key="qryBuildingRoom" operator="select" resultType="list">
+			SELECT
+				s.id,
+				s.room_no text
+			FROM
+				sys_room_tab s
+			LEFT JOIN sys_building_tab b ON b.id = s.building_no
+			WHERE 1=1
+			<isNotEmpty property="b_no">
+				AND s.building_no = #{b_no}
+			</isNotEmpty>
+			<isNotEmpty property="r_fl">
+				AND room_floor = #{r_fl}
+			</isNotEmpty>
+			<isEmpty property="b_no">
+				AND s.building_no = -1
+			</isEmpty>
+			<isEmpty property="r_fl">
+				AND room_floor = -1
+			</isEmpty>
+		</sql>
+	</mapper>
 	<!-- 楼宇信息列表 -->
 	<mapper id="qryBuildingList">
 		<sql key="qryBuildingList" operator="select" resultType="paging">

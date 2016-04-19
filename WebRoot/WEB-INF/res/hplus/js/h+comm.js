@@ -169,7 +169,7 @@ function initTable(id,url,param,cols,columnParam,sortParam,idName,isOrdering){
 			}
 		},
 		"scrollX": false,  //开启  水平滚动条
-		//"scrollY": height+'px',  //设置垂直高度 滚动条
+		"scrollY": '125px',  //设置垂直高度 滚动条
 		"pagingType": "full_numbers", //分页按钮种类显示选项       默认为two_button 两种交互式分页策略，两个按钮和全页数，展现给终端用户不同的控制方式
 		"dom": 't<"F"<<"p_i"i><"p_fl"l><"fr"p>>',//该初始化属性用来指定你想把各种控制组件注入到dom节点的位置（比如你想把分页组件放到表格的顶部）
 		"language": {  //按什么顺序定义表的控制元素在页面上出现   自定义语言设置

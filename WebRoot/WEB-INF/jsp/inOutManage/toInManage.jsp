@@ -118,9 +118,9 @@ var cols = [
 		{"data" : "ROOM_NO"}, // .
 		{"data" : "ROOM_STATE" // 任务状态
 			,"render" : function(data) {
-				if (data == "0") {
+				if (data == "1") {
 					return "<div class='label label-danger ' >入住</div>";
-				} else if (data == "1") {
+				} else if (data == "0") {
 					return "<div class='label label-04' >空房</div>";
 				} else{
 					return data;
@@ -160,26 +160,22 @@ function searchForm() {
 
 /* 迁入弹窗 */
 function toMoveIn(){
-	index = layer.open({
-	    type: 2, 
-	    title : "住户迁出",
-	    area: ['65%', '51%'],
-	    fix: false, //不固定
-	   // maxmin: true,
-	    content: _contextPath+"/topic/toUserMoveIn"
-	});
-}
-
-/* 迁出弹窗 */
-function toMoveOut(){
-	index = layer.open({
-	    type: 2, 
-	    title : "住户迁出",
-	    area: ['65%', '71%'],
-	    fix: false, //不固定
-	   // maxmin: true,
-	    content: _contextPath+"/topic/toUserMoveOut"
-	});
+	var r_id = $("#clickId").val()?$("#clickId").val():-1;
+	if(r_id != -1){
+		index = layer.open({
+		    type: 2, 
+		    title : "住户迁入登记",
+		    area: ['95%', '83%'],
+		    fix: false, //不固定
+		   // maxmin: true,
+		    content: _contextPath+"/topic/toUserMoveIn?r_id="+r_id
+		});
+	}else{
+		layer.alert("请选择一条记录！", {icon: 2}, function(index){
+			layer.close(index);
+		});  
+	}
+	
 }
 </script>
 </html>

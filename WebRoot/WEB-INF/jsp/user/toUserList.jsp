@@ -154,7 +154,6 @@ function toEditUser(){
 
 /* 搜索 查询 */
 function searchForm() {
-	console.info($('#is_move_out').val());
 	$("#clickId").val(""); //清除之前选中的id
 	table.column(0).search($('#user_name').val());
 	table.column(1).search($('#id_no').val());

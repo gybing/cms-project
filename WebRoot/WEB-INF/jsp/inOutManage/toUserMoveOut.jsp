@@ -6,6 +6,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <jsp:include page="/WEB-INF/jsp/top.jsp"></jsp:include>
 <title>新增住户</title>
+<style type="text/css">
+.search_user_btn{
+    height: 24px;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: 13px;
+    font-size: 12px;
+}
+</style>
 </head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
@@ -19,11 +28,14 @@
 						</div>
 						<div class="panel-body">
 							<div class="form-group">
-								<label class="col-sm-1 control-label">姓名:</label>
+								<label class="col-sm-1 control-label">住户:</label>
 								<div class="col-sm-2">
-									<input id="user_name" name="user_name" maxlength="14" type="text" class="required" aria-required="true" />
+										<input id="user_name" name="user_name" maxlength="14" type="text" class="required" aria-required="true" />
 								</div>
-								<label class="col-sm-2 control-label">身份证号:</label>
+								<div class="col-sm-1">
+									<button type="submit" class="btn btn-success search_user_btn"><i class=""></i>选择用户</button>
+								</div>
+								<label class="col-sm-1 control-label">身份证号:</label>
 								<div class="col-sm-2">
 									<input id="id_no" name="id_no" maxlength="14" type="text" class="required" aria-required="true" />
 								</div>
@@ -36,7 +48,7 @@
 					</div>
 					<div class="panel panel-default" style="margin-top: 5px;">
 						<div class="panel-heading" style="padding: 5px">
-							<span style="font-weight: bold;">迁出信息</span>
+							<span style="font-weight: bold;">房屋信息</span>
 						</div>
 						<div class="panel-body">
 							<div class="form-group">
@@ -48,15 +60,33 @@
 								<div class="col-sm-2">
 		                    		<select class="combox" id="floor_id" name=""floor_id""><option value="">请选择</option></select>
 								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-1 control-label">迁出房号:</label>
+								<label class="col-sm-2 control-label">迁出房号:</label>
 								<div class="col-sm-2">
 									<select class="combox" id="room_id" name="room_id"><option value="">请选择</option></select>
 								</div>
-								<label class="col-sm-2 control-label">迁出时间:</label>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-default" style="margin-top: 5px;">
+						<div class="panel-heading" style="padding: 5px">
+							<span style="font-weight: bold;">迁出信息</span>
+						</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label class="col-sm-1 control-label">迁出时间:</label>
 								<div class="col-sm-2">
 									<input type="text" class="form-control layer-date" id="move_in_time" name="move_in_time" value="${responseDataForm.resultObj[0].SHIP_DATE }"  placeholder="YYYY-MM-DD" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" />
+								</div>
+								<label class="col-sm-2 control-label">是否办理手续:</label>
+								<div class="col-sm-5">
+									<div class="radio radio-info radio-inline">
+                                        <input type="radio" id="inlineRadio1" value="option1" name="formalities" checked="">
+                                        <label for="inlineRadio1">是</label>
+                                    </div>
+                                    <div class="radio radio-inline">
+                                        <input type="radio" id="inlineRadio2" value="option2" name="formalities">
+                                        <label for="inlineRadio2">否</label>
+                                    </div>
 								</div>
 							</div>
 						</div>
@@ -88,7 +118,6 @@
 </body>
 <script type="text/javascript">
 $(function(){
-	
 });
 </script>
 </html>

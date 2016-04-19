@@ -133,9 +133,9 @@ var cols = [
 		{"data" : "ROOM_NO"}, // .
 		{"data" : "ROOM_STATE" // 任务状态
 			,"render" : function(data) {
-				if (data == "0") {
+				if (data == "1") {
 					return "<div class='label label-danger ' >入住</div>";
-				} else if (data == "1") {
+				} else if (data == "0") {
 					return "<div class='label label-04' >空房</div>";
 				} else{
 					return data;

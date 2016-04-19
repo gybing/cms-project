@@ -114,7 +114,6 @@
 </body>
 <script type="text/javascript">
 $(function() {
-	console.info('${responseDataForm.resultObj}')
 	// 初始化楼宇编号下拉框
 	$s2.init($C("#building_no"), {
 		tabdict : "building_no",
@@ -145,7 +144,6 @@ $(function() {
 			data:{"b_id":_b_id?_b_id:-1},
 			success:function(json){
 				json = json.resultObj;
-				console.info(json)
 				$("#building_name").val(json.BUILDING_NAME);
 				$("#room_floor").html(""); // 清空上一次选择的楼宇的楼层信息
 				var html = "<option value=\"\">请选择</option>";

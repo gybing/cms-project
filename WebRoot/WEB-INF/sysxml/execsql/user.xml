@@ -2,6 +2,27 @@
 <mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
 	<!-- 小区物业管理系统 -->
+	
+	<!-- 住户迁入登记 -->
+	<mapper id="userMoveIn">
+		<sql key="userMoveIn" operator="execute">
+			UPDATE `sys_user_tab`
+			SET 
+			 `is_move_in` = 1,
+			 `move_addr` = #{move_addr},
+			 `move_in_time` = #{move_in_time},
+			 `formalities` = ${formalities}
+			WHERE
+				(
+					`user_id` = #{u_id}
+				);
+		</sql>
+		<sql key="updateRoomState" operator="execute">
+			update sys_room_tab set room_state = 1 where id = #{r_id}
+		</sql>		
+	</mapper>
+	
+	<!-- 查询住户信息列表 -->
 	<mapper id="qryUserList">
 		<sql key="qryUserList" operator="select" resultType="paging">
 			<isNotEmpty property="query_count">
@@ -59,6 +80,24 @@
 			</isEmpty>
 		</sql>
 	</mapper>
+	
+	<!-- 获取当个用户信息 -->
+	<mapper id="qryUserInfoByKey">
+		<sql key="qryUserInfoByKey" operator="select" resultType="map">
+			select 
+				`user_name`, `user_tel`, `phone`, `id_no`, `sex`, 
+				`addr`, `email`, `remark`, `housing_area`, `inside_area`, 
+				`house_type`, `create_date`, `work`, `work_addr`, `work_tel`, 
+				`is_move_in`, `move_addr`, `move_in_time`, `formalities`, 
+				`decoration`, `is_move_out`, `move_out_time`, `move_out_reason`, `is_del`
+			from `sys_user_tab` 
+			where 1=1
+			<isNotEmpty property="user_id">
+				and user_id = #{user_id}
+			</isNotEmpty>			
+		</sql>
+	</mapper>
+	
 	<!-- end 小区物业管理系统 -->
 
 </mappers>
