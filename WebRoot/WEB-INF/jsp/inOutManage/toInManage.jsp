@@ -59,14 +59,14 @@
 									<button type="button" class="btn btn-outline btn-default" onclick="toMoveIn();">
 										<i class="glyphicon glyphicon-import"></i> 迁入
 									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="toMoveOut();"> 
-										<i class="glyphicon glyphicon-export"></i> 迁出
+									<button type="button" class="btn btn-outline btn-default" onclick="toEditMoveInfo();"> 
+										<i class="glyphicon glyphicon-export"></i> 编辑
 									</button>
 								</div>
 							</div>
 							<table id="room_list_table" class="table table-striped table-bordered table-hover data-table with-check">
 								<thead>
-									<tr align="center">
+									<tr style="text-align:center;">
 										<th>序号</th>
 										<th>房间编号</th>
 										<th>房间状态</th>
@@ -74,13 +74,11 @@
 										<th>楼宇编号</th>
 										<th>楼宇名称</th>
 										<th>房间类型</th>
-										<th>建筑面积</th>
-										<th>套内面积</th>
-										<th>公摊面积</th>
+										<th>住户姓名</th>
+										<th>入住时间</th>
 										<th>装修情况</th>
 										<th>朝向</th>
 										<th>备注</th>
-										<th>创建时间</th>
 									</tr>
 								</thead>
 								<tbody></tbody>
@@ -131,13 +129,11 @@ var cols = [
 		{"data" : "BUILDING_NO"}, // .
 		{"data" : "BUILDING_NAME"}, // .
 		{"data" : "ROOM_TYPE"}, // .
-		{"data" : "CONSTRUCTION_AREA"}, // .
-		{"data" : "ROOM_AREA"}, // .
-		{"data" : "PUBLIC_AREA"}, // .
+		{"data" : "USER_NAME"}, // .
+		{"data" : "MOVE_IN_TIME"}, // .
 		{"data" : "DECRATION_STATE"}, // .
 		{"data" : "ROOM_TOWARD"}, // .
-		{"data" : "REMARK"}, // .
-		{"data" : "CREATE_DATE"} // .
+		{"data" : "REMARK"} // .
 		];
 // 设置哪些列不进行排序  哪些列需排序（需要改sql xml条件）
 var aoColumnParam = [0],aaSortParam = [];
@@ -162,20 +158,48 @@ function searchForm() {
 function toMoveIn(){
 	var r_id = $("#clickId").val()?$("#clickId").val():-1;
 	if(r_id != -1){
-		index = layer.open({
-		    type: 2, 
-		    title : "住户迁入登记",
-		    area: ['95%', '83%'],
-		    fix: false, //不固定
-		   // maxmin: true,
-		    content: _contextPath+"/topic/toUserMoveIn?r_id="+r_id
+		$("#room_list_table tr").each(function(index,item){
+			if($(this).attr("data-id") == r_id){
+				if($(item.childNodes[2]).text() == "入住"){
+					layer.alert("该房间已经存在住户，请选择其他房间！", {icon: 2}, function(index){
+						layer.close(index);
+					});  
+				}else{
+					index = layer.open({
+					    type: 2, 
+					    title : "住户迁入登记",
+					    area: ['95%', '83%'],
+					    fix: false, //不固定
+					   // maxmin: true,
+					    content: _contextPath+"/topic/toUserMoveIn?r_id="+r_id
+					});
+				}
+			}
 		});
 	}else{
 		layer.alert("请选择一条记录！", {icon: 2}, function(index){
 			layer.close(index);
 		});  
 	}
-	
+}
+
+/* 编辑用户迁入信息弹出 */
+function toEditMoveInfo(){
+	var r_id = $("#clickId").val()?$("#clickId").val():-1;
+	if(r_id != -1){
+		index = layer.open({
+		    type: 2, 
+		    title : "住户迁入登记",
+		    area: ['95%', '83%'],
+		    fix: false, //不固定
+		   // maxmin: true,
+		    content: _contextPath+"/topic/toEditUserMoveInfo?r_id="+r_id
+		});
+	}else{
+		layer.alert("请选择一条记录！", {icon: 2}, function(index){
+			layer.close(index);
+		});  
+	}
 }
 </script>
 </html>

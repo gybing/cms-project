@@ -11,7 +11,8 @@
 			 `is_move_in` = 1,
 			 `move_addr` = #{move_addr},
 			 `move_in_time` = #{move_in_time},
-			 `formalities` = ${formalities}
+			 `formalities` = ${formalities},
+			 `move_in_remark` = #{move_in_remark}
 			WHERE
 				(
 					`user_id` = #{u_id}
@@ -46,6 +47,7 @@
 				sut.`work`,
 				sut.`work_tel`,
 				sut.`is_move_in`,
+				sut.in_room_id,
 				sut.`move_addr`,
 				date_format(sut.`move_in_time`, '%Y-%m-%d') `move_in_time`,
 				sut.`formalities`,
@@ -66,13 +68,21 @@
 				and sut.phone LIKE '%${columns[2][search][value]}%'
 			</isNotEmpty>
 			<isNotEmpty property="columns[3][search][value]">
-				and sut.is_move_out = '${columns[3][search][value]}'
+				<isEqual property="columns[3][search][value]" compareValue="1">
+					and sut.is_move_in = 1
+				</isEqual>
+				<isEqual property="columns[3][search][value]" compareValue="0">
+					and sut.is_move_out = 1
+				</isEqual>
 			</isNotEmpty>
 			<isNotEmpty property="columns[4][search][value]">
 				and sut.move_out_time_start = '${columns[4][search][value]}'
 			</isNotEmpty>
 			<isNotEmpty property="columns[5][search][value]">
 				and sut.move_out_time_end = '${columns[5][search][value]}'
+			</isNotEmpty>
+			<isNotEmpty property="is_move_in">
+				and sut.is_move_in = 0
 			</isNotEmpty>
 			<isEmpty property="query_count">
 				order by sut.create_date desc

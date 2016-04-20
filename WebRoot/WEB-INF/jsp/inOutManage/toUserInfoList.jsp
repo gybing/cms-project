@@ -72,7 +72,14 @@ var cols = [
 		{"data" : "USER_NAME"}, // 
 		{"data" : "ID_NO"}, // 
 		{"data" : "PHONE"}, // 
-		{"data" : "IS_MOVE_IN"}, // 
+		{"data" : "IS_MOVE_IN",
+			"render":function(data){
+				if(data == '1'){
+					return "是";
+				}else{
+					return "";
+				}
+		}}, // 
 		{"data" : "ADDR"}, // 
 		{"data" : "MOVE_IN_TIME"}// 
 		];
@@ -81,7 +88,7 @@ var aoColumnParam = [0],aaSortParam = [];
 $(function(){
 	// 加载列表信息 initTableAutoHeight(id,url,param,colsParam,aoColumnParam,aaSortParam,other); 
 	// param Ajax请求时发送额外的数据(条件),colsParam 设置列属性条件,aoColumnParam 设置哪些列不排序  aaSortParam设置哪些列排序
-	table = initTable("u_list_table", "${ctxPath}/topic/page/qryUserList", null,cols,aoColumnParam,aaSortParam,"USER_ID");
+	table = initTable("u_list_table", "${ctxPath}/topic/page/qryUserList?",{"is_move_in":0},cols,aoColumnParam,aaSortParam,"USER_ID");
 });
 
 function chooseUser(){

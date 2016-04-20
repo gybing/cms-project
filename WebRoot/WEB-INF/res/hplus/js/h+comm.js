@@ -135,7 +135,7 @@ function initTable(id,url,param,cols,columnParam,sortParam,idName,isOrdering){
 		    "type": "POST",
 		    "data":function(d){
 		        //return $.extend({}, d,param, {"numPerPage": d.length }); // param  Ajax请求时发送额外的数据(条件)，格式： { "name": "more_data", "value": "my_value" }
-		        return $.extend({}, d, {"numPerPage": d.length });
+		        return $.extend({}, d,param, {"numPerPage": d.length });
 		    }
 		  },
 		"columns" : cols, //设置列属性条件   【列表信息】

@@ -83,10 +83,14 @@
 	<mapper id="getRoomInfo">
 		<sql key="getRoomInfo" operator="select" resultType="map">
 			select 
-				`id`, `room_no`, `building_no`, `room_type`, `room_state`, 
-				`room_floor`, `construction_area`, `room_area`, `public_area`, `decration_state`, 
-				`room_toward`, `remark`, `is_del`, `create_date`
-				from sys_room_tab where 1=1
+				srt.`id`, srt.`room_no`, srt.`building_no`, srt.`room_type`, srt.`room_state`, 
+				srt.`room_floor`, srt.`construction_area`, srt.`room_area`, srt.`public_area`, srt.`decration_state`, 
+				srt.`room_toward`, srt.`remark`, srt.`is_del`, srt.`create_date`,
+				sut.user_id,sut.user_name,sut.id_no,sut.phone,DATE_FORMAT (sut.move_in_time,'%Y-%m-%d') `move_in_time`,
+				sut.formalities,sut.in_room_id,sut.move_in_remark
+				from sys_room_tab srt 
+				left join sys_user_tab sut on sut.in_room_id = srt.id
+				where 1=1
 			<isNotEmpty property="r_id">
 				and id = #{r_id}
 			</isNotEmpty>
@@ -107,6 +111,8 @@
 				    (SELECT dc.text FROM dict_common dc where dc.code = srt.`room_type` AND dc.type = 'room_type') `room_type`,
 				    srt.`room_state`,
 				    srt.`room_floor`,
+				    sut.user_name,
+				    DATE_FORMAT (sut.move_in_time,'%Y-%m-%d') `move_in_time`,
 				    srt.`construction_area`,
 				    srt.`room_area`,
 				    srt.`public_area`,
@@ -115,7 +121,9 @@
 					DATE_FORMAT (srt.`create_date`,'%Y-%m-%d %T') `create_date`,
 				    srt.`remark`
 			</isEmpty>
-			from sys_room_tab srt where 1=1 and srt.is_del = 'N'
+			from sys_room_tab srt
+			left join sys_user_tab sut on sut.in_room_id = srt.id
+			where 1=1 and srt.is_del = 'N'
 			<isNotEmpty property="columns[0][search][value]">
 				and srt.room_no LIKE '%${columns[0][search][value]}%'
 			</isNotEmpty>
@@ -132,7 +140,7 @@
 				and srt.building_name like '%${columns[4][search][value]}%'
 			</isNotEmpty>
 			<isEmpty property="query_count">
-				order by srt.create_date desc
+				order by srt.room_state,sut.move_in_time desc
 				limit ${page_start},${page_end}
 				) a,(select @i:= ${page_start} ) it
 			</isEmpty>
