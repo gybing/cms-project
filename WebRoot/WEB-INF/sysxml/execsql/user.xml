@@ -46,6 +46,7 @@
 				sut.`work`,
 				sut.`work_tel`,
 				sut.`is_move_in`,
+				sut.`move_addr`,
 				date_format(sut.`move_in_time`, '%Y-%m-%d') `move_in_time`,
 				sut.`formalities`,
 				sut.`decoration`,

@@ -172,7 +172,7 @@ $(function(){
 			if(validate() == false){ // 提交验证
 				return false;
 			} ;
-			var move_addr = $("#building_no").text() + "-" + $("#room_floor").text() + "-" + $("#room_no").text();
+			var move_addr = $("#building_no option:selected").text() + "-" + $("#room_floor option:selected").text() + "-" + $("#room_no option:selected").text();
 			$("#move_addr").val(move_addr); // 住户楼房地址信息
 			$("#room_id").val($("#room_no").val());
 			$.ajax({

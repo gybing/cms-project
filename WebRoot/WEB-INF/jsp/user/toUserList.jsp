@@ -126,7 +126,7 @@ var cols = [
 		{"data" : "PHONE"}, // 
 		{"data" : "EMAIL"}, // 
 		{"data" : "IS_MOVE_IN"}, // 
-		{"data" : "ADDR"}, // 
+		{"data" : "MOVE_ADDR"}, // 
 		{"data" : "MOVE_IN_TIME"}, // 
 		{"data" : "IS_MOVE_OUT"}, // 
 		{"data" : "MOVE_OUT_TIME"}, // 
