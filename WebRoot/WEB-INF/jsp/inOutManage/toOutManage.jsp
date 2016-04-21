@@ -59,9 +59,6 @@
 									<button type="button" class="btn btn-outline btn-default" onclick="toMoveOut();"> 
 										<i class="glyphicon glyphicon-export"></i> 迁出
 									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="toPayment('1');"> 
-										<i class="fa fa-rmb"></i> 缴费
-									</button>
 								</div>
 							</div>
 							<table id="room_list_table" class="table table-striped table-bordered table-hover data-table with-check">
