@@ -20,7 +20,7 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">姓名:</label>
 								<div class="col-sm-2">
-									<input id="user_name" name="user_name" maxlength="14" type="text" class="required" aria-required="true" />
+									<input id="user_name" name="user_name" maxlength="36" type="text" class="required" aria-required="true" />
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 								<label class="col-sm-2 control-label">性别:</label>
@@ -33,23 +33,23 @@
 								</div>
 								<label class="col-sm-2 control-label">身份证号:</label>
 								<div class="col-sm-2">
-									<input id="id_no" name="id_no" maxlength="14" type="text" class="required" aria-required="true" />
+									<input id="id_no" name="id_no" maxlength="18" type="text" class="required isIdCardNo" aria-required="true" />
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1 control-label">联系电话:</label>
 								<div class="col-sm-2">
-		                    		<input id="phone" name="phone" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="phone" name="phone" maxlength="14" type="text" class="required number" aria-required="true" />
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 								<label class="col-sm-2 control-label">身份证地址:</label>
 								<div class="col-sm-2">
-		                    		<input id="addr" name="addr" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="addr" name="addr" maxlength="150" type="text" class="" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">邮箱:</label>
 								<div class="col-sm-2">
-									<input id="email" name="email" maxlength="14" type="text" class="required" aria-required="true" />
+									<input id="email" name="email" maxlength="50" type="text" class="email" aria-required="true" />
 								</div>
 							</div>
 						</div>
@@ -62,15 +62,15 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">单位名称:</label>
 								<div class="col-sm-2">
-		                    		<input id="work" name="work" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="work" name="work" maxlength="100" type="text" class="" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">单位地址:</label>
 								<div class="col-sm-2">
-		                    		<input id="work_addr" name="work_addr" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="work_addr" name="work_addr" maxlength="150" type="text" class="" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">单位电话:</label>
 								<div class="col-sm-2">
-									<input id="work_tel" name="work_tel" maxlength="14" type="text" class="required" aria-required="true" />
+									<input id="work_tel" name="work_tel" maxlength="14" type="text" class="number" aria-required="true" />
 								</div>
 							</div>
 						</div>
@@ -107,7 +107,7 @@
 						<div class="panel-body">
 							<div class="form-group">
 								<div class="col-sm-2">
-									<textarea id="remark" name="remark" rows="2" cols="119" style="resize: none;"></textarea>
+									<textarea id="remark" name="remark" rows="2" maxlength="200" cols="119" style="resize: none;"></textarea>
 								</div> 
 							</div>
 						</div>

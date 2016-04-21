@@ -22,7 +22,7 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">姓名:</label>
 								<div class="col-sm-2">
-									<input id="user_name" name="user_name" value="${responseDataForm.resultObj.USER_NAME }" maxlength="14" type="text" class="required" aria-required="true" />
+									<input id="user_name" name="user_name" value="${responseDataForm.resultObj.USER_NAME }" maxlength="50" type="text" class="required" aria-required="true" />
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 								<label class="col-sm-2 control-label">性别:</label>
@@ -35,23 +35,23 @@
 								</div>
 								<label class="col-sm-2 control-label">身份证号:</label>
 								<div class="col-sm-2">
-									<input id="id_no" name="id_no" value="${responseDataForm.resultObj.ID_NO }" maxlength="14" type="text" class="required" aria-required="true" />
+									<input id="id_no" name="id_no" value="${responseDataForm.resultObj.ID_NO }" maxlength="18" type="text" class="required isIdCardNo" aria-required="true" />
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1 control-label">联系电话:</label>
 								<div class="col-sm-2">
-		                    		<input id="phone" name="phone" value="${responseDataForm.resultObj.PHONE }" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="phone" name="phone" value="${responseDataForm.resultObj.PHONE }" maxlength="14" type="text" class="required number" aria-required="true" />
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 								<label class="col-sm-2 control-label">身份证地址:</label>
 								<div class="col-sm-2">
-		                    		<input id="addr" name="addr" value="${responseDataForm.resultObj.ADDR }" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="addr" name="addr" value="${responseDataForm.resultObj.ADDR }" maxlength="150" type="text" class="" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">邮箱:</label>
 								<div class="col-sm-2">
-									<input id="email" name="email" value="${responseDataForm.resultObj.EMAIL }" maxlength="14" type="text" class="required" aria-required="true" />
+									<input id="email" name="email" value="${responseDataForm.resultObj.EMAIL }" maxlength="50" type="text" class="email" aria-required="true" />
 								</div>
 							</div>
 						</div>
@@ -64,15 +64,15 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">单位名称:</label>
 								<div class="col-sm-2">
-		                    		<input id="work" name="work" value="${responseDataForm.resultObj.WORK }" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="work" name="work" value="${responseDataForm.resultObj.WORK }" maxlength="100" type="text" class="required" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">单位地址:</label>
 								<div class="col-sm-2">
-		                    		<input id="work_addr" name="work_addr" value="${responseDataForm.resultObj.WORK_ADDR }" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="work_addr" name="work_addr" value="${responseDataForm.resultObj.WORK_ADDR }" maxlength="150" type="text" class="required" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">单位电话:</label>
 								<div class="col-sm-2">
-									<input id="work_tel" name="work_tel" value="${responseDataForm.resultObj.WORK_TEL }" maxlength="14" type="text" class="required" aria-required="true" />
+									<input id="work_tel" name="work_tel" value="${responseDataForm.resultObj.WORK_TEL }" maxlength="14" type="text" class="number" aria-required="true" />
 								</div>
 							</div>
 						</div>
@@ -109,7 +109,7 @@
 						<div class="panel-body">
 							<div class="form-group">
 								<div class="col-sm-2">
-									<textarea id="remarak" name="remark" rows="2" cols="119" style="resize: none;">${responseDataForm.resultObj.REMARK }</textarea>
+									<textarea id="remarak" name="remark" rows="2" cols="119" maxlength="200" style="resize: none;">${responseDataForm.resultObj.REMARK }</textarea>
 								</div> 
 							</div>
 						</div>
