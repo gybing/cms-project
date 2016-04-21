@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	<!-- 新增费用类型信息 -->
+	<mapper id="saveFeeType">
+		<sql key="saveFeeType" operator="execute">
+			INSERT INTO `sys_fee_tab` (
+				`id`, `fee_type_code`, `type_name`, `pay_way`, `count_type`, `pay_type`, 
+				`pay_cycle`, `cycle_unit`, `pay_price`, `is_del`, `create_date`) 
+			VALUES (
+				UUID(), #{FEE_TYPE_CODE}, #{TYPE_NAME}, #{PAY_WAY}, #{COUNT_TYPE}, #{PAY_TYPE}, 
+				#{PAY_CYCLE}, #{CYCLE_UNIT}, #{PAY_PRICE}, 'N', now());
+		</sql>
+	</mapper>
+	<!-- 更新费用类型信息 -->
+	<mapper id="updateFeeType">
+		<sql key="updateFeeType" operator="execute">
+			UPDATE `sys_fee_tab`
+				SET 
+				 `fee_type_code` = #{fee_type_code},
+				 `type_name` = #{type_name},
+				 `pay_way` = #{pay_way},
+				 `count_type` = #{count_type},
+				 `pay_type` = #{pay_type},
+				 `pay_cycle` = #{pay_cycle},
+				 `cycle_unit` = #{cycle_unit},
+				 `pay_price` = #{pay_price}
+				WHERE
+					(
+						`id` = #{f_id}
+					);
+		</sql>
+	</mapper>
+	<!-- 删除费用类型信息 -->
+	<mapper id="delfeeTypeInfo">
+		<sql key="delfeeTypeInfo" operator="execute">
+			update sys_fee_tab set is_del = 'Y' where id = #{f_id}
+		</sql>
+	</mapper>
+	<!-- 获取费用类型信息 -->
+	<mapper id="getFeeTypeInfo">
+		<sql key="getFeeTypeInfo" operator="select" resultType="map">
+			select `fee_type_code`, `type_name`, `pay_way`, `count_type`, `pay_type`, `pay_cycle`, `cycle_unit`, `pay_price`, `is_del`, `create_date`
+				from `sys_fee_tab` where 1=1
+			<isNotEmpty property="fee_id">
+				and id = #{fee_id}
+			</isNotEmpty>
+		</sql>
+	</mapper>
+
+	<!-- 费用类型信息列表 -->
+	<mapper id="qryFeeTypeList">
+		<sql key="qryFeeTypeList" operator="select" resultType="paging">
+			<isNotEmpty property="query_count">
+				select count(distinct sft.id)
+			</isNotEmpty>
+			<isEmpty property="query_count">
+				select (@i:=@i+1) num,a.* from (
+				select 	sft.id,
+						sft.fee_type_code,
+						sft.type_name,
+						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.pay_way AND dc.type = 'PAY_WAY') pay_way,
+						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.count_type AND dc.type = 'COUNT_TYPE') count_type,
+						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.pay_type AND dc.type = 'PAY_TYPE') pay_type,
+						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.pay_cycle AND dc.type = 'PAY_CYCLE') pay_cycle,
+						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.cycle_unit AND dc.type = 'CYCLE_UNIT') cycle_unit,
+						sft.pay_price,
+						DATE_FORMAT (sft.create_date,'%Y-%m-%d %T') `create_date`
+			</isEmpty>
+			from sys_fee_tab sft where 1=1 and sft.is_del = 'N'
+			<isNotEmpty property="columns[0][search][value]">
+				and sft.fee_type_code LIKE '%${columns[0][search][value]}%'
+			</isNotEmpty>
+			<isNotEmpty property="columns[1][search][value]">
+				and sft.type_name LIKE '%${columns[1][search][value]}%'
+			</isNotEmpty>
+			<isEmpty property="query_count">
+				order by sft.create_date desc
+				limit ${page_start},${page_end}
+				) a,(select @i:= ${page_start} ) it
+			</isEmpty>
+		</sql>
+	</mapper>
+</mappers>
