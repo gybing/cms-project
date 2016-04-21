@@ -3,6 +3,23 @@
 	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
 	<!-- 小区物业管理系统 -->
 	
+	<!-- 住户迁出等级 -->
+	<mapper id="userMoveOut">
+		<sql key="userMoveOut" operator="execute">
+			UPDATE `sys_user_tab`
+			SET 
+			 `is_move_out` = 1,
+			 `move_out_time` = #{move_out_time},
+			 `move_out_reason` = #{move_out_reason}
+			WHERE
+				(
+					`user_id` = #{u_id}
+				);
+		</sql>
+		<sql key="updateRoomState" operator="execute">
+			update sys_room_tab set room_state = 0 where id = #{r_id}
+		</sql>	
+	</mapper>
 	<!-- 住户迁入登记 -->
 	<mapper id="userMoveIn">
 		<sql key="userMoveIn" operator="execute">

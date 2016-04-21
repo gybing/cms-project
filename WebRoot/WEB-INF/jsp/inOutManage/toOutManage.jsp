@@ -74,13 +74,11 @@
 										<th>楼宇编号</th>
 										<th>楼宇名称</th>
 										<th>房间类型</th>
-										<th>建筑面积</th>
-										<th>套内面积</th>
-										<th>公摊面积</th>
+										<th>住户姓名</th>
+										<th>入住时间</th>
 										<th>装修情况</th>
 										<th>朝向</th>
 										<th>备注</th>
-										<th>创建时间</th>
 									</tr>
 								</thead>
 								<tbody></tbody>
@@ -131,13 +129,11 @@ var cols = [
 		{"data" : "BUILDING_NO"}, // .
 		{"data" : "BUILDING_NAME"}, // .
 		{"data" : "ROOM_TYPE"}, // .
-		{"data" : "CONSTRUCTION_AREA"}, // .
-		{"data" : "ROOM_AREA"}, // .
-		{"data" : "PUBLIC_AREA"}, // .
+		{"data" : "USER_NAME"}, // .
+		{"data" : "MOVE_IN_TIME"}, // .
 		{"data" : "DECRATION_STATE"}, // .
 		{"data" : "ROOM_TOWARD"}, // .
-		{"data" : "REMARK"}, // .
-		{"data" : "CREATE_DATE"} // .
+		{"data" : "REMARK"} // .
 		];
 // 设置哪些列不进行排序  哪些列需排序（需要改sql xml条件）
 var aoColumnParam = [0],aaSortParam = [];
@@ -146,6 +142,25 @@ $(function(){
 	// param Ajax请求时发送额外的数据(条件),colsParam 设置列属性条件,aoColumnParam 设置哪些列不排序  aaSortParam设置哪些列排序
 	table = initTableAutoHeight("room_list_table", "${ctxPath}/topic/page/qryRoomList", {"user_move_in":1},cols,aoColumnParam,aaSortParam,"ID");
 });
+
+/* 迁出弹窗 */
+function toMoveOut(){
+	var r_id = $("#clickId").val()?$("#clickId").val():-1;
+	if(r_id != -1){
+		index = layer.open({
+		    type: 2, 
+		    title : "住户迁出登记",
+		    area: ['95%', '83%'],
+		    fix: false, //不固定
+		   // maxmin: true,
+		    content: _contextPath+"/topic/toUserMoveOut?r_id="+r_id
+		});
+	}else{
+		layer.alert("请选择一条记录！", {icon: 2}, function(index){
+			layer.close(index);
+		});  
+	}
+}
 
 /* 搜索 查询 */
 function searchForm() {
@@ -158,84 +173,5 @@ function searchForm() {
 	table.draw();
 }
 
-/* 新增房间信息弹窗 */
-function toAddRoom(){
-	index = layer.open({
-	    type: 2, 
-	    title : "新增房间",
-	    area: ['65%', '71%'],
-	    fix: false, //不固定
-	   // maxmin: true,
-	    content: _contextPath+"/topic/toAddRoom"
-	});
-}
-
-/* 编辑房间信息弹窗 */
-function toEditRoom(){
-	var r_id = $("#clickId").val()?$("#clickId").val():"";
-	if(r_id){
-		index = layer.open({
-		    type: 2, 
-		    title : "编辑房间信息",
-		    area: ['65%', '61%'],
-		    fix: false, //不固定
-		   // maxmin: true,
-		    content: _contextPath+"/topic/toEditRoom?r_id="+r_id
-		});
-	}else{
-		layer.alert("请选择一条记录！", {icon: 2}, function(index){
-			layer.close(index);
-		});  
-	}
-}
-
-/* 删除房间信息 */
-function deleteRoomInfo(){
-	var r_id = $("#clickId").val()?$("#clickId").val():"";
-	if(r_id){
-		$.ajax({
-			url:"${ctxPath}/topic/ajax/getRoomInfoByKey",
-			type:"post",
-			dataType:"json",
-			data:{"r_id":r_id},
-			success:function(json){
-				if(json.result == 1){
-					json = json.resultObj;
-					if(json.ROOM_STATE == 0){
-						layer.alert("该房间存在住户，无法删除！", {icon: 2}, function(index){
-							layer.close(index);
-						});  
-					}else{
-						layer.confirm('您确定要删除这条房间记录吗?', {icon: 3, title:'提示'}, function(index){
-							 $.ajax({
-									url : "${ctxPath }/topic/ajax/deleteRoomInfo",
-									dataType : "json",
-									type : "post",
-									data:{"r_id":r_id},
-									success : function(json) {
-										if (json.result == '1') {
-											layer.alert(json.resultInfo, function(index){
-												//刷新表格，关闭弹窗
-												searchForm();
-												layer.close(index);
-											});  
-										} else {
-											layer.alert(json.resultInfo,{icon: 2}, function(index){
-												layer.close(index);
-											});  
-											return;
-										}
-								}});
-						});
-					}
-				}
-			}
-		});
-	}else{
-		layer.alert("请选择一条记录！", {icon: 2}, function(index){
-			layer.close(index);
-		});  
-	}
-}
 </script>
 </html>

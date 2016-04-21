@@ -125,10 +125,24 @@ var cols = [
 		{"data" : "ID_NO"}, // 
 		{"data" : "PHONE"}, // 
 		{"data" : "EMAIL"}, // 
-		{"data" : "IS_MOVE_IN"}, // 
+		{"data" : "IS_MOVE_IN",
+			"render":function(data){
+				if(data == '1'){
+					return "是";
+				}else{
+					return "";
+				}
+		}}, // 
 		{"data" : "MOVE_ADDR"}, // 
 		{"data" : "MOVE_IN_TIME"}, // 
-		{"data" : "IS_MOVE_OUT"}, // 
+		{"data" : "IS_MOVE_OUT",
+			"render":function(data){
+				if(data == '1'){
+					return "是";
+				}else{
+					return "";
+				}
+		}}, // 
 		{"data" : "MOVE_OUT_TIME"}, // 
 		{"data" : "MOVE_OUT_REASON"} // 
 		];
