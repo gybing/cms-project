@@ -6,7 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>首页-车辆实时动态</title>
+    <title>首页-小区物业管理系统</title>
     <jsp:include page="/WEB-INF/jsp/top.jsp"></jsp:include>
     <style type="text/css">
      table.dataTable thead .sorting_desc::after{content: "";}
@@ -102,7 +102,7 @@
 					<div class="ibox-content">
 						<div class="panel panel-default" style="margin-top: 5px;">
 							<div class="panel-heading" style="padding: 5px">
-								<span style="font-weight: bold;">车辆实时动态</span>
+								<span style="font-weight: bold;">小区整体情况</span>
 							</div>
 							<div class="panel-body">
 								<div class="form-group" style="padding-top:2px;padding-bottom: 2px">
@@ -148,4 +148,3 @@
 		</div>
 	</div>
 </body>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=vaOdcXMsIjnesIldud46GOtT"></script>

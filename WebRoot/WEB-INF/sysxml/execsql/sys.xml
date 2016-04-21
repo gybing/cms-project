@@ -598,8 +598,6 @@
 			</isEmpty>
 			  FROM sys_url_tab P
 			 WHERE P.SYS_CODE = 'cms'
-			   AND (P.PRIV_ID IS NULL OR P.PRIV_ID = '')
-			
 			<isNotEmpty property="columns[0][search][value]">
 				AND P.URL_ID LIKE '%${columns[0][search][value]}%'
 			</isNotEmpty>
