@@ -21,36 +21,36 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">楼宇编号:</label>
 								<div class="col-sm-3">
-		                    		<input id="building_no" name="building_no" value="${responseDataForm.resultObj.BUILDING_NO }" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="building_no" name="building_no" value="${responseDataForm.resultObj.BUILDING_NO }" maxlength="11" type="text" class="digits required form-control" aria-required="true" />
 								</div>
 								<label class="col-sm-1 control-label">楼宇名称:</label>
 								<div class="col-sm-3">
-		                    		<input id="building_name" name="building_name" value="${responseDataForm.resultObj.BUILDING_NAME }" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="building_name" name="building_name" value="${responseDataForm.resultObj.BUILDING_NAME }" maxlength="50" type="text" class="required form-control" aria-required="true" />
 								</div>
 								<label class="col-sm-1  control-label">楼宇层数:</label>
 								<div class="col-sm-3">
-									<input id="building_floors" name="building_floors" value="${responseDataForm.resultObj.BUILDING_FLOORS }" maxlength="14" class="required number" type="text"/>
+									<input id="building_floors" name="building_floors" value="${responseDataForm.resultObj.BUILDING_FLOORS }" maxlength="11" class="required number form-control" type="text"/>
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1 control-label">楼宇地址:</label>
 								<div class="col-sm-3">
-									<input id="building_addr" name="building_addr" value="${responseDataForm.resultObj.BUILDING_ADDR }" maxlength="14" type="text" aria-required="true" />
+									<input id="building_addr" name="building_addr" value="${responseDataForm.resultObj.BUILDING_ADDR }" maxlength="150" class="form-control" type="text" aria-required="true" />
 								</div>
 								<label class="col-sm-1 control-label">楼宇类型:</label>
 								<div class="col-sm-3">
-									<input id="building_type" name="building_type" value="${responseDataForm.resultObj.BUILDING_TYPE }" maxlength="14" type="text" aria-required="true" />
+									<input id="building_type" name="building_type" value="${responseDataForm.resultObj.BUILDING_TYPE }" maxlength="20" class="form-control" type="text" aria-required="true" />
 								</div>
 								<label class="col-sm-1 control-label">楼宇结构:</label>
 								<div class="col-sm-3">
-									<input id="building_structure" name="building_structure" value="${responseDataForm.resultObj.BUILDING_STRUCTURE }" maxlength="14" type="text" aria-required="true" />
+									<input id="building_structure" name="building_structure" value="${responseDataForm.resultObj.BUILDING_STRUCTURE }" maxlength="20" class="form-control" type="text" aria-required="true" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1 control-label">楼宇朝向:</label>
 								<div class="col-sm-3">
-									<input id="building_toward" name="building_toward" value="${responseDataForm.resultObj.BUILDING_TOWARD }" maxlength="14" type="text" aria-required="true" />
+									<input id="building_toward" name="building_toward" value="${responseDataForm.resultObj.BUILDING_TOWARD }" class="form-control" maxlength="20" type="text" aria-required="true" />
 								</div>
 							</div>
 						</div>

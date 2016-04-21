@@ -9,6 +9,11 @@
 .has-success .control-label{
 	color:inherit;
 }
+.area_unit{
+    margin-left: -42px;
+    width: 10px;
+    margin-top: 4px;
+	}
 </style>
 <%-- <jsp:include page="/WEB-INF/jsp/formSubmit.jsp"></jsp:include> --%>
 <title>新增住户</title>
@@ -26,7 +31,7 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">房间编号:</label>
 								<div class="col-sm-2">
-									<input id="room_no" name="room_no" maxlength="14" class="required form-control" type="text"/>
+									<input id="room_no" name="room_no" maxlength="14" class="required digits form-control" type="text"/>
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 								<label class="col-sm-2 control-label">楼宇编号:</label>
@@ -37,7 +42,7 @@
 								</div>
 								<label class="col-sm-2 control-label">楼宇名称:</label>
 								<div class="col-sm-2">
-		                    		<input id="building_name" name="building_name" readonly maxlength="14" type="text" class="form-control" />
+		                    		<input id="building_name" name="building_name" readonly maxlength="20" type="text" class="form-control" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -63,25 +68,34 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">建筑面积:</label>
 								<div class="col-sm-3">
-									<input id="construction_area" name="construction_area" maxlength="14" type="text" class="form-control" />
+									<input id="construction_area" name="construction_area" maxlength="11" type="text" class="number form-control" />
+								</div>
+								<div class="col-sm-1 area_unit">
+									<span>(㎡)</span>
 								</div>
 								<label class="col-sm-1 control-label">套内面积:</label>
 								<div class="col-sm-3">
-									<input id="room_area" name="room_area" maxlength="14" type="text" class="form-control" />
+									<input id="room_area" name="room_area" maxlength="11" type="text" class="number form-control" />
+								</div>
+								<div class="col-sm-1 area_unit">
+									<span>(㎡)</span>
 								</div>
 								<label class="col-sm-1 control-label">公摊面积:</label>
 								<div class="col-sm-3">
-									<input id="public_area" name="public_area" maxlength="14" type="text" class="form-control" />
+									<input id="public_area" name="public_area" maxlength="11" type="text" class="number form-control" />
+								</div>
+								<div class="col-sm-1 area_unit">
+									<span>(㎡)</span>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1 control-label">装修情况:</label>
 								<div class="col-sm-3">
-									<input id="decration_state" name="decration_state" maxlength="14" type="text" class="form-control" />
+									<input id="decration_state" name="decration_state" maxlength="20" type="text" class="form-control" />
 								</div>
 								<label class="col-sm-1 control-label">朝向:</label>
 								<div class="col-sm-3">
-									<input id="room_toward" name="room_toward" maxlength="14" type="text" class="form-control" />
+									<input id="room_toward" name="room_toward" maxlength="20" type="text" class="form-control" />
 								</div>
 							</div>
 						</div>

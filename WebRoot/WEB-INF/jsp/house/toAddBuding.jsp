@@ -21,38 +21,38 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">楼宇编号:</label>
 								<div class="col-sm-3">
-		                    		<input id="building_no" name="building_no" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="building_no" name="building_no" maxlength="11" type="text" class="required digits form-control" aria-required="true" />
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 								<label class="col-sm-1 control-label">楼宇名称:</label>
 								<div class="col-sm-3">
-		                    		<input id="building_name" name="building_name" maxlength="14" type="text" class="required" aria-required="true" />
+		                    		<input id="building_name" name="building_name" maxlength="20" type="text" class="required form-control" aria-required="true" />
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 								<label class="col-sm-1  control-label">楼宇层数:</label>
 								<div class="col-sm-3">
-									<input id="building_floors" name="building_floors" maxlength="14" class="required number" type="text"/>
+									<input id="building_floors" name="building_floors" maxlength="14" class="required number form-control" type="text"/>
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1  control-label">楼宇地址:</label>
 								<div class="col-sm-3">
-									<input id="building_addr" name="building_addr" maxlength="14" type="text"/>
+									<input id="building_addr" name="building_addr" maxlength="150" type="text" class="form-control"/>
 								</div>
 								<label class="col-sm-1 control-label">楼宇类型:</label>
 								<div class="col-sm-3">
-									<input id="building_type" name="building_type" maxlength="14" type="text" aria-required="true" />
+									<input id="building_type" name="building_type" maxlength="50" type="text" aria-required="true" class="form-control"/>
 								</div>
 								<label class="col-sm-1 control-label">楼宇结构:</label>
 								<div class="col-sm-3">
-									<input id="building_structure" name="building_structure" maxlength="14" type="text" aria-required="true" />
+									<input id="building_structure" name="building_structure" maxlength="50" type="text" aria-required="true" class="form-control"/>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1 control-label">楼宇朝向:</label>
 								<div class="col-sm-3">
-									<input id="building_toward" name="building_toward" maxlength="14" type="text" aria-required="true" />
+									<input id="building_toward" name="building_toward" maxlength="20" type="text" aria-required="true" class="form-control"/>
 								</div>
 							</div>
 						</div>
