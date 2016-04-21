@@ -9,8 +9,7 @@
 </head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
-		<form id="orderInfoEditForm" method="post" action="${ctxPath }/topic/ajax/addOrder" data-id="${param.pdataId}" callback="" class="form-horizontal">
-			<input type="hidden" name="ORDER_ID" value="" />
+		<form id="add_user_info_form" method="post" action="#" data-id="" callback="" class="form-horizontal">
 			<div class="ibox">
 				<div class="ibox-content">
 					<div class="panel panel-default" style="margin-top: 5px;">
@@ -108,7 +107,7 @@
 						<div class="panel-body">
 							<div class="form-group">
 								<div class="col-sm-2">
-									<textarea rows="2" cols="119" style="resize: none;"></textarea>
+									<textarea id="remark" name="remark" rows="2" cols="119" style="resize: none;"></textarea>
 								</div> 
 							</div>
 						</div>
@@ -131,6 +130,33 @@ $(function(){
 	$("#sex").select2({
 		minimumResultsForSearch:-1
 	});
+	// 表单提交
+	$("#add_user_info_form").validate({
+		submitHandler : function(form) {
+			$.ajax({
+				url : "${ctxPath }/topic/ajax/saveUserInfo",
+				dataType : "json",
+				data : $(form).serialize(),
+				type : "post",
+				success : function(json) {
+					if (json.result == '1') {
+						layer.alert(json.resultInfo, function(index){
+							//刷新表格，关闭弹窗
+							parent.searchForm();
+							parent.layer.close(parent.layer.getFrameIndex(window.name));
+							layer.close(index);
+						});  
+					} else {
+						layer.alert(json.resultInfo,{icon: 2}, function(index){
+							//刷新表格，关闭弹窗
+							layer.close(index);
+						});  
+						return;
+					}
+			}});
+		}
+	});
+	
 });
 </script>
 </html>

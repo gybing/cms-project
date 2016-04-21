@@ -30,25 +30,25 @@
 										<div class="col-sm-2">
 											<input id="phone" name="phone" maxlength="14" type="text" class="required" aria-required="true" />
 										</div>
-										<label class="col-sm-1 control-label">是否迁出:</label>
+										<label class="col-sm-1 control-label">迁入迁出:</label>
 										<div class="col-sm-2">
 											<select class="combox" id="is_move_out" name="is_move_out">
 												<option value="">请选择</option>
-												<option value="0">否</option>
-												<option value="1">是</option>
+												<option value="1">迁入</option>
+												<option value="0">迁出</option>
 											</select>
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-1 control-label">迁入时间（起）:</label>
 										<div class="col-sm-2">
-											<input type="text" class="form-control layer-date" id="move_in_time_start" name="move_in_time_start" value="${responseDataForm.resultObj[0].MOVE_IN_TIME }" placeholder="YYYY-MM-DD hh:mm"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm'})" />
+											<input type="text" class="form-control layer-date" id="move_in_time_start" name="move_in_time_start" value="${responseDataForm.resultObj[0].MOVE_IN_TIME }" placeholder="YYYY-MM-DD"  onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" />
 										</div>
 										<label class="col-sm-1 control-label">迁入时间（止）:</label>
-										<div class="col-sm-2">
-											<input type="text" class="form-control layer-date" id="move_in_time_end" name="move_in_time_end" value="${responseDataForm.resultObj[0].MOVE_IN_TIME }" placeholder="YYYY-MM-DD hh:mm"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm'})" />
-										</div>
 										<div class="col-sm-3">
+											<input type="text" class="form-control layer-date" id="move_in_time_end" name="move_in_time_end" value="${responseDataForm.resultObj[0].MOVE_IN_TIME }" placeholder="YYYY-MM-DD"  onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" />
+										</div>
+										<div class="col-sm-2">
 											<button type="button" class="btn btn-sm btn-primary " onclick="searchForm();">查    询</button>
 											<button type="button" class="btn btn-sm btn-primary " onclick="resetForm('user_list_search_form');">重    置</button>
 											<button type="button" class="btn btn-sm btn-primary " onclick="refreshForm('user_list_search_form');">刷    新</button>
@@ -146,6 +146,11 @@ var cols = [
 // 设置哪些列不进行排序  哪些列需排序（需要改sql xml条件）
 var aoColumnParam = [0],aaSortParam = [];
 $(function(){
+	
+	$("#is_move_out").select2({
+		minimumResultsForSearch:-1
+	});
+	
 	// 加载列表信息 initTableAutoHeight(id,url,param,colsParam,aoColumnParam,aaSortParam,other); 
 	// param Ajax请求时发送额外的数据(条件),colsParam 设置列属性条件,aoColumnParam 设置哪些列不排序  aaSortParam设置哪些列排序
 	table = initTableAutoHeight("user_list_table", "${ctxPath}/topic/page/qryUserList", null,cols,aoColumnParam,aaSortParam,"USER_ID");

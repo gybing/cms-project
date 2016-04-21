@@ -3,6 +3,31 @@
 	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
 	<!-- 小区物业管理系统 -->
 	
+	<!-- 新增住户信息 -->
+	<mapper id="saveUserInfo">
+		<sql key="saveUserInfo" operator="execute">
+			INSERT INTO `sys_user_tab`(
+				`user_id`, `user_name`, `phone`, `id_no`, `sex`, 
+				`addr`, `email`, `remark`, `create_date`, 
+				`work`, `work_addr`, `work_tel` )
+			VALUES (
+				UUID(), #{USER_NAME}, #{PHONE}, #{ID_NO}, #{SEX},
+				 #{ADDR}, #{EMAIL}, #{REMARK}, now(),  
+				 #{WORK},#{WORK_ADDR},#{WORK_TEL} );
+		</sql>
+	</mapper>
+	
+	<!-- 更新住户信息 -->
+	<mapper id="updateUserInfo">
+		<sql key="updateUserInfo" operator="execute">
+			update sys_user_tab set 
+				user_name = #{USER_NAME},phone = #{PHONE},id_no = #{ID_NO},sex = #{SEX},
+				addr = #{ADDR},email = #{EMAIL},remark = #{REMARK},
+				work = #{WORK},work_addr = #{WORK_ADDR},work_tel = #{WORK_TEL}
+			where user_id = #{USER_ID}
+		</sql>
+	</mapper>
+	
 	<!-- 删除住户信息 -->
 	<mapper id="deleteUserInfo">
 		<sql key="deleteUserInfo" operator="execute">
@@ -100,10 +125,10 @@
 				</isEqual>
 			</isNotEmpty>
 			<isNotEmpty property="columns[4][search][value]">
-				and sut.move_out_time_start = '${columns[4][search][value]}'
+				and sut.move_in_time >=CONCAT('${columns[4][search][value]}',' 00:00:00') 
 			</isNotEmpty>
 			<isNotEmpty property="columns[5][search][value]">
-				and sut.move_out_time_end = '${columns[5][search][value]}'
+				and sut.move_in_time &lt;= CONCAT('${columns[5][search][value]}',' 23:59:59') 
 			</isNotEmpty>
 			<isNotEmpty property="is_move_in">
 				and sut.is_move_in = 0
