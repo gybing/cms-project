@@ -158,24 +158,29 @@ function searchForm() {
 function toMoveIn(){
 	var r_id = $("#clickId").val()?$("#clickId").val():-1;
 	if(r_id != -1){
+		var existUser = false;
 		$("#room_list_table tr").each(function(index,item){
 			if($(this).attr("data-id") == r_id){
 				if($(item.childNodes[2]).text() == "入住"){
-					layer.alert("该房间已经存在住户，请选择其他房间！", {icon: 2}, function(index){
-						layer.close(index);
-					});  
-				}else{
-					index = layer.open({
-					    type: 2, 
-					    title : "住户迁入登记",
-					    area: ['95%', '83%'],
-					    fix: false, //不固定
-					   // maxmin: true,
-					    content: _contextPath+"/topic/toUserMoveIn?r_id="+r_id
-					});
+					existUser = true;
 				}
 			}
 		});
+		if(existUser){
+			layer.alert("该房间已经存在住户，请选择其他房间！", {icon: 2}, function(index){
+				layer.close(index);
+			});  
+		}else{
+			index = layer.open({
+			    type: 2, 
+			    title : "住户迁入登记",
+			    area: ['95%', '83%'],
+			    fix: false, //不固定
+			   // maxmin: true,
+			    content: _contextPath+"/topic/toUserMoveIn?r_id="+r_id
+			});
+		}
+		
 	}else{
 		layer.alert("请选择一条记录！", {icon: 2}, function(index){
 			layer.close(index);
@@ -187,14 +192,29 @@ function toMoveIn(){
 function toEditMoveInfo(){
 	var r_id = $("#clickId").val()?$("#clickId").val():-1;
 	if(r_id != -1){
-		index = layer.open({
-		    type: 2, 
-		    title : "住户迁入登记",
-		    area: ['95%', '83%'],
-		    fix: false, //不固定
-		   // maxmin: true,
-		    content: _contextPath+"/topic/toEditUserMoveInfo?r_id="+r_id
+		var existUser = false;
+		$("#room_list_table tr").each(function(index,item){
+			if($(this).attr("data-id") == r_id){
+				if($(item.childNodes[2]).text() == "空房"){
+					existUser = true;
+				}
+			}
 		});
+		if(existUser){
+			layer.alert("该房间尚未入住，无法编辑入住信息！", {icon: 2}, function(index){
+				layer.close(index);
+			});  
+		}else{
+			index = layer.open({
+			    type: 2, 
+			    title : "编辑迁入信息",
+			    area: ['95%', '83%'],
+			    fix: false, //不固定
+			   // maxmin: true,
+			    content: _contextPath+"/topic/toEditUserMoveInfo?r_id="+r_id
+			});
+		}
+		
 	}else{
 		layer.alert("请选择一条记录！", {icon: 2}, function(index){
 			layer.close(index);

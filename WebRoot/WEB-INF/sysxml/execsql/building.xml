@@ -67,6 +67,9 @@
 			<isEmpty property="r_fl">
 				AND room_floor = -1
 			</isEmpty>
+			<isNotEmpty property="room_state">
+				AND s.room_state = #{room_state}
+			</isNotEmpty>
 		</sql>
 	</mapper>
 	<!-- 楼宇信息列表 -->

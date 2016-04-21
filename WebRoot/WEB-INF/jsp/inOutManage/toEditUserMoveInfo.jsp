@@ -108,7 +108,7 @@
 					</div>
 					<div class="form-group" style="margin-top:65px;margin-right:-7px;">
 						<div class="col-sm-1" style="float:right">
-                    		<button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i>取消</button>
+                    		<button type="button" class="btn btn-default" onclick="cancelLayer()"><i class="glyphicon glyphicon-remove"></i>取消</button>
 						</div>
 						<div class="col-sm-1" style="float:right">
                     		<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i>保存</button>
@@ -121,7 +121,6 @@
 </body>
 <script type="text/javascript">
 $(function(){
-	console.info('${responseDataForm.resultObj}');
 	if('${responseDataForm.resultObj.USER_ID}'){
 		loadUserInfo('${responseDataForm.resultObj.USER_ID}');
 	}
@@ -238,7 +237,6 @@ function loadUserInfo(u_id){
  * room_floor 楼层
  */
 function loadRoomSelect(elementId,building_no,room_floor){
-	console.info('${responseDataForm.resultObj}')
 	$.ajax({
 		url : "${ctxPath}/topic/ajax/qryBuildingRoom",
 		data : {"b_no" : building_no,"r_fl":room_floor},

@@ -56,27 +56,12 @@
 							</form>
 							<div class="ibox-content widget-content nopadding float-e-margins">
 								<div id="orderToolbar" style=" float:left; padding: 5px 5px;">
-									<button type="button" class="btn btn-outline btn-default" onclick="toAddRoom();">
-										<i class="glyphicon glyphicon-plus"></i> 新增
-									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="toEditRoom();">
-										<i class="glyphicon glyphicon-edit"></i> 修改
-									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="deleteRoomInfo();">
-										<i class="glyphicon glyphicon-remove"></i> 删除
-									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="toMoveIn();">
-										<i class="glyphicon glyphicon-import"></i> 迁入
-									</button>
 									<button type="button" class="btn btn-outline btn-default" onclick="toMoveOut();"> 
 										<i class="glyphicon glyphicon-export"></i> 迁出
 									</button>
 									<button type="button" class="btn btn-outline btn-default" onclick="toPayment('1');"> 
 										<i class="fa fa-rmb"></i> 缴费
 									</button>
-									<!-- <button type="button" class="btn btn-outline btn-default" onclick="toReserve('0');"> 
-										<i class="glyphicon glyphicon-time"></i> 取消预约
-									</button> -->
 								</div>
 							</div>
 							<table id="room_list_table" class="table table-striped table-bordered table-hover data-table with-check">
@@ -159,7 +144,7 @@ var aoColumnParam = [0],aaSortParam = [];
 $(function(){
 	// 加载列表信息 initTableAutoHeight(id,url,param,colsParam,aoColumnParam,aaSortParam,other); 
 	// param Ajax请求时发送额外的数据(条件),colsParam 设置列属性条件,aoColumnParam 设置哪些列不排序  aaSortParam设置哪些列排序
-	table = initTableAutoHeight("room_list_table", "${ctxPath}/topic/page/qryRoomList", null,cols,aoColumnParam,aaSortParam,"ID");
+	table = initTableAutoHeight("room_list_table", "${ctxPath}/topic/page/qryRoomList", {"user_move_in":1},cols,aoColumnParam,aaSortParam,"ID");
 });
 
 /* 搜索 查询 */

@@ -139,6 +139,14 @@
 			<isNotEmpty property="columns[4][search][value]">
 				and srt.building_name like '%${columns[4][search][value]}%'
 			</isNotEmpty>
+			<isNotEmpty property="user_move_in">
+				<isEqual property="user_move_in" compareValue="0">
+					and srt.room_state = 0
+				</isEqual>
+				<isEqual property="user_move_in" compareValue="1">
+					and srt.room_state = 1
+				</isEqual>
+			</isNotEmpty>
 			<isEmpty property="query_count">
 				order by srt.room_state,sut.move_in_time desc
 				limit ${page_start},${page_end}

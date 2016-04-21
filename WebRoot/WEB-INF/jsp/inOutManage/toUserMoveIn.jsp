@@ -108,7 +108,7 @@
 					</div>
 					<div class="form-group" style="margin-top:65px;margin-right:-7px;">
 						<div class="col-sm-1" style="float:right">
-                    		<button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i>取消</button>
+                    		<button type="button" class="btn btn-default" onclick="cancelLayer2()"><i class="glyphicon glyphicon-remove"></i>取消</button>
 						</div>
 						<div class="col-sm-1" style="float:right">
                     		<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i>保存</button>
@@ -236,7 +236,7 @@ function loadUserInfo(u_id){
 function loadRoomSelect(elementId,building_no,room_floor){
 	$.ajax({
 		url : "${ctxPath}/topic/ajax/qryBuildingRoom",
-		data : {"b_no" : building_no,"r_fl":room_floor},
+		data : {"b_no" : building_no,"r_fl":room_floor,"room_state":"0"},
 		dataType:"json",
 		type:"post",
 		success:function(data){
@@ -269,5 +269,9 @@ function validate(){
 	return true;
 }
 
+function cancelLayer2(){
+	console.info(window.parent.index);
+	parent.layer.close(window.parent.index); 
+}
 </script>
 </html>
