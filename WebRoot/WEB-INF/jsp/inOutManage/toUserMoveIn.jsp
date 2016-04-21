@@ -129,7 +129,7 @@ $(function(){
 	});
 	// 设置楼层下拉框为 select2
 	$("#room_floor").select2({
-		minimumResultsForSearch:-1,
+		minimumResultsForSearch:-1
 	});
 	
 	//根据选择的楼宇编号，获取楼宇名称,设置楼宇的楼层信息

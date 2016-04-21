@@ -3,7 +3,14 @@
 	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
 	<!-- 小区物业管理系统 -->
 	
-	<!-- 住户迁出等级 -->
+	<!-- 删除住户信息 -->
+	<mapper id="deleteUserInfo">
+		<sql key="deleteUserInfo" operator="execute">
+			update sys_user_tab set is_del = 'Y' where user_id = #{user_id}
+		</sql>
+	</mapper>
+	
+	<!-- 住户迁出登记 -->
 	<mapper id="userMoveOut">
 		<sql key="userMoveOut" operator="execute">
 			UPDATE `sys_user_tab`

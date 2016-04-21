@@ -65,18 +65,6 @@
 									<button type="button" class="btn btn-outline btn-default" onclick="deleteRoomInfo();">
 										<i class="glyphicon glyphicon-remove"></i> 删除
 									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="toMoveIn();">
-										<i class="glyphicon glyphicon-import"></i> 迁入
-									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="toMoveOut();"> 
-										<i class="glyphicon glyphicon-export"></i> 迁出
-									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="toPayment('1');"> 
-										<i class="fa fa-rmb"></i> 缴费
-									</button>
-									<!-- <button type="button" class="btn btn-outline btn-default" onclick="toReserve('0');"> 
-										<i class="glyphicon glyphicon-time"></i> 取消预约
-									</button> -->
 								</div>
 							</div>
 							<table id="room_list_table" class="table table-striped table-bordered table-hover data-table with-check">

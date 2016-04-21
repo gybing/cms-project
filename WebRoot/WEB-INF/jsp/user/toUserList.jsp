@@ -64,10 +64,10 @@
 									<button type="button" class="btn btn-outline btn-default" onclick="toEditUser();">
 										<i class="glyphicon glyphicon-edit"></i> 修改
 									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="delOrder();">
+									<button type="button" class="btn btn-outline btn-default" onclick="deleteUserInfo();">
 										<i class="glyphicon glyphicon-remove"></i> 删除
 									</button>
-									<button type="button" class="btn btn-outline btn-default" onclick="toMoveIn();">
+									<!-- <button type="button" class="btn btn-outline btn-default" onclick="toMoveIn();">
 										<i class="glyphicon glyphicon-import"></i> 迁入
 									</button>
 									<button type="button" class="btn btn-outline btn-default" onclick="toMoveOut();"> 
@@ -75,9 +75,6 @@
 									</button>
 									<button type="button" class="btn btn-outline btn-default" onclick="toPayment('1');"> 
 										<i class="fa fa-rmb"></i> 缴费
-									</button>
-									<!-- <button type="button" class="btn btn-outline btn-default" onclick="toReserve('0');"> 
-										<i class="glyphicon glyphicon-time"></i> 取消预约
 									</button> -->
 								</div>
 							</div>
@@ -151,19 +148,38 @@ var aoColumnParam = [0],aaSortParam = [];
 $(function(){
 	// 加载列表信息 initTableAutoHeight(id,url,param,colsParam,aoColumnParam,aaSortParam,other); 
 	// param Ajax请求时发送额外的数据(条件),colsParam 设置列属性条件,aoColumnParam 设置哪些列不排序  aaSortParam设置哪些列排序
-	table = initTableAutoHeight("user_list_table", "${ctxPath}/topic/page/qryUserList", null,cols,aoColumnParam,aaSortParam,"USER_ID",getScreen());
+	table = initTableAutoHeight("user_list_table", "${ctxPath}/topic/page/qryUserList", null,cols,aoColumnParam,aaSortParam,"USER_ID");
 });
 
 /* 新增住户信息 */
 function toAddUser(){
-	/* 跳转页面  iUrl请求url  iTitletab标签名 */
-	indexToPage("${ctxPath }/topic/toAddUser", "新增住户信息");
+	index = layer.open({
+	    type: 2, 
+	    title : "新增住户信息",
+	    area: ['65%', '71%'],
+	    fix: false, //不固定
+	   // maxmin: true,
+	    content: _contextPath+"/topic/toAddUser"
+	});
 }
 
 /* 编辑住户信息  */
 function toEditUser(){
-	/* 跳转页面  iUrl请求url  iTitletab标签名 */
-	indexToPage("${ctxPath }/topic/toEditUser", "编辑住户信息");
+	var u_id = $("#clickId").val()?$("#clickId").val():"";
+	if(u_id){
+		index = layer.open({
+		    type: 2, 
+		    title : "编辑房间信息",
+		    area: ['65%', '71%'],
+		    fix: false, //不固定
+		   // maxmin: true,
+		    content: _contextPath+"/topic/toEditUser?user_id="+u_id
+		});
+	}else{
+		layer.alert("请选择一条记录！", {icon: 2}, function(index){
+			layer.close(index);
+		});  
+	}
 }
 
 /* 搜索 查询 */
@@ -176,6 +192,55 @@ function searchForm() {
 	table.column(4).search($('#move_in_time_start').val());
 	table.column(5).search($('#move_in_time_end').val());
 	table.draw();
+}
+
+/* 删除住户信息 */
+function deleteUserInfo(){
+	var user_id = $("#clickId").val()?$("#clickId").val():"";
+	if(user_id){
+		$.ajax({
+			url:"${ctxPath}/topic/ajax/qryUserInfoByKey",
+			type:"post",
+			dataType:"json",
+			data:{"user_id":user_id},
+			success:function(json){
+				if(json.result == 1){
+					json = json.resultObj;
+					if(json.IS_MOVE_IN == 1 && json.IS_MOVE_OUT == 0){
+						layer.alert("该住户仍在小区居住，住户信息无法删除！", {icon: 2}, function(index){
+							layer.close(index);
+						});  
+					}else{
+						layer.confirm('您确定要删除这条房间记录吗?', {icon: 3, title:'提示'}, function(index){
+							 $.ajax({
+									url : "${ctxPath }/topic/ajax/deleteUserInfo",
+									dataType : "json",
+									type : "post",
+									data:{"user_id":user_id},
+									success : function(json) {
+										if (json.result == '1') {
+											layer.alert(json.resultInfo, function(index){
+												//刷新表格，关闭弹窗
+												searchForm();
+												layer.close(index);
+											});  
+										} else {
+											layer.alert(json.resultInfo,{icon: 2}, function(index){
+												layer.close(index);
+											});  
+											return;
+										}
+								}});
+						});
+					}
+				}
+			}
+		});
+	}else{
+		layer.alert("请选择一条记录！", {icon: 2}, function(index){
+			layer.close(index);
+		});  
+	}
 }
 
 /* 迁入弹窗 */
@@ -201,15 +266,6 @@ function toMoveOut(){
 	    content: _contextPath+"/topic/toUserMoveOut"
 	});
 }
-/**
- * 获取屏幕高度
- * */
-function getScreen()
-{
-	var height = document.body.clientHeight;
-	var ibox_title = $(".ibox-title").height();
-	var toolbar = $("#toolbar").height();
-	return height-94-ibox_title-40-toolbar;
-}
+
 </script>
 </html>
