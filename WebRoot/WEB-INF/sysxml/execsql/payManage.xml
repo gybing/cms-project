@@ -15,38 +15,56 @@
 		</sql>
 	</mapper>
 	<!-- 更新费用类型信息 -->
-	<mapper id="updateFeeType">
-		<sql key="updateFeeType" operator="execute">
-			UPDATE `sys_fee_tab`
+	<mapper id="updatePayment">
+		<sql key="updatePayment" operator="execute">
+			UPDATE `sys_pay_tab`
 				SET 
-				 `fee_type_code` = #{fee_type_code},
-				 `type_name` = #{type_name},
-				 `pay_way` = #{pay_way},
-				 `count_type` = #{count_type},
-				 `pay_type` = #{pay_type},
-				 `pay_cycle` = #{pay_cycle},
-				 `cycle_unit` = #{cycle_unit},
-				 `pay_price` = #{pay_price}
+				 `begin_date` = #{begin_date},
+				 `end_date` = #{end_date},
+				 `total` = ${total},
+				 `pay_date` =  #{pay_date},
+				 `is_completed` =  #{is_completed},
+				 `total_price` = ${pay_price}*${total},
+				 `remark` = #{remark}
 				WHERE
 					(
-						`id` = #{f_id}
+						`id` = #{p_id}
 					);
 		</sql>
 	</mapper>
 	<!-- 删除费用类型信息 -->
-	<mapper id="delfeeTypeInfo">
-		<sql key="delfeeTypeInfo" operator="execute">
-			update sys_fee_tab set is_del = 'Y' where id = #{f_id}
+	<mapper id="delPayment">
+		<sql key="delPayment" operator="execute">
+			update sys_pay_tab set is_del = 'Y' where id = #{p_id}
 		</sql>
 	</mapper>
 	<!-- 获取费用类型信息 -->
-	<mapper id="getFeeTypeInfo">
-		<sql key="getFeeTypeInfo" operator="select" resultType="map">
-			select `fee_type_code`, `type_name`, `pay_way`, `count_type`, `pay_type`, `pay_cycle`, `cycle_unit`, `pay_price`, `is_del`, `create_date`,
-				(SELECT dc.text FROM dict_common dc WHERE dc.`code` = count_type AND dc.type = 'COUNT_TYPE') s_count_type
-				from `sys_fee_tab` where 1=1
-			<isNotEmpty property="fee_id">
-				and id = #{fee_id}
+	<mapper id="getPaymentInfo">
+		<sql key="getPaymentInfo" operator="select" resultType="map">
+			SELECT
+				sp.`id`,
+				su.user_name,
+				su.phone,
+				su.move_addr,
+				sp.`fee_name`,
+				sp.`count_type`,
+				sp.`pay_price`,
+				DATE_FORMAT(sp.`begin_date`,'%Y-%m-%d') `begin_date`,
+				DATE_FORMAT(sp.`end_date`,'%Y-%m-%d') `end_date`,
+				sp.`total`,
+				DATE_FORMAT(sp.`pay_date`,'%Y-%m-%d %T') `pay_date`,
+				sp.`is_completed`,
+				sp.`total_price`,
+				sp.`remark`,
+				sp.`is_del`,
+				DATE_FORMAT(sp.`create_date`,'%Y-%m-%d %T') `create_date`,
+				(SELECT ut.USER_NAME FROM user_tab ut WHERE ut.USER_ID = sp.`op_user_id`) op_user
+			FROM
+				sys_pay_tab sp
+			LEFT JOIN sys_user_tab su ON su.user_id = sp.user_id
+			WHERE 1=1
+			<isNotEmpty property="p_id">
+				AND sp.id = #{p_id}
 			</isNotEmpty>
 		</sql>
 	</mapper>

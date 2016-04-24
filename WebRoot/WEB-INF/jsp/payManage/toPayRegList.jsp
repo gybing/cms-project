@@ -117,7 +117,7 @@ var cols = [
 				if(data == '1'){
 					return "是";
 				}else{
-					return "";
+					return "否";
 				}
 		}}, // 
 		{"data" : "OP_USER"}, // 
@@ -162,15 +162,15 @@ function toAddFee(){
 
 /* 修改缴费信息 */
 function toEditFee(){
-	var b_id = $("#clickId").val()?$("#clickId").val():"";
-	if(b_id){
+	var p_id = $("#clickId").val()?$("#clickId").val():"";
+	if(p_id){
 		index = layer.open({
 		    type: 2, 
 		    title : "修改缴费信息",
-		    area: ['65%', '61%'],
+		    area: ['95%', '87%'],
 		    fix: false, //不固定
 		   // maxmin: true,
-		    content: _contextPath+"/topic/toEditFee?b_id="+b_id
+		    content: _contextPath+"/topic/toEditFee?p_id="+p_id
 		});
 	}else{
 		layer.alert("请选择一条记录！", {icon: 2}, function(index){
@@ -180,14 +180,14 @@ function toEditFee(){
 }
 /* 删除缴费信息 */
 function delFee(){
-	var b_id = $("#clickId").val()?$("#clickId").val():"";
-	if(b_id){
+	var p_id = $("#clickId").val()?$("#clickId").val():"";
+	if(p_id){
 		layer.confirm('您确定要删除这条记录吗?', {icon: 3, title:'提示'}, function(index){
 			 $.ajax({
-					url : "${ctxPath }/topic/ajax/delFeeInfo",
+					url : "${ctxPath }/topic/ajax/delPayment",
 					dataType : "json",
 					type : "post",
-					data:{"b_id":b_id},
+					data:{"p_id":p_id},
 					success : function(json) {
 						if (json.result == '1') {
 							layer.alert(json.resultInfo, function(index){
