@@ -14,26 +14,37 @@
 				<div class="ibox-content">
 					<div class="panel panel-default" style="margin-top: 5px;">
 						<div class="panel-body">
-							<form class="form-horizontal" id="fee_list_form">
+							<form class="form-horizontal" id="payment_list_form">
+							<input type="hidden" name="fee_name" id="fee_name" /> <!-- 费用名称 -->
 							<input type="hidden" id="clickId" name="clickId">
 								<div class="ibox">
 									<div class="form-group">
-										<label class="col-sm-1 control-label">负责人:</label>
+										<label class="col-sm-1 control-label">住户姓名:</label>
 										<div class="col-sm-2">
 											<input id="user_name" name="user_name" maxlength="14" type="text" class="required" aria-required="true" />
 										</div>
-										<label class="col-sm-1 control-label">联系电话:</label>
+										<label class="col-sm-1 control-label">住户地址:</label>
 										<div class="col-sm-2">
-											<input id="phone" name="phone" maxlength="14" type="text" class="required" aria-required="true" />
+											<input id="move_addr" name="move_addr" maxlength="14" type="text" class="required" aria-required="true" />
 										</div>
-										<label class="col-sm-1 control-label">楼层数量:</label>
+										<label class="col-sm-1 control-label">费用名称:</label>
 										<div class="col-sm-2">
-											<input id="id_no" name="id_no" maxlength="14" type="text" class="required" aria-required="true" />
+											<select class="combox" id="pay_type" name="pay_type"><option value="">请选择</option></select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-1 control-label">缴费时间（起）:</label>
+										<div class="col-sm-2">
+											<input type="text" class="form-control layer-date" id="pay_date_start" name="pay_date_start" value="${param.PAY_DATE_START }" placeholder="YYYY-MM-DD"  onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" />
+										</div>
+										<label class="col-sm-1 control-label">缴费时间（止）:</label>.
+										<div class="col-sm-3">
+											<input type="text" class="form-control layer-date" id="pay_date_end" name="pay_date_end" value="${param.PAY_DATE_END }" placeholder="YYYY-MM-DD"  onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" />
 										</div>
 										<div class="col-sm-3">
 											<button type="button" class="btn btn-sm btn-primary " onclick="searchForm();">查    询</button>
-											<button type="button" class="btn btn-sm btn-primary " onclick="resetForm('user_list_search_form');">重    置</button>
-											<button type="button" class="btn btn-sm btn-primary " onclick="refreshForm('user_list_search_form');">刷    新</button>
+											<button type="button" class="btn btn-sm btn-primary " onclick="resetForm('payment_list_form');">重    置</button>
+											<button type="button" class="btn btn-sm btn-primary " onclick="refreshForm('payment_list_form');">刷    新</button>
 										</div>
 									</div>
 								</div>
@@ -51,7 +62,7 @@
 									</button>
 								</div>
 							</div>
-							<table id="fee_list_table" class="table table-striped table-bordered table-hover data-table with-check">
+							<table id="payment_list_table" class="table table-striped table-bordered table-hover data-table with-check">
 								<thead>
 									<tr align="center">
 										<th width="50px">序号</th>
@@ -66,7 +77,7 @@
 										<th>合计</th>
 										<th>缴费时间</th>
 										<th>是否缴清</th>
-										<th>登记员</th>
+										<th>操作员</th>
 										<th>备注</th>
 									</tr>
 								</thead>
@@ -79,6 +90,12 @@
 	</div>
 </body>
 <script type="text/javascript">
+//初始化费用类型下拉框
+$s2.init($C("#pay_type"), {
+	tabdict : "pay_type",
+	defVal:'${param.fee_name}'
+});
+
 var table;
 var cols = [
 		{"data" : "NUM",// 序号
@@ -111,18 +128,23 @@ var aoColumnParam = [0],aaSortParam = [];
 $(function(){
 	// 加载列表信息 initTableAutoHeight(id,url,param,colsParam,aoColumnParam,aaSortParam,other); 
 	// param Ajax请求时发送额外的数据(条件),colsParam 设置列属性条件,aoColumnParam 设置哪些列不排序  aaSortParam设置哪些列排序
-	table = initTableAutoHeight("fee_list_table", "${ctxPath}/topic/page/qryPaymentList", null,cols,aoColumnParam,aaSortParam,"ID",getScreen());
+	table = initTableAutoHeight("payment_list_table", "${ctxPath}/topic/page/qryPaymentList", null,cols,aoColumnParam,aaSortParam,"ID",getScreen());
+	
+	//根据选择的费用类型，加载对应费用类型相关信息
+	$("#pay_type").change(function(){
+		$("#fee_name").val($("#pay_type option:selected").text() != '请选择'?$("#pay_type option:selected").text():"");
+	});
+
 });
 
 /* 搜索 查询 */
 function searchForm() {
 	$("#clickId").val(""); //清除之前选中的id
 	table.column(0).search($('#user_name').val());
-	table.column(1).search($('#id_no').val());
-	table.column(2).search($('#phone').val());
-	table.column(3).search($('#is_move_out').val());
-	table.column(4).search($('#move_in_time_start').val());
-	table.column(5).search($('#move_in_time_end').val());
+	table.column(1).search($('#move_addr').val());
+	table.column(2).search($('#fee_name').val());
+	table.column(3).search($('#pay_date_start').val());
+	table.column(4).search($('#pay_date_end').val());
 	table.draw();
 }
 

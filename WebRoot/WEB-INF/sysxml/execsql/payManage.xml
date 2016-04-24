@@ -80,10 +80,19 @@
 			LEFT JOIN sys_user_tab su ON su.user_id = sp.user_id
 			where 1=1 and sp.is_del = 'N'
 			<isNotEmpty property="columns[0][search][value]">
-				and sft.fee_type_code LIKE '%${columns[0][search][value]}%'
+				and su.user_name LIKE '%${columns[0][search][value]}%'
 			</isNotEmpty>
 			<isNotEmpty property="columns[1][search][value]">
-				and sft.type_name LIKE '%${columns[1][search][value]}%'
+				and su.move_addr LIKE '%${columns[1][search][value]}%'
+			</isNotEmpty>
+			<isNotEmpty property="columns[2][search][value]">
+				and sp.fee_name LIKE '%${columns[2][search][value]}%'
+			</isNotEmpty>
+			<isNotEmpty property="columns[3][search][value]">
+				and sp.pay_date >=CONCAT('${columns[3][search][value]}',' 00:00:00') 
+			</isNotEmpty>
+			<isNotEmpty property="columns[4][search][value]">
+				and sp.pay_date &lt;= CONCAT('${columns[4][search][value]}',' 23:59:59') 
 			</isNotEmpty>
 			<isEmpty property="query_count">
 				order by sp.create_date desc
