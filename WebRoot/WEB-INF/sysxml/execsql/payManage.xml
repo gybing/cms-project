@@ -2,14 +2,16 @@
 <mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
 	<!-- 新增费用类型信息 -->
-	<mapper id="saveFeeType">
-		<sql key="saveFeeType" operator="execute">
-			INSERT INTO `sys_fee_tab` (
-				`id`, `fee_type_code`, `type_name`, `pay_way`, `count_type`, `pay_type`, 
-				`pay_cycle`, `cycle_unit`, `pay_price`, `is_del`, `create_date`) 
-			VALUES (
-				UUID(), #{FEE_TYPE_CODE}, #{TYPE_NAME}, #{PAY_WAY}, #{COUNT_TYPE}, #{PAY_TYPE}, 
-				#{PAY_CYCLE}, #{CYCLE_UNIT}, #{PAY_PRICE}, 'N', now());
+	<mapper id="savePayment">
+		<sql key="savePayment" operator="execute">
+			INSERT INTO `sys_pay_tab` (
+				`id`, `user_id`, `fee_name`, `count_type`, `pay_price`, `begin_date`, 
+				`end_date`, `total`, `pay_date`, `is_completed`, `total_price`, `remark`, 
+				`is_del`, `create_date`, `op_user_id`
+			) VALUES (
+				UUID(), #{user_id}, #{fee_name}, #{count_type}, ${pay_price}, #{begin_date}, 
+				#{end_date}, ${total}, #{pay_date}, #{is_completed}, ${pay_price}*${total}, #{remark}, 
+				'N', now(), '$_CRU_USER_ID_$');
 		</sql>
 	</mapper>
 	<!-- 更新费用类型信息 -->
@@ -49,26 +51,34 @@
 		</sql>
 	</mapper>
 
-	<!-- 费用类型信息列表 -->
-	<mapper id="qryFeeTypeList">
-		<sql key="qryFeeTypeList" operator="select" resultType="paging">
+	<!-- 缴费登记信息列表 -->
+	<mapper id="qryPaymentList">
+		<sql key="qryPaymentList" operator="select" resultType="paging">
 			<isNotEmpty property="query_count">
-				select count(distinct sft.id)
+				select count(distinct sp.id)
 			</isNotEmpty>
 			<isEmpty property="query_count">
 				select (@i:=@i+1) num,a.* from (
-				select 	sft.id,
-						sft.fee_type_code,
-						sft.type_name,
-						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.pay_way AND dc.type = 'PAY_WAY') pay_way,
-						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.count_type AND dc.type = 'COUNT_TYPE') count_type,
-						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.pay_type AND dc.type = 'PAY_TYPE') pay_type,
-						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.pay_cycle AND dc.type = 'PAY_CYCLE') pay_cycle,
-						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.cycle_unit AND dc.type = 'CYCLE_UNIT') cycle_unit,
-						sft.pay_price,
-						DATE_FORMAT (sft.create_date,'%Y-%m-%d %T') `create_date`
+				select 	sp.`id`,
+						su.user_name,
+						su.move_addr,
+						sp.`fee_name`,
+						sp.`count_type`,
+						sp.`pay_price`,
+						DATE_FORMAT(sp.`begin_date`,'%Y-%m-%d') `begin_date`,
+						DATE_FORMAT(sp.`end_date`,'%Y-%m-%d') `end_date`,
+						sp.`total`,
+						DATE_FORMAT(sp.`pay_date`,'%Y-%m-%d %T') `pay_date`,
+						sp.`is_completed`,
+						sp.`total_price`,
+						sp.`remark`,
+						sp.`is_del`,
+						DATE_FORMAT(sp.`create_date`,'%Y-%m-%d %T') `create_date`,
+						(SELECT ut.USER_NAME FROM user_tab ut WHERE ut.USER_ID = sp.`op_user_id`) op_user
 			</isEmpty>
-			from sys_fee_tab sft where 1=1 and sft.is_del = 'N'
+			from sys_pay_tab sp 
+			LEFT JOIN sys_user_tab su ON su.user_id = sp.user_id
+			where 1=1 and sp.is_del = 'N'
 			<isNotEmpty property="columns[0][search][value]">
 				and sft.fee_type_code LIKE '%${columns[0][search][value]}%'
 			</isNotEmpty>
@@ -76,7 +86,7 @@
 				and sft.type_name LIKE '%${columns[1][search][value]}%'
 			</isNotEmpty>
 			<isEmpty property="query_count">
-				order by sft.create_date desc
+				order by sp.create_date desc
 				limit ${page_start},${page_end}
 				) a,(select @i:= ${page_start} ) it
 			</isEmpty>

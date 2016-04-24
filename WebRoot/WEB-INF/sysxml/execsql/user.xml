@@ -131,7 +131,7 @@
 				and sut.move_in_time &lt;= CONCAT('${columns[5][search][value]}',' 23:59:59') 
 			</isNotEmpty>
 			<isNotEmpty property="is_move_in">
-				and sut.is_move_in = 0
+				and sut.is_move_in = ${is_move_in}
 			</isNotEmpty>
 			<isEmpty property="query_count">
 				order by sut.create_date desc

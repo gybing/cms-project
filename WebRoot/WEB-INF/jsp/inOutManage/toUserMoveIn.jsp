@@ -207,7 +207,7 @@ function selectUserToMoveIn(){
 	    title : "选择用户",
 	    area: ['95%', '80%'],
 	    fix: false, //不固定
-	    content: _contextPath+"/topic/selectUserToMoveIn"
+	    content: _contextPath+"/topic/selectUserToMoveIn?isIn="+0
 	});
 }
 

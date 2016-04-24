@@ -119,7 +119,7 @@ function toAddBuilding(){
 	    area: ['65%', '61%'],
 	    fix: false, //不固定
 	   // maxmin: true,
-	    content: _contextPath+"/topic/toAddBuding"
+	    content: _contextPath+"/topic/toAddBuilding"
 	});
 }
 

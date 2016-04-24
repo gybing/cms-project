@@ -698,6 +698,15 @@
 	<!-- 通过表 查字典信息 下拉框 -->
 	<mapper id="getTabSel">
 	    <sql key="getTabSel" resultType="list" operator="select">
+	    	<!-- 费用类型 -->
+	    	<isEqual property="TYPE" compareValue="pay_type">
+	    		SELECT
+					sf.id,
+					sf.type_name text
+				FROM
+					`sys_fee_tab` sf 
+				WHERE 1=1 AND sf.is_del = 'N'
+	    	</isEqual>
 	    	<!-- 楼宇编号 -->
 	    	<isEqual property="TYPE" compareValue="building_no">
 	    		select distinct id,building_no text from sys_building_tab 
