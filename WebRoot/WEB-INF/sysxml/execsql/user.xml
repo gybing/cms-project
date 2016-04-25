@@ -59,6 +59,7 @@
 			SET 
 			 `is_move_in` = 1,
 			 `move_addr` = #{move_addr},
+			 `in_room_id` = #{r_id},
 			 `move_in_time` = #{move_in_time},
 			 `formalities` = ${formalities},
 			 `move_in_remark` = #{move_in_remark}

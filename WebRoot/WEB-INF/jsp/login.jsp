@@ -40,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势四</li>
                         <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势五</li>
                     </ul>
-                    <strong>还没有账号？ <a href="#">立即注册&raquo;</a></strong>
+                   <!--  <strong>还没有账号？ <a href="#">立即注册&raquo;</a></strong> -->
                 </div>
             </div>
             <div class="col-sm-5">
@@ -49,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    	<input type="text" name="usercode"  style="width: 257px;" class="form-control uname" placeholder="用户名" required="">
                     <input type="password" name="passwd" class="form-control" placeholder="密码" required="">
                     <p class="m-t-md"></p>
-                    <a href="">忘记密码了？</a>
+					<a href="">忘记密码，请联系管理员！</a> 
                     <button class="btn btn-success btn-block">登录</button>
                 </form>
             </div>

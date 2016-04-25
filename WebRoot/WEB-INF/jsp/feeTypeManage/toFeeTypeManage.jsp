@@ -24,7 +24,7 @@
 										</div>
 										<label class="col-sm-1 control-label">费用名称:</label>
 										<div class="col-sm-2">
-											<input id="type_name" name="type_name" maxlength="14" type="text" class="required" aria-required="true" />
+											<input id="type_name" name="type_name" maxlength="20" type="text" class="required" aria-required="true" />
 										</div>
 										<div class="col-sm-3">
 											<button type="button" class="btn btn-sm btn-primary " onclick="searchForm();">查    询</button>

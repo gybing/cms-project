@@ -40,11 +40,11 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">住户:</label>
 								<div class="col-sm-2">
-										<input id="user_name" name="user_name" value="${responseDataForm.resultObj.USER_NAME }" maxlength="14" type="text" readonly class="required form-control" aria-required="true" />
+										<input id="user_name" name="user_name" value="${responseDataForm.resultObj.USER_NAME }" maxlength="20" type="text" readonly class="required form-control" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">房号:</label>
 								<div class="col-sm-2">
-									<input id="room_addr" name="room_addr" value="${responseDataForm.resultObj.MOVE_ADDR }" maxlength="14" type="text" readonly class="form-control" aria-required="true" />
+									<input id="room_addr" name="room_addr" value="${responseDataForm.resultObj.MOVE_ADDR }" maxlength="20" type="text" readonly class="form-control" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">联系电话:</label>
 								<div class="col-sm-2">

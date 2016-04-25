@@ -40,14 +40,14 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">住户:</label>
 								<div class="col-sm-2">
-										<input id="user_name" name="user_name" maxlength="14" type="text" readonly class="required form-control" aria-required="true" />
+										<input id="user_name" name="user_name" maxlength="20" type="text" readonly class="required form-control" aria-required="true" />
 								</div>
 								<div class="col-sm-1">
 									<button type="button" class="btn btn-success search_user_btn" onclick="selectUserToMoveIn()"><i class=""></i>选择用户</button>
 								</div>
 								<label class="col-sm-1 control-label">房号:</label>
 								<div class="col-sm-2">
-									<input id="room_addr" name="room_addr" maxlength="14" type="text" readonly class="form-control" aria-required="true" />
+									<input id="room_addr" name="room_addr" maxlength="20" type="text" readonly class="form-control" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">联系电话:</label>
 								<div class="col-sm-2">

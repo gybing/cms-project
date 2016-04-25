@@ -32,7 +32,7 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">房间编号:</label>
 								<div class="col-sm-2">
-									<input id="room_no" name="room_no" value="${responseDataForm.resultObj.ROOM_NO }" maxlength="14" class="digits required form-control" type="text"/>
+									<input id="room_no" name="room_no" value="${responseDataForm.resultObj.ROOM_NO }" maxlength="20" class="digits required form-control" type="text"/>
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 								<label class="col-sm-2 control-label">楼宇编号:</label>
@@ -43,7 +43,7 @@
 								</div>
 								<label class="col-sm-2 control-label">楼宇名称:</label>
 								<div class="col-sm-2">
-		                    		<input id="building_name" name="building_name" readonly maxlength="14" type="text" class="form-control" />
+		                    		<input id="building_name" name="building_name" readonly maxlength="20" type="text" class="form-control" />
 								</div>
 							</div>
 							<div class="form-group">

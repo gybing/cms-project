@@ -20,7 +20,7 @@
 									<div class="form-group">
 										<label class="col-sm-1 control-label">负责人:</label>
 										<div class="col-sm-2">
-											<input id="user_name" name="user_name" maxlength="14" type="text" class="required" aria-required="true" />
+											<input id="user_name" name="user_name" maxlength="20" type="text" class="required" aria-required="true" />
 										</div>
 										<label class="col-sm-1 control-label">联系电话:</label>
 										<div class="col-sm-2">
@@ -28,7 +28,7 @@
 										</div>
 										<label class="col-sm-1 control-label">楼层数量:</label>
 										<div class="col-sm-2">
-											<input id="id_no" name="id_no" maxlength="14" type="text" class="required" aria-required="true" />
+											<input id="id_no" name="id_no" maxlength="18" type="text" class="required" aria-required="true" />
 										</div>
 										<div class="col-sm-3">
 											<button type="button" class="btn btn-sm btn-primary " onclick="searchForm();">查    询</button>

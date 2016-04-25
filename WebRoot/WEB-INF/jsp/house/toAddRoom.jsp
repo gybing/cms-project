@@ -31,7 +31,7 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">房间编号:</label>
 								<div class="col-sm-2">
-									<input id="room_no" name="room_no" maxlength="14" class="required digits form-control" type="text"/>
+									<input id="room_no" name="room_no" maxlength="20" class="required digits form-control" type="text"/>
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
 								<label class="col-sm-2 control-label">楼宇编号:</label>

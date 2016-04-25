@@ -20,7 +20,7 @@
 									<div class="form-group">
 										<label class="col-sm-1 control-label">房间编号:</label>
 										<div class="col-sm-2">
-											<input id="room_no" name="room_no" maxlength="14" type="text" class="required form-control" aria-required="true" />
+											<input id="room_no" name="room_no" maxlength="20" type="text" class="required form-control" aria-required="true" />
 										</div>
 										<label class="col-sm-1 control-label">房间状态:</label>
 										<div class="col-sm-2">
@@ -44,7 +44,7 @@
 										</div>
 										<label class="col-sm-1 control-label">楼宇名称:</label>
 										<div class="col-sm-3">
-											<input id="building_name" name="building_name" maxlength="14" type="text" class="required form-control" aria-required="true" />
+											<input id="building_name" name="building_name" maxlength="20" type="text" class="required form-control" aria-required="true" />
 										</div>
 										<div class="col-sm-3">
 											<button type="button" class="btn btn-sm btn-primary " onclick="searchForm();">查    询</button>
