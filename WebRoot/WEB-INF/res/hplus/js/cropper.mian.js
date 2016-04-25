@@ -273,12 +273,14 @@
     },
 
     submitDone: function (data) {
-      //console.log(data);
+      console.log(data);	
       //debugger;
       if (data.result == 1) { // 返回结果为成功时
-        if (data.resultObj.pic0) {
-          this.url = data.resultObj.pic0.qiniuPath; // 获取牵牛存放图片的路径
-
+        if (data.resultObj) {
+        	
+          this.url = _resRoot+"/pic/"+data.resultObj; // 获取放图片的路径
+          
+          console.info(this.url);
           if (this.support.datauri || this.uploaded) {
             this.uploaded = false;
             this.cropDone();

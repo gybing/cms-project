@@ -51,13 +51,16 @@ public class PicService implements IService {
 				String code = requestDataForm.getString(defualt_prefix+"_"+"imgtype"+i);
 				HttpRequestObject httpRequestObject = requestDataForm.get(defualt_prefix+"_"+"imgtype_img"+i);
 				String path = saveFile(httpRequestObject);
-				if(!"jiyun".equals(path.substring(0, 5))){ 
+				if(!"cms".equals(path.substring(0, 3))){ 
 					if(maxFileNum!=1 || httpRequestObject.getValue().length>0){//上传了一张不合格图片（maxFileNum=1）
 						rdf.setResult(ResponseDataForm.FAULAIE);
 						rdf.setResultInfo(path);
 						return rdf;
 					}
-				}else if("jiyun".equals(path.substring(0, 5))){
+				}else if("cms".equals(path.substring(0, 3))){
+					rdf.setResult(ResponseDataForm.SESSFUL);
+					rdf.setResultObj(path);
+					return rdf;
 				}
 			}
 		}
@@ -88,7 +91,7 @@ public class PicService implements IService {
 			return "上传文件格式只能是jpg,png,jpeg,bmp！";
 		}
 		fileName=DigestUtils.md5Hex(fileName)+"_"+DateUtil.getCurrDateStr("yyyyMMddHHmmss")+fileName.substring(fileName.lastIndexOf("."));
-		String path=ImageUtil.saveImage(fileByte,"jiyun", fileName);
+		String path=ImageUtil.saveImage(fileByte,"cms", fileName);
 		
 		return path;
 	}
