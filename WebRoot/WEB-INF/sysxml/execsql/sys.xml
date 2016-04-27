@@ -190,17 +190,6 @@
 	<!-- 查看权限列表 -->
 	<mapper id="queryRolePrivList">
 	    <sql key="queryRolePrivList" operator="select" resultType="list">
-			<!-- select a.priv_id,a.name,a.pid,a.is_folder,IF(b.priv_id is null,'false','true') is_checked 
-			from priv_bsm_tab a 
-			left join (select * from role_priv_bsm_tab where role_id=${role_id}) b on a.priv_id=b.priv_id
-			WHERE a.IS_DEL='N' -->
-			<!--  <isNotEqual property="session_role_type" compareValue="0">
-			and a.priv_id in (
-				select priv_id from role_priv_tab t 
-				inner join user_role_tab t1 on t.role_id=t1.role_id 
-				where t1.user_id='$_CRU_USER_ID_$'
-			)
-			</isNotEqual>-->
 			SELECT A.PRIV_ID,
 			       A.NAME,
 			       A.PID,
@@ -219,14 +208,6 @@
 		</sql>
 	</mapper>
 	<!-- 保存角色权限 -->
-	<!-- <mapper id="saveRolePriv">
-		<sql key="save_user_and_role_del" operator="execute" >
-			delete from role_priv_bsm_tab where ROLE_ID=#{ROLE_ID}
-	    </sql>
-	    <sql key="save_user_and_role" operator="execute" iterfields="PRIV_IDS" iterfieldsplit=",">
-	        insert into role_priv_bsm_tab (ROLE_ID, PRIV_ID) values (#{ROLE_ID}, #{PRIV_IDS})
-	    </sql>
-	</mapper> -->
 	<mapper id="saveRolePriv">
 		<sql key="save_user_and_role_del" operator="execute" >
             DELETE FROM role_priv_bsm_tab WHERE ROLE_ID = #{P_ROLE_ID}
@@ -239,17 +220,6 @@
 	    </sql>
 	</mapper>
 	<!-- 查看权限列表 -->
-	<!-- <mapper id="queryPrivList">
-	    <sql key="queryPrivList" operator="select" resultType="list">
-			select a.*,(select count(1) from priv_bsm_tab where IS_DEL='N' and pid=a.priv_id ) childNum  from priv_bsm_tab a WHERE a.IS_DEL='N'
-			<isNotEmpty property="pid">
-			    and pid=${pid}
-			</isNotEmpty>
-			<isEmpty property="pid">
-			    and pid=0
-			</isEmpty>
-		</sql>
-	</mapper> -->
 	<mapper id="queryPrivList">
 	    <sql key="queryPrivList" operator="select" resultType="list">
 			SELECT A.PRIV_ID UNID,
@@ -402,18 +372,6 @@
 			<isEmpty property="query_count">
 				LIMIT ${page_start},${page_end}
 			</isEmpty>
-		</sql>
-	</mapper>
-	<!-- 获取航线字典表中的所有航线数据 -->
-	<mapper id="getSailLine">
-		<sql key="getSailLine" operator="select" resultType="list">
-		  	select * from dict_sailline 
-		</sql>
-	</mapper>
-	<!-- 获取国家字典表中的所有国家数据 -->
-	<mapper id="getCountryDict">
-		<sql key="getCountryDict" operator="select" resultType="list">
-		  	select * from dict_country 
 		</sql>
 	</mapper>
 	<!-- 获取字典表中的特定类型数据 -->
@@ -711,143 +669,6 @@
 	    	<isEqual property="TYPE" compareValue="building_no">
 	    		select distinct id,building_no text from sys_building_tab 
 	    	</isEqual>
-	    	<isEqual property="TYPE" compareValue="room_type">
-	    		select distinct id,
-	    	</isEqual>
-	    	<!-- 调度中心 -->
-	    	<isEqual property="TYPE" compareValue="schedule_center">
-				SELECT T.CENTER_CODE ID,TRIM(T.CENTER_NAME) TEXT FROM tab_schedule_center T
-			       	<isNotEmpty property="sSearch_0">
-			       	    WHERE T.CENTER_NAME LIKE '%${sSearch_0}%'
-			       	</isNotEmpty>
-			       	ORDER BY T.CENTER_ID DESC
-	    	</isEqual>
-	    	<!-- 调度中心ID跟TEXT相同 -->
-	    	<isEqual property="TYPE" compareValue="schedule_center_text">
-				SELECT T.CENTER_NAME ID,TRIM(T.CENTER_NAME) TEXT FROM tab_schedule_center T
-			       	<isNotEmpty property="sSearch_0">
-			       	    WHERE T.CENTER_NAME LIKE '%${sSearch_0}%'
-			       	</isNotEmpty>
-			       	ORDER BY T.CENTER_ID DESC
-	    	</isEqual>
-	    	<!-- 船名 -->
-	    	<isEqual property="TYPE" compareValue="ship_name">
-	    		SELECT S.NAME_CN ID, TRIM(S.NAME_CN) TEXT FROM tab_ship S
-				    <isNotEmpty property="sSearch_0">
-			       	    WHERE S.NAME_CN LIKE '%${sSearch_0}%'
-			       	</isNotEmpty>
-			       	ORDER BY S.SHIP_ID DESC
-	    	</isEqual>
-	    	<!-- 港口 -->
-	    	<isEqual property="TYPE" compareValue="port_name">
-	    		SELECT P.PORT_CODE ID,TRIM(CONCAT(P.PORT_CODE,' ',P.PORT_CN)) TEXT FROM tab_port P 
-				    <isNotEmpty property="sSearch_0">
-			       	    WHERE CONCAT(P.PORT_CODE,P.PORT_CN) LIKE '%${sSearch_0}%'
-			       	</isNotEmpty>
-			       	ORDER BY P.PORT_ID DESC
-	    	</isEqual>
-	    	<!-- 货主 -->
-	    	<isEqual property="TYPE" compareValue="cargo_owner">
-	    		SELECT C.OWNNER_ID ID,TRIM(C.COMPANY) TEXT FROM tab_cargo_ownner C WHERE C.COMPANY_TYPE = 'hz'
-				    <isNotEmpty property="sSearch_0">
-			       	    AND C.COMPANY LIKE '%${sSearch_0}%' OR C.COMPANY_CODE LIKE '%${sSearch_0}%'
-			       	</isNotEmpty>
-			       	ORDER BY C.OWNNER_ID DESC
-	    	</isEqual>
-	    	<!-- 货代 -->
-	    	<isEqual property="TYPE" compareValue="cargo_proxy">
-	    		SELECT C.OWNNER_ID ID,TRIM(C.COMPANY) TEXT FROM tab_cargo_ownner C WHERE C.COMPANY_TYPE = 'hd'
-				    <isNotEmpty property="sSearch_0">
-			       	    AND C.COMPANY LIKE '%${sSearch_0}%' OR C.COMPANY_CODE LIKE '%${sSearch_0}%'
-			       	</isNotEmpty>
-			       	ORDER BY C.OWNNER_ID DESC
-	    	</isEqual>
-	    	<!-- 司机 -->
-	    	<isEqual property="TYPE" compareValue="driver">
-	    		SELECT DRIVER_ID ID,TRIM(CONCAT(NAME,'(',MOBILE_1,')')) TEXT FROM tab_driver WHERE IS_DEL='N' AND CURRENT_STATUS !='离职' 
-	    		<isNotEmpty property="sSearch_0">
-			    	AND (NAME LIKE '%${sSearch_0}%' OR MOBILE_1 LIKE '%${sSearch_0}%') ; 
-			    </isNotEmpty>
-	    	</isEqual>
-	    	<!-- 车牌 -->
-	    	<isEqual property="TYPE" compareValue="plate">
-	    		SELECT FT_ID ID,TRIM(TRUCK_PLATE) TEXT FROM tab_frame_truck WHERE IS_DEL='N' 
-	    		<isNotEmpty property="sSearch_0">
-			    	AND TRUCK_PLATE LIKE '%${sSearch_0}%' 
-			    </isNotEmpty>
-	    		AND TYPE='T';
-	    	</isEqual>
-	    	<!-- 车架 -->
-	    	<isEqual property="TYPE" compareValue="frame">
-	    		SELECT FT_ID ID,TRIM(CODE) TEXT FROM tab_frame_truck WHERE IS_DEL='N'
-	    		<isNotEmpty property="sSearch_0">
-			    	AND CODE LIKE '%${sSearch_0}%' 
-			    </isNotEmpty>
-	    		AND TYPE='F';
-	    	</isEqual>
-	    	<!-- 地点 -->
-	    	<isEqual property="TYPE" compareValue="dict_area">
-	    		SELECT A.CODE ID,TRIM(A.NAME) TEXT,A.ID AREA_ID,A.LAT,A.LNG,A.PROVINCE,A.CITY FROM dict_area A 
-				    <isNotEmpty property="sSearch_0">
-			       	    WHERE A.NAME LIKE '%${sSearch_0}%'
-			       	</isNotEmpty>
-			       	ORDER BY A.ID DESC
-	    	</isEqual>
-	    	<!-- 车架号id为中文 -->
-	    	<isEqual property="TYPE" compareValue="TRUCK_FRAME">
-	    		SELECT TRUCK_PLATE ID,TRIM(TRUCK_PLATE) TEXT FROM tab_frame_truck WHERE IS_DEL='N' AND TYPE='F';
-	    	</isEqual>
-	    	<!-- 车架号id为CODE -->
-	    	<isEqual property="TYPE" compareValue="TRUCK_FRAME_CODE">
-	    		SELECT CODE ID,TRIM(CODE) TEXT FROM tab_frame_truck WHERE IS_DEL='N' AND TYPE='F';
-	    	</isEqual>
-	    	<!-- 箱主 -->
-	    	<isEqual property="TYPE" compareValue="box_ownner">
-	    		SELECT O.OWNNER_ID ID,TRIM(O.SHORTCUT) TEXT FROM tab_box_ownner O
-				    <isNotEmpty property="sSearch_0">
-			       	    WHERE TRIM(O.SHORTCUT) LIKE '%${sSearch_0}%'
-			       	</isNotEmpty>
-			       	ORDER BY O.OWNNER_ID DESC
-	    	</isEqual>
-	    	<!-- 箱号 -->
-	    	<isEqual property="TYPE" compareValue="boxNo">
-	    		SELECT tob.box_id ID,TRIM(CONCAT("提单号:",tod.ORDER_NO," 箱号:", tob.NO," 铅封号:",tob.seal_no)) TEXT FROM tab_order_box tob
-		      	LEFT JOIN tab_order tod ON tob.ORDER_ID = tod.ORDER_ID 
-				WHERE tob.order_id IN (SELECT ORDER_ID FROM tab_order WHERE IS_DEL='N' AND IS_FINISH!='Y') 
-				AND SIZE='20' 
-				<!-- AND NOT EXISTS (SELECT a.BOX_ID FROM tab_order_box_schedule a WHERE a.COMMAND = '4' AND a.BOX_ID = tob.BOX_ID) -->
-	    		<isNotEmpty property="sSearch_0">
-			       AND CONCAT(tod.ORDER_NO,tob.NO,tob.SIZE)=#{sSearch_0}
-			    </isNotEmpty>
-	    		<isNotEmpty property="boxId">
-			       AND tob.box_id!=#{boxId}
-			    </isNotEmpty>
-	    	</isEqual>
-	    	<!-- 费用类型 -->
-	    	<isEqual property="TYPE" compareValue="fee_type">
-	    		SELECT F.FEE_CODE ID,TRIM(F.FEE_TYPE) TEXT FROM dict_fee F WHERE F.IS_DEL='N'
-				    <isNotEmpty property="sSearch_0">
-			       	    AND F.FEE_TYPE LIKE '%${sSearch_0}%'
-			       	</isNotEmpty>
-			       	 ORDER BY F.ID
-	    	</isEqual>
-	    	<!-- 航线 -->
-	    	<isEqual property="TYPE" compareValue="sailline">
-	    		SELECT S.SAILLINE ID,TRIM(S.SAILLINE) TEXT FROM dict_sailline S
-	    		<isNotEmpty property="sSearch_0">
-		       	    WHERE S.SAILLINE LIKE '%${sSearch_0}%'
-		       	</isNotEmpty>
-		       	 ORDER BY S.SAILCODE
-	    	</isEqual>
-	    	<!-- 停靠码头 -->
-	    	<isEqual property="TYPE" compareValue="tkmatou">
-	    		SELECT NAME ID,TRIM(NAME) TEXT FROM dict_area WHERE MATOU = 1
-	    	</isEqual>
-	    	<!-- 所属国 -->
-	    	<isEqual property="TYPE" compareValue="country">
-	    		SELECT CHINESENAME ID,TRIM(CHINESENAME) TEXT FROM dict_country 
-	    	</isEqual>
-	    	
 	    </sql>
 	</mapper>
 </mappers>
