@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 
 import net.sf.json.JSONArray;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.cms.common.dao.impl.JdbcDaoImpl;
@@ -18,10 +19,13 @@ import com.cms.common.form.RequestDataForm;
 import com.cms.common.form.ResponseDataForm;
 import com.cms.common.service.IService;
 import com.cms.common.utils.DateUtil;
+import com.cms.controller.DatatablesController;
 
 @Service("indexDataService")
 public class IndexDataService implements IService{
 
+	protected static Logger logger = Logger.getLogger(DatatablesController.class);
+	
 	@Resource
 	private JdbcDaoImpl jdbcDao;
 	
@@ -30,6 +34,10 @@ public class IndexDataService implements IService{
 			throws Exception {
 		
 		ResponseDataForm rdf = new ResponseDataForm();
+		
+		logger.debug("----------------- start indexDataService --------------------");
+
+		
 		Map<String , Object> map = new HashMap<String, Object>();
 		
 		String roomCnt = jdbcDao.queryForString("select count(1) from sys_room_tab where is_del = 'N'",null);
@@ -64,8 +72,13 @@ public class IndexDataService implements IService{
 		map.put("PayLegendData", getPayStateItem());
 		map.put("PaySeriesData", getPayStateData());
 		
+		System.out.println(map.toString());
 		rdf.setResult(ResponseDataForm.SESSFUL);
 		rdf.setResultObj(map);
+		
+		logger.debug("----------------- end indexDataService --------------------");
+
+		
 		return rdf;
 	}
 	
