@@ -20,7 +20,7 @@
                         <h5>房间总量</h5>
                     </div>
                     <div class="ibox-content">
-                        <h1 class="no-margins">4200</h1>
+                        <h1 class="no-margins">${responseDataForm.resultObj.roomCnt}</h1>
                     </div>
                 </div>
 			</div>
@@ -31,7 +31,7 @@
                         <h5>入住人数</h5>
                     </div>
                     <div class="ibox-content">
-                        <h1 class="no-margins">3,800</h1>
+                        <h1 class="no-margins">${responseDataForm.resultObj.moveInCnt}</h1>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                         <h5>费用总计</h5>
                     </div>
                     <div class="ibox-content">
-                        <h1 class="no-margins">106,120</h1>
+                        <h1 class="no-margins">${responseDataForm.resultObj.mPay}</h1>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                         <h5>费用总计</h5>
                     </div>
                     <div class="ibox-content">
-                        <h1 class="no-margins">80,600</h1>
+                        <h1 class="no-margins">${responseDataForm.resultObj.yPay}</h1>
                     </div>
                 </div>
             </div>
@@ -100,49 +100,15 @@
 	</div>
 </body>
 <script type="text/javascript">
-//基于准备好的dom，初始化echarts实例
-var myChart = echarts.init(document.getElementById('echarts-pie-chart'));
-var myChart2 = echarts.init(document.getElementById('echarts-pie-chart2'));
-option = {
-	title: {
-		text: "小区住房使用情况",
-		subtext: "",
-		x: "center"
-	},
-	tooltip: {
-		trigger: "item",
-		formatter: "{a} <br/>{b} : {c} ({d}%)"
-	},
-	legend: {
-		orient: "vertical",
-		x: "left",
-		data: ["已入住", "空房", "装修中", "未装修"]
-	},
-	calculable: !0,
-	series: [{
-		name: "访问来源",
-		type: "pie",
-		radius: "55%",
-		center: ["50%", "60%"],
-		data: [{
-			value: 335,
-			name: "已入住"
-		}, {
-			value: 310,
-			name: "空房"
-		}, {
-			value: 234,
-			name: "装修中"
-		}, {
-			value: 135,
-			name: "未装修"
-		}]
-	}]
-};
-
-option2 = {
+var dd = "";
+$(function(){
+	
+	//基于准备好的dom，初始化echarts实例
+	var myChart = echarts.init(document.getElementById('echarts-pie-chart'));
+	var myChart2 = echarts.init(document.getElementById('echarts-pie-chart2'));
+	option = {
 		title: {
-			text: "当月缴费组成情况",
+			text: "小区住房使用情况",
 			subtext: "",
 			x: "center"
 		},
@@ -153,32 +119,92 @@ option2 = {
 		legend: {
 			orient: "vertical",
 			x: "left",
-			data: ["水费", "电费", "物业费", "其他"]
+			data: roomLegendData('${responseDataForm.resultObj.RoomLegendData}')
+//	 		data: ["已入住", "空房", "装修中", "未装修"]
 		},
 		calculable: !0,
 		series: [{
-			name: "访问来源",
+			name: "",
 			type: "pie",
 			radius: "55%",
 			center: ["50%", "60%"],
-			data: [{
-				value: 335,
-				name: "水费"
-			}, {
-				value: 310,
-				name: "电费"
-			}, {
-				value: 634,
-				name: "物业费"
-			}, {
-				value: 15,
-				name: "其他"
-			}]
-		}]
+			data: roomSeriesData('${responseDataForm.resultObj.RoomSeriesData}')
+// 	 		data: [{
+// 	 			value: 335,
+// 	 			name: "已入住"
+// 	 		}, {
+// 	 			value: 310,
+// 	 			name: "空房"
+// 	 		}, {
+// 	 			value: 234,
+// 	 			name: "装修中"
+// 	 		}, {
+// 	 			value: 135,
+// 	 			name: "未装修"
+// 	 		}]
+		}]	
 	};
-//使用刚指定的配置项和数据显示图表。
-myChart.setOption(option);
-myChart2.setOption(option2);
 
+	option2 = {
+			title: {
+				text: "当月缴费组成情况",
+				subtext: "",
+				x: "center"
+			},
+			tooltip: {
+				trigger: "item",
+				formatter: "{a} <br/>{b} : {c} ({d}%)"
+			},
+			legend: {
+				orient: "vertical",
+				x: "left",
+				data: roomLegendData('${responseDataForm.resultObj.PayLegendData}')
+			},
+			calculable: !0,
+			series: [{
+				type: "pie",
+				radius: "55%",
+				center: ["50%", "60%"],
+				data: roomSeriesData('${responseDataForm.resultObj.PaySeriesData}')
+			}]
+		};
+	//使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	myChart2.setOption(option2);
+
+	
+});
+/**
+ * 获取饼图数据项
+ * @param data 服务器返回的数据项字符串
+ */
+function roomLegendData(data){
+	var obj = eval(data);
+	var res = [];
+	var length = obj.length;
+	while(length -- ){
+		var name = obj[length].NAME;
+		res.push(name);
+	}
+	return res;
+}
+/**
+ * 获取饼图数据
+ * @param data 服务器返回的数据 list<map>
+ */
+function roomSeriesData(data){
+	var obj = eval(data);
+	var res = [];
+	var length = obj.length;
+	while(length -- ){
+		var name = obj[length].NAME;
+		var value = obj[length].VALUE;
+		res.push({
+			"value":value,
+			"name":name
+		});
+	}
+	return res;
+}
 </script>
 </html>

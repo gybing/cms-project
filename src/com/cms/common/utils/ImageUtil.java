@@ -54,7 +54,7 @@ public class ImageUtil {
 	}
 	
 	public static String getImagesPath(){
-		String path=getRootPath()+java.io.File.separatorChar+Environment.IMAGE_SAVE_PATH;
+		String path=getRootPath()+java.io.File.separatorChar+"WEB-INF/res/"+Environment.IMAGE_SAVE_PATH;
 		File dir=new File(path);
 		if(!dir.exists()){
 			dir.mkdirs();

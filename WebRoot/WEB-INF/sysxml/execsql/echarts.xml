@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+	
+	<mapper id="getRoomLegendData">
+		<sql key="getRoomLegendData" resultType="list" operator="select">
+			SELECT
+				dc.text
+			FROM
+				sys_room_tab srt
+			LEFT JOIN dict_common dc ON dc.`code` = srt.room_state
+			AND dc.type = 'ROOM_STATE'
+			GROUP BY
+				srt.room_state
+		</sql>
+	</mapper>
+</mappers>

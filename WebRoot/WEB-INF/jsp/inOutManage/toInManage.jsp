@@ -116,12 +116,12 @@ var cols = [
 		{"data" : "ROOM_NO"}, // .
 		{"data" : "ROOM_STATE" // 任务状态
 			,"render" : function(data) {
-				if (data == "1") {
+				if (data == "入住") {
 					return "<div class='label label-danger ' >入住</div>";
-				} else if (data == "0") {
+				} else if (data == "空房") {
 					return "<div class='label label-04' >空房</div>";
 				} else{
-					return data;
+					return "<div class='label label-03' >"+data+"</div>";
 				}
 			}
 		},

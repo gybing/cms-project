@@ -10,6 +10,8 @@ public class DateUtil {
 	 * 默认时间格式
 	 */
 	public static final String DEFUALT_DATE_FORMAT="yyyy-MM-dd HH:mm:ss";
+	
+	public static final String SHORT_DATE_FORMAT = "yyyy-MM-dd";
 
 	/**
 	 * 获取当前时间字符串
@@ -101,4 +103,45 @@ public class DateUtil {
 		}
 		return time;
 	}
+	/**
+	 * 每月1号, 格式 yyyy-MM-dd
+	 * @author lxh
+	 * @created 
+	 *
+	 * @return
+	 */
+	public static String getMonthFirstDayStr() {
+	    Calendar c = Calendar.getInstance();
+	    c.set(Calendar.DATE, 1);
+	    return getDateStr(c, SHORT_DATE_FORMAT);
+	}
+	
+	/**
+	 * 每月最后一天, 格式 yyyy-MM-dd
+	 * @author lxh
+	 * @created 
+	 *
+	 * @return
+	 */
+	public static String getMonthLastDayStr() {
+	    Calendar c = Calendar.getInstance();
+	    c.set(Calendar.DATE, 1);
+	    c.add(Calendar.MONTH, 1);
+	    c.add(Calendar.DATE, -1);
+	    return getDateStr(c, SHORT_DATE_FORMAT);
+	}
+	
+	/**
+	 * 获取当前年份
+	 * @Title: getCurrentYear 
+	 * @Description: TODO
+	 * @param @return    
+	 * @return String    返回类型 
+	 * @throws
+	 */
+	public static String getCurrentYear(){
+		 Calendar c = Calendar.getInstance();
+		 return getDateStr(c, "yyyy");
+	}
+	
 }

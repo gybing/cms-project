@@ -25,7 +25,7 @@
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
 
-    <link rel="shortcut icon" href="${resRoot}/yunba.ico">
+    <link rel="shortcut icon" href="${resRoot}/icon.jpg">
   	<script type="text/javascript">	
 		var _contextPath = "${ctxPath}";
 	    var _resRoot = "${resRoot}";

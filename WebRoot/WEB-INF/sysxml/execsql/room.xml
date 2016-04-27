@@ -109,7 +109,7 @@
 				   	(SELECT sbt.building_no FROM sys_building_tab sbt WHERE sbt.id = srt.`building_no`) building_no,
 					(SELECT sbt.building_name FROM sys_building_tab sbt WHERE sbt.id = srt.`building_no`) building_name,
 				    (SELECT dc.text FROM dict_common dc where dc.code = srt.`room_type` AND dc.type = 'room_type') `room_type`,
-				    srt.`room_state`,
+				    (SELECT dc.text FROM dict_common dc where dc.code =  srt.`room_state` AND dc.type = 'ROOM_STATE') `room_state`,
 				    srt.`room_floor`,
 				    sut.user_name,
 				    DATE_FORMAT (sut.move_in_time,'%Y-%m-%d') `move_in_time`,

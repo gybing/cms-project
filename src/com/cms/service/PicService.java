@@ -33,10 +33,6 @@ public class PicService implements IService {
     @Autowired
     JdbcDaoImpl daoHelp;
     
-    @Autowired
-    ImageService imageService;
-
-    
 	@Override
 	@Transactional
 	public ResponseDataForm service(RequestDataForm requestDataForm) throws Exception {
