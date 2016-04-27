@@ -159,15 +159,17 @@ function toMoveIn(){
 	var r_id = $("#clickId").val()?$("#clickId").val():-1;
 	if(r_id != -1){
 		var existUser = false;
+		var r_state_text = "";
 		$("#room_list_table tr").each(function(index,item){
 			if($(this).attr("data-id") == r_id){
-				if($(item.childNodes[2]).text() == "入住"){
+				if($(item.childNodes[2]).text() != "空房"){
 					existUser = true;
+					r_state_text = $(item.childNodes[2]).text();
 				}
 			}
 		});
 		if(existUser){
-			layer.alert("该房间已经存在住户，请选择其他房间！", {icon: 2}, function(index){
+			layer.alert("该房间为"+r_state_text+"状态，请选择空房状态的房间！", {icon: 2}, function(index){
 				layer.close(index);
 			});  
 		}else{

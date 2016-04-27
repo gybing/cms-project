@@ -204,7 +204,7 @@ function deleteRoomInfo(){
 			success:function(json){
 				if(json.result == 1){
 					json = json.resultObj;
-					if(json.ROOM_STATE == 0){
+					if(json.ROOM_STATE == 1){
 						layer.alert("该房间存在住户，无法删除！", {icon: 2}, function(index){
 							layer.close(index);
 						});  
