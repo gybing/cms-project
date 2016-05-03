@@ -135,7 +135,7 @@ public class IndexDataService implements IService{
 	 * @return String
 	 */
 	public String getPayStateItem(){
-		String sql = "SELECT spt.fee_name name FROM sys_pay_tab spt where spt.pay_date >= ? and spt.pay_date <= ?  GROUP BY spt.fee_name";
+		String sql = "SELECT spt.fee_name name FROM sys_pay_tab spt where spt.pay_date >= ? and spt.pay_date <= ? AND spt.is_del = 'N' GROUP BY spt.fee_name";
 		String firstDayOfCurrentMonth = DateUtil.getMonthFirstDayStr() + " 00:00:00";
 		String lastDayOfCurrentMonth = DateUtil.getMonthLastDayStr() + " 24:59:59";
 		return getLegendData(sql,new Object[]{firstDayOfCurrentMonth,lastDayOfCurrentMonth});
@@ -152,6 +152,7 @@ public class IndexDataService implements IService{
 		sb.append("	1 = 1 ");
 		sb.append("AND spt.pay_date >= ? ");
 		sb.append("AND spt.pay_date <= ? ");
+		sb.append("AND spt.is_del = 'N' ");
 		sb.append("GROUP BY ");
 		sb.append("	spt.fee_name ");
 		
