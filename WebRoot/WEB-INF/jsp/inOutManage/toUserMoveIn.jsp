@@ -142,17 +142,16 @@ $(function(){
 			data:{"b_id":building_no?building_no:-1},
 			success:function(json){
 				json = json.resultObj;
-				$("#building_name").val(json.BUILDING_NAME);
 				$("#room_floor").html(""); // 清空上一次选择的楼宇的楼层信息
 				var html = "<option value=\"\">请选择</option>";
 				for (var int = 1; int <= json.BUILDING_FLOORS; int++) {
 					html += "<option value=\""+int+"\">"+int+"</option>";
 				}
-				$("#room_floor").append(html); // 重新载入选中楼宇的楼称信息
+				$("#room_floor").append(html); // 重新载入选中楼宇的楼层信息
 				$("#room_floor").val("").trigger("change"); // 清空上一次选择楼层信息
 				if('${responseDataForm.resultObj.ROOM_FLOOR}'){
 					$("#room_floor").val('${responseDataForm.resultObj.ROOM_FLOOR}').trigger("change"); // 如果存在楼层信息则选中
-					loadRoomSelect("room_no",building_no,'${responseDataForm.resultObj.ROOM_FLOOR}');
+					loadRoomSelect("room_no",building_no,'${responseDataForm.resultObj.ROOM_FLOOR}','${responseDataForm.resultObj.ROOM_NO}');
 				}
 			}
 		});
@@ -233,7 +232,7 @@ function loadUserInfo(u_id){
  * building_no 楼宇 id
  * room_floor 楼层
  */
-function loadRoomSelect(elementId,building_no,room_floor){
+function loadRoomSelect(elementId,building_no,room_floor,room_no){
 	$.ajax({
 		url : "${ctxPath}/topic/ajax/qryBuildingRoom",
 		data : {"b_no" : building_no,"r_fl":room_floor,"room_state":"0"},
@@ -245,6 +244,9 @@ function loadRoomSelect(elementId,building_no,room_floor){
 			var json = data.resultObj;
 			$.each(json, function(index, item) {
 				var temp= "";
+				if(item.TEXT == room_no){
+					temp = "selected='selected'";
+				}
 				var option = "<option "+temp+" value=\""+item.ID+"\" >"+ item.TEXT + "</option>";
 				$("#"+elementId).append(option);
 			});

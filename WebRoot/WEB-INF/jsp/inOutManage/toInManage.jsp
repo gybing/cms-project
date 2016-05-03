@@ -140,7 +140,7 @@ var aoColumnParam = [0],aaSortParam = [];
 $(function(){
 	// 加载列表信息 initTableAutoHeight(id,url,param,colsParam,aoColumnParam,aaSortParam,other); 
 	// param Ajax请求时发送额外的数据(条件),colsParam 设置列属性条件,aoColumnParam 设置哪些列不排序  aaSortParam设置哪些列排序
-	table = initTableAutoHeight("room_list_table", "${ctxPath}/topic/page/qryRoomList", null,cols,aoColumnParam,aaSortParam,"ID");
+	table = initTableAutoHeight("room_list_table", "${ctxPath}/topic/page/qryRoomList", {"user_move_in":"0"},cols,aoColumnParam,aaSortParam,"ID");
 });
 
 /* 搜索 查询 */

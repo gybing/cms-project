@@ -107,7 +107,7 @@
 				sut.`move_out_reason`,
 				sut.`is_del`
 			</isEmpty>
-			from sys_user_tab sut where 1=1
+			from sys_user_tab sut where 1=1 and sut.is_del = 'N'
 			<isNotEmpty property="columns[0][search][value]">
 				and sut.user_name LIKE '%${columns[0][search][value]}%'
 			</isNotEmpty>
@@ -132,7 +132,12 @@
 				and sut.move_in_time &lt;= CONCAT('${columns[5][search][value]}',' 23:59:59') 
 			</isNotEmpty>
 			<isNotEmpty property="is_move_in">
-				and sut.is_move_in = ${is_move_in}
+				<isEqual property="is_move_in" compareValue="0">
+					and sut.is_move_in = ${is_move_in}
+				</isEqual>
+				<isEqual property="is_move_in" compareValue="1">
+					and sut.is_move_in = ${is_move_in} and sut.is_move_out <![CDATA[<>]]> 1
+				</isEqual>
 			</isNotEmpty>
 			<isEmpty property="query_count">
 				order by sut.create_date desc

@@ -64,11 +64,11 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label">单位名称:</label>
 								<div class="col-sm-2">
-		                    		<input id="work" name="work" value="${responseDataForm.resultObj.WORK }" maxlength="100" type="text" class="required" aria-required="true" />
+		                    		<input id="work" name="work" value="${responseDataForm.resultObj.WORK }" maxlength="100" type="text" class="" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">单位地址:</label>
 								<div class="col-sm-2">
-		                    		<input id="work_addr" name="work_addr" value="${responseDataForm.resultObj.WORK_ADDR }" maxlength="150" type="text" class="required" aria-required="true" />
+		                    		<input id="work_addr" name="work_addr" value="${responseDataForm.resultObj.WORK_ADDR }" maxlength="150" type="text" class="" aria-required="true" />
 								</div>
 								<label class="col-sm-2 control-label">单位电话:</label>
 								<div class="col-sm-2">

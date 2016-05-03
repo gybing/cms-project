@@ -216,7 +216,7 @@ function deleteUserInfo(){
 							layer.close(index);
 						});  
 					}else{
-						layer.confirm('您确定要删除这条房间记录吗?', {icon: 3, title:'提示'}, function(index){
+						layer.confirm('您确定要删除这条用户信息吗?', {icon: 3, title:'提示'}, function(index){
 							 $.ajax({
 									url : "${ctxPath }/topic/ajax/deleteUserInfo",
 									dataType : "json",

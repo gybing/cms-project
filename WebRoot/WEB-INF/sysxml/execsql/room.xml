@@ -122,7 +122,7 @@
 				    srt.`remark`
 			</isEmpty>
 			from sys_room_tab srt
-			left join sys_user_tab sut on sut.in_room_id = srt.id
+			left join sys_user_tab sut on sut.in_room_id = srt.id AND sut.is_move_out <![CDATA[<>]]> 1
 			where 1=1 and srt.is_del = 'N'
 			<isNotEmpty property="columns[0][search][value]">
 				and srt.room_no LIKE '%${columns[0][search][value]}%'
