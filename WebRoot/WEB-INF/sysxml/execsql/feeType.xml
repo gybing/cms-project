@@ -42,6 +42,7 @@
 	<mapper id="getFeeTypeInfo">
 		<sql key="getFeeTypeInfo" operator="select" resultType="map">
 			select `fee_type_code`, `type_name`, `pay_way`, `count_type`, `pay_type`, `pay_cycle`, `cycle_unit`, `pay_price`,`unit`, `is_del`, `create_date`,
+				(SELECT dc.text FROM dict_common dc WHERE dc.`code` = unit AND dc.type = 'UNIT') unit_text,
 				(SELECT dc.text FROM dict_common dc WHERE dc.`code` = count_type AND dc.type = 'COUNT_TYPE') s_count_type
 				from `sys_fee_tab` where 1=1
 			<isNotEmpty property="fee_id">

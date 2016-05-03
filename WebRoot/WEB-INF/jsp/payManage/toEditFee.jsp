@@ -63,13 +63,17 @@
 								<div class="col-sm-2">
 									<input id="pay_type" name="pay_type" value="${responseDataForm.resultObj.FEE_NAME }" maxlength="14" type="text" readonly class="form-control" aria-required="true" />
 								</div>
-								<label class="col-sm-2 control-label">计费方式:</label>
+								<label class="col-sm-1 control-label">计费方式:</label>
 								<div class="col-sm-2">
 									<input id="count_type" name="count_type" value="${responseDataForm.resultObj.COUNT_TYPE }" maxlength="14" type="text" readonly class="form-control" aria-required="true" />
 								</div>
-								<label class="col-sm-2 control-label">收费单价:</label>
+								<label class="col-sm-1 control-label">收费单价:</label>
 								<div class="col-sm-2">
 									<input id="pay_price" name="pay_price" value="${responseDataForm.resultObj.PAY_PRICE }" maxlength="14" type="text" readonly class="form-control" aria-required="true" />
+								</div>
+								<label class="col-sm-1 control-label">单位:</label>
+								<div class="col-sm-2">
+									<input id="unit_text" name="unit_text" value="${responseDataForm.resultObj.UNIT_TEXT }"  maxlength="14" readonly type="text" class="required form-control" aria-required="true" />
 								</div>
 							</div>
 						</div>
@@ -84,23 +88,31 @@
 								<div class="col-sm-2">
 									<input type="text" class="form-control layer-date" id="begin_date" name="begin_date" value="${responseDataForm.resultObj.BEGIN_DATE }"  placeholder="YYYY-MM-DD" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" />
 								</div>
-								<label class="col-sm-2 control-label">结束时间:</label>
+								<label class="col-sm-1 control-label">结束时间:</label>
 								<div class="col-sm-2">
 									<input type="text" class="form-control layer-date" id="end_date" name="end_date" value="${responseDataForm.resultObj.END_DATE }"  placeholder="YYYY-MM-DD" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" />
 								</div>
-								<label class="col-sm-2 control-label">总量:</label>
+								<label class="col-sm-1 control-label">缴费时间:</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control layer-date" id="pay_date" name="pay_date"  value="${responseDataForm.resultObj.PAY_DATE }"  placeholder="YYYY-MM-DD hh:mm:ss" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+								</div>
+								<label class="col-sm-1 control-label">数量:</label>
 								<div class="col-sm-2">
 									<input id="total" name="total" maxlength="14" value="${responseDataForm.resultObj.TOTAL }" type="text" class="number form-control" aria-required="true" />
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-1 control-label">缴费时间:</label>
+								<label class="col-sm-1 control-label">应缴金额:</label>
 								<div class="col-sm-2">
-									<input type="text" class="form-control layer-date" id="pay_date" name="pay_date"  value="${responseDataForm.resultObj.PAY_DATE }"  placeholder="YYYY-MM-DD hh:mm:ss" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" />
+									<input id="cnt" name="cnt" value="${responseDataForm.resultObj.TOTAL_PRICE }" maxlength="14" type="text" readonly class="form-control" aria-required="true" />
 								</div>
-								<label class="col-sm-2 control-label">是否缴清:</label>
+								<label class="col-sm-1 control-label">实缴金额:</label>
 								<div class="col-sm-2">
-									<div class="radio radio-info radio-inline">
+									<input id="fact_of_fee" name="fact_of_fee" value="${responseDataForm.resultObj.FACT_OF_FEE }" maxlength="14" type="text" class="required number form-control" aria-required="true" />
+								</div>
+								<label class="col-sm-1 control-label">是否缴清:</label>
+								<div class="col-sm-2">
+									<div class="radio radio-inline">
                                         <input type="radio" id="inlineRadio1" value="1" name="is_completed" <c:if test="${responseDataForm.resultObj.IS_COMPLETED eq '1'}"> checked=""</c:if>>
                                         <label for="inlineRadio1">是</label>
                                     </div>
@@ -109,9 +121,9 @@
                                         <label for="inlineRadio2">否</label>
                                     </div>
 								</div>
-								<label class="col-sm-2 control-label">费用合计:</label>
+								<label class="col-sm-1 control-label">欠款金额:</label>
 								<div class="col-sm-2">
-									<input id="cnt" name="cnt" value="${responseDataForm.resultObj.TOTAL_PRICE }" maxlength="14" type="text" readonly class="form-control" aria-required="true" />
+									<input id="arrears" name="arrears" value="${responseDataForm.resultObj.ARREARS }" maxlength="14" type="text" class="number form-control" aria-required="true" />
 								</div>
 							</div>
 						</div>
@@ -143,10 +155,33 @@
 </body>
 <script type="text/javascript">
 $(function(){
-	// 光标离开总量输入框时
+	// 光标离开数量输入框时
 	$("#total").blur(function(){
 		if($("#pay_price").val()){
 			$("#cnt").val($("#pay_price").val()*$("#total").val());
+		}
+	});
+	
+	// 光标离开实缴金额输入框时
+	$("#fact_of_fee").blur(function(){
+		var fact_of_fee = $("#fact_of_fee").val(); // 获取实缴金额
+		var cnt = $("#cnt").val(); // 获取应缴金额
+		var tmp = cnt - fact_of_fee; // 精算差值
+		if(tmp > 0){
+			$("#arrears").val(tmp); // 应缴金额与实缴金额的差值赋值给欠款金额输入框
+			$("#inlineRadio2").iCheck("check"); // 同时设定是否缴清为否
+			$("#inlineRadio1").iCheck("uncheck"); // 移除checked属性
+		}else if(tmp == 0){ // 如果实缴金额与实缴金额相同
+			$("#arrears").val(""); // 清空欠款金额输入框
+			$("#inlineRadio1").iCheck("check"); // 同时设定是否缴清为是
+			$("#inlineRadio2").iCheck("uncheck"); // 移除checked属性
+		}else{
+			layer.alert("实缴金额大于应缴金额，请确认！",{icon: 2}, function(index){
+			$("#inlineRadio1").iCheck("check"); // 设定是否缴清为是
+			$("#inlineRadio2").iCheck("uncheck"); // 移除checked属性
+				$("#arrears").val(""); // 清空欠款金额输入框
+				layer.close(index); // 关闭提示窗
+			});  
 		}
 	});
 	

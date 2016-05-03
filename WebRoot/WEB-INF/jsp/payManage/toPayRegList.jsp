@@ -38,10 +38,18 @@
 											<input type="text" class="form-control layer-date" id="pay_date_start" name="pay_date_start" value="${param.PAY_DATE_START }" placeholder="YYYY-MM-DD"  onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" />
 										</div>
 										<label class="col-sm-1 control-label">缴费时间（止）:</label>.
-										<div class="col-sm-3">
+										<div class="col-sm-2">
 											<input type="text" class="form-control layer-date" id="pay_date_end" name="pay_date_end" value="${param.PAY_DATE_END }" placeholder="YYYY-MM-DD"  onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" />
 										</div>
-										<div class="col-sm-3">
+										<label class="col-sm-1 control-label">是否缴清:</label>.
+										<div class="col-sm-2">
+											<select id="is_completed" name="is_completed">
+												<option value="">请选择</option>
+												<option value="1">是</option>
+												<option value="0">否</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
 											<button type="button" class="btn btn-sm btn-primary " onclick="searchForm();">查    询</button>
 											<button type="button" class="btn btn-sm btn-primary " onclick="resetForm('payment_list_form');">重    置</button>
 											<button type="button" class="btn btn-sm btn-primary " onclick="refreshForm('payment_list_form');">刷    新</button>
@@ -74,9 +82,12 @@
 										<th>结束时间</th>
 										<th>收费单价</th>
 										<th>总量</th>
+										<th>单位</th>
 										<th>合计</th>
+										<th>实缴金额</th>
 										<th>缴费时间</th>
 										<th>是否缴清</th>
+										<th>欠款金额</th>
 										<th>操作员</th>
 										<th>备注</th>
 									</tr>
@@ -95,6 +106,9 @@ $s2.init($C("#pay_type"), {
 	tabdict : "pay_type",
 	defVal:'${param.fee_name}'
 });
+// 初始化是否缴清下拉框
+$s2.init($C("#is_completed"), {
+});
 
 var table;
 var cols = [
@@ -110,7 +124,9 @@ var cols = [
 		{"data" : "END_DATE"}, // 
 		{"data" : "PAY_PRICE"}, // 
 		{"data" : "TOTAL"}, // 
+		{"data" : "UNIT"}, // 
 		{"data" : "TOTAL_PRICE"}, // 
+		{"data" : "FACT_OF_FEE"}, // 
 		{"data" : "PAY_DATE"}, // 
 		{"data" : "IS_COMPLETED",
 			"render":function(data){
@@ -120,6 +136,7 @@ var cols = [
 					return "否";
 				}
 		}}, // 
+		{"data" : "ARREARS"}, // 
 		{"data" : "OP_USER"}, // 
 		{"data" : "REMARK"} // 
 		];
@@ -145,6 +162,7 @@ function searchForm() {
 	table.column(2).search($('#fee_name').val());
 	table.column(3).search($('#pay_date_start').val());
 	table.column(4).search($('#pay_date_end').val());
+	table.column(5).search($('#is_completed').val());
 	table.draw();
 }
 
