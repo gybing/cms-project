@@ -13,6 +13,59 @@
 <body class="gray-bg">
 	<div class="wrapper wrapper-content" style="padding:20px">
 		<div class="row">
+			<div class="col-sm-13">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                    	<a href="article.html" class="btn-link">
+                            <h2>小区物业管理系统</h2>
+                        </a>
+                    	<p>
+                           	物业管理系统是现代居住小区不可缺少的一部分。一个好的物业管理系统可以提升小区的管理水平，使小区的日常管理更加方便。将计算机的强大功能与现代的管理思想相结合，建立现代的智能小区是物业管理发展的方向。重视现代化的管理，重视细致周到的服务是小区工作的宗旨。以提高物业管理的经济效益、管理水平，确保取得最大经济效益为目标。
+                        </p>
+                    </div>
+                </div>
+            </div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>小区住房使用情况</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-pie-chart"></div>
+                    </div>
+                </div>
+            </div>
+			<div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>当月缴费组成</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="graph_flot.html#">选项1</a>
+                                </li>
+                                <li><a href="graph_flot.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-pie-chart2"></div>
+                    </div>
+                </div>
+            </div>
+		</div>
+		<div class="row">
 			<div class="col-sm-3">
 				<div class="ibox float-e-margins">
                     <div class="ibox-title">
@@ -54,45 +107,6 @@
                     </div>
                     <div class="ibox-content">
                         <h1 class="no-margins">${responseDataForm.resultObj.yPay}</h1>
-                    </div>
-                </div>
-            </div>
-		</div>
-		<div class="row">
-			<div class="col-sm-6">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>小区住房使用情况</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="echarts" id="echarts-pie-chart"></div>
-                    </div>
-                </div>
-            </div>
-			<div class="col-sm-6">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>当月缴费组成</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="graph_flot.html#">选项1</a>
-                                </li>
-                                <li><a href="graph_flot.html#">选项2</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="echarts" id="echarts-pie-chart2"></div>
                     </div>
                 </div>
             </div>
