@@ -77,6 +77,12 @@
 								<div class="col-sm-3">
 									<input id="pay_price" name="pay_price" maxlength="14" class="required number form-control" type="text"/><span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
+								<label class="col-sm-1 control-label">计费单位:</label>
+								<div class="col-sm-3">
+									<select class="combox form-control" id="unit" name="unit">
+										<option value="">请选择</option>
+									</select>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -112,6 +118,9 @@ $(function() {
 	});
 	$s2.init($C("#pay_unit"), {
 		sysdict : $sysdict.PAY_UNIT
+	});
+	$s2.init($C("#unit"), {
+		sysdict : $sysdict.UNIT
 	});
 	// 表单提交验证
 	$("#building_add_form").validate({

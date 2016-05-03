@@ -6,10 +6,10 @@
 		<sql key="saveFeeType" operator="execute">
 			INSERT INTO `sys_fee_tab` (
 				`id`, `fee_type_code`, `type_name`, `pay_way`, `count_type`, `pay_type`, 
-				`pay_cycle`, `cycle_unit`, `pay_price`, `is_del`, `create_date`) 
+				`pay_cycle`, `cycle_unit`, `pay_price`,`unit`, `is_del`, `create_date`) 
 			VALUES (
 				UUID(), #{FEE_TYPE_CODE}, #{TYPE_NAME}, #{PAY_WAY}, #{COUNT_TYPE}, #{PAY_TYPE}, 
-				#{PAY_CYCLE}, #{CYCLE_UNIT}, #{PAY_PRICE}, 'N', now());
+				#{PAY_CYCLE}, #{CYCLE_UNIT}, #{PAY_PRICE}, ${UNIT},'N', now());
 		</sql>
 	</mapper>
 	<!-- 更新费用类型信息 -->
@@ -24,7 +24,8 @@
 				 `pay_type` = #{pay_type},
 				 `pay_cycle` = #{pay_cycle},
 				 `cycle_unit` = #{cycle_unit},
-				 `pay_price` = #{pay_price}
+				 `pay_price` = #{pay_price},
+				 `unit` = #{unit}
 				WHERE
 					(
 						`id` = #{f_id}
@@ -40,7 +41,7 @@
 	<!-- 获取费用类型信息 -->
 	<mapper id="getFeeTypeInfo">
 		<sql key="getFeeTypeInfo" operator="select" resultType="map">
-			select `fee_type_code`, `type_name`, `pay_way`, `count_type`, `pay_type`, `pay_cycle`, `cycle_unit`, `pay_price`, `is_del`, `create_date`,
+			select `fee_type_code`, `type_name`, `pay_way`, `count_type`, `pay_type`, `pay_cycle`, `cycle_unit`, `pay_price`,`unit`, `is_del`, `create_date`,
 				(SELECT dc.text FROM dict_common dc WHERE dc.`code` = count_type AND dc.type = 'COUNT_TYPE') s_count_type
 				from `sys_fee_tab` where 1=1
 			<isNotEmpty property="fee_id">
@@ -65,6 +66,7 @@
 						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.pay_type AND dc.type = 'PAY_TYPE') pay_type,
 						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.pay_cycle AND dc.type = 'PAY_CYCLE') pay_cycle,
 						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.cycle_unit AND dc.type = 'CYCLE_UNIT') cycle_unit,
+						(SELECT dc.text FROM dict_common dc WHERE dc.`code` = sft.unit AND dc.type = 'UNIT') unit,
 						sft.pay_price,
 						DATE_FORMAT (sft.create_date,'%Y-%m-%d %T') `create_date`
 			</isEmpty>

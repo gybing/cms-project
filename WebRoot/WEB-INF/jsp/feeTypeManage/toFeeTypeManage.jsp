@@ -59,6 +59,7 @@
 										<th>计费周期数</th>
 										<th>计费周期单位</th>
 										<th>收费单价</th>
+										<th>收费单位</th>
 									</tr>
 								</thead>
 								<tbody></tbody>
@@ -83,7 +84,8 @@ var cols = [
 		{"data" : "PAY_TYPE"}, // 
 		{"data" : "PAY_CYCLE"}, // 
 		{"data" : "CYCLE_UNIT"}, // 
-		{"data" : "PAY_PRICE"} // 
+		{"data" : "PAY_PRICE"}, // 
+		{"data" : "UNIT"} // 
 		];
 // 设置哪些列不进行排序  哪些列需排序（需要改sql xml条件）
 var aoColumnParam = [0],aaSortParam = [];
