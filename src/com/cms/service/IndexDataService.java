@@ -59,6 +59,9 @@ public class IndexDataService implements IService{
 		String firstDayOfCurrentMonth = DateUtil.getMonthFirstDayStr() + " 00:00:00";
 		String lastDayOfCurrentMonth = DateUtil.getMonthLastDayStr() + " 24:59:59";
 		String mPay = jdbcDao.queryForString(mSql.toString(), new Object[]{firstDayOfCurrentMonth,lastDayOfCurrentMonth});
+		if("".equals(mPay)){
+			mPay = "0";
+		}
 		map.put("mPay", mPay);
 		
 		String firstDayOfYear = DateUtil.getCurrentYear() + "-01-01 00:00:00";
@@ -69,8 +72,8 @@ public class IndexDataService implements IService{
 		map.put("RoomLegendData",getRoomStateItem()); // 获取小区住房情况饼图数据项
 		map.put("RoomSeriesData", getRoomStateData()); // 获取小区住房使用情况饼图数据
 		
-		map.put("PayLegendData", getPayStateItem());
-		map.put("PaySeriesData", getPayStateData());
+		map.put("PayLegendData", getPayStateItem()); // 获取小区当月缴费情况饼图数据项
+		map.put("PaySeriesData", getPayStateData()); // 获取小区当月缴费情况饼图数据
 		
 		System.out.println(map.toString());
 		rdf.setResult(ResponseDataForm.SESSFUL);
@@ -132,8 +135,10 @@ public class IndexDataService implements IService{
 	 * @return String
 	 */
 	public String getPayStateItem(){
-		String sql = "SELECT spt.fee_name name FROM sys_pay_tab spt GROUP BY spt.fee_name";
-		return getLegendData(sql);
+		String sql = "SELECT spt.fee_name name FROM sys_pay_tab spt where spt.pay_date >= ? and spt.pay_date <= ?  GROUP BY spt.fee_name";
+		String firstDayOfCurrentMonth = DateUtil.getMonthFirstDayStr() + " 00:00:00";
+		String lastDayOfCurrentMonth = DateUtil.getMonthLastDayStr() + " 24:59:59";
+		return getLegendData(sql,new Object[]{firstDayOfCurrentMonth,lastDayOfCurrentMonth});
 	}
 	
 	public String getPayStateData(){
@@ -168,11 +173,25 @@ public class IndexDataService implements IService{
 		JSONArray j = JSONArray.fromObject(list);
 		return j.toString();
 	}
+	
+	/**
+	 * 获取饼图数据项
+	 * @author lxh
+	 * @date 2016 下午11:35:44
+	 * @param sql 查询语句
+	 * @param o 参数 object[]{}
+	 * @return String
+	 */
+	public String getLegendData(String sql,Object[] o){
+		List<Map<String, Object>> list = jdbcDao.queryForList(sql, o);
+		JSONArray j = JSONArray.fromObject(list);
+		return j.toString();
+	}
 	/**
 	 * 获取饼图数据
 	 * @author lxh
 	 * @date 2016 下午2:48:58
-	 * @param sql
+	 * @param sql 查询语句
 	 * @return String
 	 */
 	public String getSeriesData(String sql){
@@ -184,8 +203,9 @@ public class IndexDataService implements IService{
 	/**
 	 * 获取饼图数据
 	 * @author lxh
-	 * @date 2016 下午2:48:58
-	 * @param sql
+	 * @date 2016 下午11:34:42
+	 * @param sql 查询语句
+	 * @param o 参数 object[]{}
 	 * @return String
 	 */
 	public String getSeriesData(String sql,Object[] o){

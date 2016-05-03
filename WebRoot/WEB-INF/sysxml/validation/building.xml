@@ -7,4 +7,9 @@
     <validation id="updateBuilding">
 		<property field="building_no" method="database" msg="楼宇编号已经存在, 请重新输入!" sql="SELECT COUNT(1) FROM sys_building_tab s WHERE s.building_no = #{building_no} and s.id != #{b_id}" ></property>
 	</validation>
+	
+	<!-- 判断楼宇下房间是否存在住户 -->
+	<validation id="checkExistsUser">
+		<property field="id" method="database" msg="楼宇下仍存在住户，无法删除！" sql="SELECT COUNT(sut.user_id) user_cnt FROM `sys_building_tab` sbt LEFT JOIN sys_room_tab srt ON srt.building_no = sbt.id AND srt.is_del = 'N' LEFT JOIN sys_user_tab sut ON sut.in_room_id = srt.id and sut.is_del = 'N' WHERE 1=1 AND sbt.is_del = 'N' AND sbt.id = '${b_id}'"></property>
+	</validation>
 </validations>
