@@ -167,7 +167,8 @@ public class IndexDataService implements IService{
 	 * @return String
 	 */
 	public String getLegendData(String sql){
-		List<Map<String, Object>> list = jdbcDao.queryForList(sql, null);
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		list = jdbcDao.queryForList(sql, null);
 		JSONArray j = JSONArray.fromObject(list);
 		return j.toString();
 	}
@@ -181,7 +182,8 @@ public class IndexDataService implements IService{
 	 * @return String
 	 */
 	public String getLegendData(String sql,Object[] o){
-		List<Map<String, Object>> list = jdbcDao.queryForList(sql, o);
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		list = jdbcDao.queryForList(sql, o);
 		JSONArray j = JSONArray.fromObject(list);
 		return j.toString();
 	}
@@ -193,7 +195,8 @@ public class IndexDataService implements IService{
 	 * @return String
 	 */
 	public String getSeriesData(String sql){
-		List<Map<String, Object>> list = jdbcDao.queryForList(sql, null);
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		list = jdbcDao.queryForList(sql, null);
 		JSONArray j = JSONArray.fromObject(list);
 		return j.toString();
 	}
@@ -207,7 +210,8 @@ public class IndexDataService implements IService{
 	 * @return String
 	 */
 	public String getSeriesData(String sql,Object[] o){
-		List<Map<String, Object>> list = jdbcDao.queryForList(sql, o);
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		list = jdbcDao.queryForList(sql, o);
 		JSONArray j = JSONArray.fromObject(list);
 		return j.toString();
 	}
