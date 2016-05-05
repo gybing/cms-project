@@ -58,15 +58,12 @@ public class IndexDataService implements IService{
 		
 		String firstDayOfCurrentMonth = DateUtil.getMonthFirstDayStr() + " 00:00:00";
 		String lastDayOfCurrentMonth = DateUtil.getMonthLastDayStr() + " 24:59:59";
-		String mPay = jdbcDao.queryForString(mSql.toString(), new Object[]{firstDayOfCurrentMonth,lastDayOfCurrentMonth});
-		if("".equals(mPay)){
-			mPay = "0";
-		}
+		String mPay = jdbcDao.queryForString(mSql.toString(), new Object[]{firstDayOfCurrentMonth,lastDayOfCurrentMonth},"0");
 		map.put("mPay", mPay);
 		
 		String firstDayOfYear = DateUtil.getCurrentYear() + "-01-01 00:00:00";
 		String lastDayOfYear = DateUtil.getCurrentYear() + "-12-31 24:59:59";
-		String yPay = jdbcDao.queryForString(mSql.toString(), new Object[]{firstDayOfYear,lastDayOfYear});
+		String yPay = jdbcDao.queryForString(mSql.toString(), new Object[]{firstDayOfYear,lastDayOfYear},"0");
 		map.put("yPay", yPay);
 		
 		map.put("RoomLegendData",getRoomStateItem()); // 获取小区住房情况饼图数据项
