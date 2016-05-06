@@ -42,10 +42,10 @@
 												<option value="">请选择</option>
 											</select>
 										</div>
-										<label class="col-sm-1 control-label">楼宇名称:</label>
+										<!-- <label class="col-sm-1 control-label">楼宇名称:</label>
 										<div class="col-sm-3">
 											<input id="building_name" name="building_name" maxlength="20" type="text" class="required form-control" aria-required="true" />
-										</div>
+										</div> -->
 										<div class="col-sm-3">
 											<button type="button" class="btn btn-sm btn-primary " onclick="searchForm();">查    询</button>
 											<button type="button" class="btn btn-sm btn-primary " onclick="resetForm('user_list_search_form');">重    置</button>
@@ -75,7 +75,7 @@
 										<th>房间状态</th>
 										<th>所在楼层</th>
 										<th>楼宇编号</th>
-										<th>楼宇名称</th>
+										<!-- <th>楼宇名称</th> -->
 										<th>房间类型</th>
 										<th>建筑面积</th>
 										<th>套内面积</th>
@@ -132,7 +132,7 @@ var cols = [
 		},
 		{"data" : "ROOM_FLOOR"}, // .
 		{"data" : "BUILDING_NO"}, // .
-		{"data" : "BUILDING_NAME"}, // .
+	/* 	{"data" : "BUILDING_NAME"}, // . */
 		{"data" : "ROOM_TYPE"}, // .
 		{"data" : "CONSTRUCTION_AREA"}, // .
 		{"data" : "ROOM_AREA"}, // .
@@ -157,7 +157,7 @@ function searchForm() {
 	table.column(1).search($('#room_state').val());
 	table.column(2).search($('#building_no').val());
 	table.column(3).search($('#room_type').val());
-	table.column(4).search($('#building_name').val());
+	/* table.column(4).search($('#building_name').val()); */
 	table.draw();
 }
 

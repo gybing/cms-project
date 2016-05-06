@@ -5,9 +5,9 @@
 	<mapper id="saveBuildingInfo">
 		<sql key="saveBuildingInfo" operator="execute">
 			INSERT INTO `sys_building_tab` 
-				(`id`,`building_no`,`building_name`,`building_floors`,`building_addr`,`building_type`,`building_structure`,`building_toward`,`create_date`,`remark`)
+				(`id`,`building_no`,<!-- `building_name`, -->`building_floors`,`building_addr`,`building_type`,`building_structure`,`building_toward`,`create_date`,`remark`)
 			VALUES 
-				(UUID(),#{BUILDING_NO},#{BUILDING_NAME},${BUILDING_FLOORS},#{BUILDING_ADDR},#{BUILDING_TYPE},#{BUILDING_STRUCTURE},#{BUILDING_TOWARD},now(),#{REMARK});
+				(UUID(),#{BUILDING_NO},<!-- #{BUILDING_NAME}, -->${BUILDING_FLOORS},#{BUILDING_ADDR},#{BUILDING_TYPE},#{BUILDING_STRUCTURE},#{BUILDING_TOWARD},now(),#{REMARK});
 		</sql>
 	</mapper>
 	<!-- 更新楼宇信息 -->
@@ -16,7 +16,7 @@
 			UPDATE `sys_building_tab`
 				SET 
 				 `building_no` = #{BUILDING_NO},
-				 `building_name` = #{BUILDING_NAME},
+				<!--  `building_name` = #{BUILDING_NAME}, -->
 				 `building_floors` = ${BUILDING_FLOORS},
 				 `building_addr` = #{BUILDING_ADDR},
 				 `building_type` = #{BUILDING_TYPE},
@@ -38,7 +38,7 @@
 	<!-- 获取楼宇信息 -->
 	<mapper id="getBuildingInfo">
 		<sql key="getBuildingInfo" operator="select" resultType="map">
-			select `building_no`,`building_name`,`building_floors`,`building_addr`,`building_type`,`building_structure`,`building_toward`,`create_date`,`remark`
+			select `building_no`,<!-- `building_name`, -->`building_floors`,`building_addr`,`building_type`,`building_structure`,`building_toward`,`create_date`,`remark`
 				from sys_building_tab where 1=1
 			<isNotEmpty property="b_id">
 				and id = #{b_id}
@@ -82,7 +82,7 @@
 				select (@i:=@i+1) num,a.* from (
 				select sbt.`id`,
 					sbt.`building_no`,
-					sbt.`building_name`,
+					<!-- sbt.`building_name`, -->
 					sbt.`building_floors`,
 					sbt.`building_addr`,
 					sbt.`building_type`,

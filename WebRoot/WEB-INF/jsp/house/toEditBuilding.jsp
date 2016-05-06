@@ -23,10 +23,10 @@
 								<div class="col-sm-3">
 		                    		<input id="building_no" name="building_no" value="${responseDataForm.resultObj.BUILDING_NO }" maxlength="11" type="text" class="digits required form-control" aria-required="true" />
 								</div>
-								<label class="col-sm-1 control-label">楼宇名称:</label>
+								<%-- <label class="col-sm-1 control-label">楼宇名称:</label>
 								<div class="col-sm-3">
 		                    		<input id="building_name" name="building_name" value="${responseDataForm.resultObj.BUILDING_NAME }" maxlength="50" type="text" class="required form-control" aria-required="true" />
-								</div>
+								</div> --%>
 								<label class="col-sm-1  control-label">楼宇层数:</label>
 								<div class="col-sm-3">
 									<input id="building_floors" name="building_floors" value="${responseDataForm.resultObj.BUILDING_FLOORS }" maxlength="11" class="required number form-control" type="text"/>

@@ -70,7 +70,7 @@
 								</div>
 								<label class="col-sm-2 control-label">单位电话:</label>
 								<div class="col-sm-2">
-									<input id="work_tel" name="work_tel" maxlength="14" type="text" class="number" aria-required="true" />
+									<input id="work_tel" name="work_tel" maxlength="14" type="text" class="phone" aria-required="true" />
 								</div>
 							</div>
 						</div>

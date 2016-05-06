@@ -145,7 +145,7 @@ $(function(){
 			data:{"b_id":building_no?building_no:-1},
 			success:function(json){
 				json = json.resultObj;
-				$("#building_name").val(json.BUILDING_NAME);
+				/* $("#building_name").val(json.BUILDING_NAME); */
 				$("#room_floor").html(""); // 清空上一次选择的楼宇的楼层信息
 				var html = "<option value=\"\">请选择</option>";
 				for (var int = 1; int <= json.BUILDING_FLOORS; int++) {

@@ -24,11 +24,11 @@
 		                    		<input id="building_no" name="building_no" maxlength="11" type="text" class="required digits form-control" aria-required="true" />
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
 								</div>
-								<label class="col-sm-1 control-label">楼宇名称:</label>
+								<!-- <label class="col-sm-1 control-label">楼宇名称:</label>
 								<div class="col-sm-3">
 		                    		<input id="building_name" name="building_name" maxlength="20" type="text" class="required form-control" aria-required="true" />
 									<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 必填项</span>
-								</div>
+								</div> -->
 								<label class="col-sm-1  control-label">楼宇层数:</label>
 								<div class="col-sm-3">
 									<input id="building_floors" name="building_floors" maxlength="14" class="required number form-control" type="text"/>

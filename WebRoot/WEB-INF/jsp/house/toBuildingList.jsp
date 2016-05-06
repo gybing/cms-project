@@ -56,7 +56,7 @@
 									<tr align="center">
 										<th width="50px">序号</th>
 										<th>楼宇编号</th>
-										<th>楼宇名称</th>
+										<!-- <th>楼宇名称</th> -->
 										<th>楼宇层数</th>
 										<th>楼宇地址</th>
 										<th>楼宇类型</th>
@@ -82,7 +82,7 @@ var cols = [
 				return "<div align='center' style='width:50px'>" + data + "</div>";
 		}},
 		{"data" : "BUILDING_NO"}, // 
-		{"data" : "BUILDING_NAME"}, // 
+		/* {"data" : "BUILDING_NAME"}, //  */
 		{"data" : "BUILDING_FLOORS"}, // 
 		{"data" : "BUILDING_ADDR"}, // 
 		{"data" : "BUILDING_TYPE"}, // 

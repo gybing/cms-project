@@ -41,10 +41,10 @@
 										<option value="">请选择</option>
 									</select>
 								</div>
-								<label class="col-sm-2 control-label">楼宇名称:</label>
+								<!-- <label class="col-sm-2 control-label">楼宇名称:</label>
 								<div class="col-sm-2">
 		                    		<input id="building_name" name="building_name" readonly maxlength="20" type="text" class="form-control" />
-								</div>
+								</div> -->
 							</div>
 							<div class="form-group">
 								<label class="col-sm-1 control-label">房间类型:</label>
@@ -158,7 +158,7 @@ $(function() {
 			data:{"b_id":_b_id?_b_id:-1},
 			success:function(json){
 				json = json.resultObj;
-				$("#building_name").val(json.BUILDING_NAME);
+				/* $("#building_name").val(json.BUILDING_NAME); */
 				$("#room_floor").html(""); // 清空上一次选择的楼宇的楼层信息
 				var html = "<option value=\"\">请选择</option>";
 				for (var int = 1; int <= json.BUILDING_FLOORS; int++) {
